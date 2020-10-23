@@ -13,8 +13,7 @@
   :config
   (add-hook 'js2-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-  (add-hook 'web-mode-hook 'prettier-js-mode)
-  )
+  (add-hook 'web-mode-hook 'prettier-js-mode))
 
 (use-package! js2-mode
   :config
