@@ -8,3 +8,4 @@
   :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
 (package! ranger)
 (package! move-text)
+(package! ace-window)
