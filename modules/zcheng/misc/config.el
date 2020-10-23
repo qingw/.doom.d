@@ -14,6 +14,8 @@
   (kbd "C-}") #'sp-forward-sexp
   (kbd "s-(") #'sp-forward-barf-sexp
   (kbd "s-)") #'sp-backward-barf-sexp
+  (kbd "s-<") #'move-text-up
+  (kbd "s->") #'move-text-down
 
   ;; SPC x x
   (kbd "SPC g P") #'gcl/git-push

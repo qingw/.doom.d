@@ -187,4 +187,5 @@
        abbrev
        misc
        ui
-       web)
+       web
+       vue)
