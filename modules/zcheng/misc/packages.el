@@ -7,4 +7,3 @@
 (package! visual-regexp-steriods
   :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
 (package! ranger)
-(package! ace-window)

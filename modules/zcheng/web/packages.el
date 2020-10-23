@@ -2,3 +2,4 @@
 ;;; dev/js/packages.el
 
 (package! prettier-js)
+(package! js-doc)
