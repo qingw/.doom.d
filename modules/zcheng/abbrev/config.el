@@ -1,6 +1,8 @@
 ;;; zcheng/abbrev/config.el -*- lexical-binding: t; -*-
 
 (define-abbrev-table 'global-abbrev-table '(
+                                            ("8spc" "spacemacs")
+                                            ("8al" ";;;###autoload")
                                             ;; chinese
                                             ("8waiw" "图片外网(原图)链接")
                                             ;; math/unicode symbols

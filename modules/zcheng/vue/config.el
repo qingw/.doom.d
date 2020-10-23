@@ -1,3 +1,5 @@
 ;;; zcheng/vue/config.el -*- lexical-binding: t; -*-
 
-(add-hook 'vue-mode-hook #'lsp!)
+(use-package! vue-mode
+  :init
+  (add-hook 'vue-mode-hook #'lsp!))

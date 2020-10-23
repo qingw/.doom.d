@@ -188,4 +188,5 @@
        misc
        ui
        web
-       vue)
+       ;; vue
+       )

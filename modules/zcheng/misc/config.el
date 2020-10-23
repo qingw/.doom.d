@@ -1,30 +1,12 @@
 ;;; zcheng/misc/config.el -*- lexical-binding: t; -*-
 
+;; (defconst my-leader "SPC")
+
 ;; global mode enable
 (setq-default abbrev-mode t)
 ;; --- end
 
 ;;;; keybindings
-(evil-define-key* 'normal 'global
-  (kbd "C-=") #'er/expand-region
-  (kbd "C-+") #'text-scale-increase
-  (kbd "C-(") #'sp-backward-slurp-sexp
-  (kbd "C-)") #'sp-forward-slurp-sexp
-  (kbd "C-{") #'sp-backward-sexp
-  (kbd "C-}") #'sp-forward-sexp
-  (kbd "s-(") #'sp-forward-barf-sexp
-  (kbd "s-)") #'sp-backward-barf-sexp
-  (kbd "s-<") #'move-text-up
-  (kbd "s->") #'move-text-down
-
-  ;; SPC x x
-  (kbd "SPC g P") #'gcl/git-push
-  (kbd "SPC v p") #'ivy-push-view
-  (kbd "SPC v o") #'ivy-pop-view
-  (kbd "SPC v .") #'ivy-switch-view
-  (kbd "SPC i c") #'counsel-colors-web
-  (kbd "SPC i C") #'counsel-colors-emacs
-  )
 (map! :n "C-=" #'er/expand-region
       :n "C-+" #'text-scale-increase
       :n "C-(" #'sp-backward-slurp-sexp
@@ -32,7 +14,18 @@
       :n "C-{" #'sp-backward-sexp
       :n "C-}" #'sp-forward-sexp
       :n "s-(" #'sp-forward-barf-sexp
-      :n "s-)" #'sp-backward-barf-sexp)
+      :n "s-)" #'sp-backward-barf-sexp
+      :n "s-<" #'move-text-up
+      :n "s->" #'move-text-down)
+
+(map! :leader
+      (:prefix ("v" . "View")
+       :n "p" #'ivy-push-view
+       :n "o" #'ivy-pop-view
+       :n "." #'ivy-switch-view)
+      ;; g
+      :n "gP" #'gcl/git-push
+      )
 
 ;;;; -end keybindings
 

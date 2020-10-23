@@ -3,3 +3,6 @@
 
 
 (package! vue-mode)
+(package! evil-matchit)
+(package! yasnippet)
+(package! flycheck)
