@@ -15,7 +15,7 @@
   (kbd "s-(") #'sp-forward-barf-sexp
   (kbd "s-)") #'sp-backward-barf-sexp
 
-  ;; SPC
+  ;; SPC x x
   (kbd "SPC g P") #'gcl/git-push
   )
 (map! :n "C-=" #'er/expand-region
