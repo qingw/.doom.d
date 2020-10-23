@@ -20,6 +20,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
+(setq doom-font (font-spec :family "Fira Code" :size 15 :weight 'semi-light))
 ;; (setq doom-font (font-spec :family "monospace" :size 13 :weight 'semi-light))
  ;;     doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
@@ -47,6 +48,7 @@
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
 ;;
+(add-load-path! "lisp")
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
