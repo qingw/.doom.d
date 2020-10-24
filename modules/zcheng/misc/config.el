@@ -4,6 +4,7 @@
 
 ;; global mode enable
 (setq-default abbrev-mode t)
+(global-prettify-symbols-mode t)
 ;; --- end
 
 ;;;; keybindings
@@ -25,6 +26,7 @@
        :n "." #'ivy-switch-view)
       ;; g
       :n "gP" #'gcl/git-push
+      :n "lm" #'lsp-ui-imenu
       )
 
 ;;;; -end keybindings
@@ -51,3 +53,4 @@
   (progn
     (define-key global-map (kbd "C-c r") 'vr/replace)
     (define-key global-map (kbd "C-c q")' vr/query-replace)))
+

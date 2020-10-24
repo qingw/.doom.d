@@ -9,3 +9,6 @@
 (package! ranger)
 (package! move-text)
 (package! ace-window)
+(package! sidebar
+  :recipe (:host github :repo "sebastiencs/sidebar.el") :disable t)
+(package! treemacs)

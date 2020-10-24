@@ -10,14 +10,18 @@
         js-doc-license "MIT"))
 
 (use-package! prettier-js
-  :hook ((js2-mode.  prettier-js-mode)
-         (typescript-mode . prettier-js-mode)
-         (css-mode . prettier-js-mode)
-         (web-mode . prettier-js-mode)
-         (rjsx-mode . prettier-js-mode)
-         (vue-mode . prettier-js-mode)))
+  :init
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'web-mode-hook 'prettier-js-mode)
+  (add-hook 'css-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'vue-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
+  )
+
 
 (use-package! js2-mode
+  :init
   :config
   (setq js2-basic-offset 2
         js-switch-indent-offset 2
