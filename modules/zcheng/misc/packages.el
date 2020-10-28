@@ -14,3 +14,5 @@
 (package! treemacs)
 (package! smart-hungry-delete)
 (package! crux)
+(package! pangu-spacing)
+(package! multiple-cursors)

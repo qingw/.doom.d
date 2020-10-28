@@ -5,6 +5,7 @@
 ;; global mode enable
 (setq-default abbrev-mode t)
 (global-prettify-symbols-mode t)
+(global-pangu-spacing-mode 1)
 ;; --- end
 
 ;;;; keybindings
@@ -20,6 +21,8 @@
       :n "s->" #'move-text-down)
 
 (map! :leader
+      ;; a
+      :n "ar" #'ranger
       (:prefix ("v" . "View")
        :n "p" #'ivy-push-view
        :n "o" #'ivy-pop-view
@@ -27,8 +30,8 @@
       ;; f
       :n "fo" #'crux-open-with
       ;; g
-      :n "ar" #'ranger
       :n "gP" #'gcl/git-push
+      ;; l
       :n "lm" #'lsp-ui-imenu
       :n "lt" #'treemacs
       :n "ll" #'+workspace/switch-to
@@ -42,7 +45,12 @@
 (map! "C-c o" #'crux-open-with
       "C-c u" #'crux-view-url
       "C-c D" #'crux-delete-buffer-and-file
-      "C-c S" #'crux-find-shell-init-file)
+      "C-c S" #'crux-find-shell-init-file
+      "C-c h h" #'hydra-main/body
+      "C-c h l" #'hydra-launcher/body
+      "C-c h m" #'hydra-multiple-cursors/body
+      )
+
 ;;;; -end keybindings
 
 (use-package! evil
