@@ -18,7 +18,27 @@
       :n "s-(" #'sp-forward-barf-sexp
       :n "s-)" #'sp-backward-barf-sexp
       :n "s-<" #'move-text-up
-      :n "s->" #'move-text-down)
+      :n "s->" #'move-text-down
+      ;; multiple cursors
+      "C->" #'mc/mark-next-like-this
+      "C-<" #'mc/mark-previous-like-this
+      "C-c C-<" #'mc/mark-all-like-this
+      "C-S-c C-S-c" #'mc/edit-lines
+      "C-S-c 0" #'mc/insert-numbers
+      "C-S-c 1" #'mc/insert-letters
+      "C-S-c s" #'mc/mark-all-in-region
+      "C-S-c S" #'mc/mark-all-in-region-regexp
+
+      ;; crux
+      "C-c o" #'crux-open-with
+      "C-c u" #'crux-view-url
+      "C-c D" #'crux-delete-buffer-and-file
+      "C-c S" #'crux-find-shell-init-file
+      ;; hydra
+      "C-c h" nil
+      "C-c h h" #'hydra-main/body
+      "C-c h t" #'hydra-tip/body
+      )
 
 (map! :leader
       ;; a
@@ -41,15 +61,6 @@
        :n "x" #'doom/open-scratch-buffer)
       )
 
-;; crux key remap
-(map! "C-c o" #'crux-open-with
-      "C-c u" #'crux-view-url
-      "C-c D" #'crux-delete-buffer-and-file
-      "C-c S" #'crux-find-shell-init-file
-      "C-c h h" #'hydra-main/body
-      "C-c h l" #'hydra-launcher/body
-      "C-c h m" #'hydra-multiple-cursors/body
-      )
 
 ;;;; -end keybindings
 
