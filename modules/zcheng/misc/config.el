@@ -6,6 +6,10 @@
 (setq-default abbrev-mode t)
 (global-prettify-symbols-mode t)
 (global-pangu-spacing-mode 1)
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+(setq-default fill-column 80)
+;; enble the xref backend
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 ;; --- end
 
 ;;;; keybindings
