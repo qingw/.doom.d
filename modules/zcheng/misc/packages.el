@@ -12,3 +12,5 @@
 (package! sidebar
   :recipe (:host github :repo "sebastiencs/sidebar.el") :disable t)
 (package! treemacs)
+(package! smart-hungry-delete)
+(package! crux)

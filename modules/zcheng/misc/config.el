@@ -24,11 +24,25 @@
        :n "p" #'ivy-push-view
        :n "o" #'ivy-pop-view
        :n "." #'ivy-switch-view)
+      ;; f
+      :n "fo" #'crux-open-with
       ;; g
+      :n "ar" #'ranger
       :n "gP" #'gcl/git-push
       :n "lm" #'lsp-ui-imenu
+      :n "lt" #'treemacs
+      :n "ll" #'+workspace/switch-to
+      ;; x
+      :n "x" nil
+      (:prefix ("x" . "Trash")
+       :n "x" #'doom/open-scratch-buffer)
       )
 
+;; crux key remap
+(map! "C-c o" #'crux-open-with
+      "C-c u" #'crux-view-url
+      "C-c D" #'crux-delete-buffer-and-file
+      "C-c S" #'crux-find-shell-init-file)
 ;;;; -end keybindings
 
 (use-package! evil
@@ -54,3 +68,9 @@
     (define-key global-map (kbd "C-c r") 'vr/replace)
     (define-key global-map (kbd "C-c q")' vr/query-replace)))
 
+
+(use-package! smart-hungry-delete
+  :bind (("<backspace>" . smart-hungry-delete-backward-char)
+         ("C-d" . smart-hungry-delete-forward-char))
+  :defer nil
+  :config (smart-hungry-delete-add-default-hooks))
