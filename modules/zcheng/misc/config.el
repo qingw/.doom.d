@@ -12,6 +12,8 @@
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 ;; --- end
 
+(map! "C-s" nil
+      "C-c h" nil)
 ;;;; keybindings
 (map! :n "C-=" #'er/expand-region
       :n "C-+" #'cnfonts-increase-fontsize
@@ -33,14 +35,15 @@
       "C-S-c 1" #'mc/insert-letters
       "C-S-c s" #'mc/mark-all-in-region
       "C-S-c S" #'mc/mark-all-in-region-regexp
-
+      ;; C-s(control - command)
+      "C-s-," #'parrot-rotate-prev-word-at-point
+      "C-s-." #'parrot-rotate-next-word-at-point
       ;; crux
       "C-c o" #'crux-open-with
       "C-c u" #'crux-view-url
       "C-c D" #'crux-delete-buffer-and-file
       "C-c S" #'crux-find-shell-init-file
       ;; hydra
-      "C-c h" nil
       "C-c h h" #'hydra-main/body
       "C-c h t" #'hydra-tip/body
 
@@ -52,10 +55,8 @@
 (map! :leader
       ;; a
       :n "ar" #'ranger
-      (:prefix ("v" . "View")
-       :n "p" #'ivy-push-view
-       :n "o" #'ivy-pop-view
-       :n "." #'ivy-switch-view)
+      ;; b
+      :n "bf" #'osx-lib-reveal-in-finder
       ;; f
       :n "fo" #'crux-open-with
       ;; g
@@ -68,6 +69,10 @@
       :n "x" nil
       (:prefix ("x" . "Trash")
        :n "x" #'doom/open-scratch-buffer)
+      (:prefix ("v" . "View")
+       :n "p" #'ivy-push-view
+       :n "o" #'ivy-pop-view
+       :n "." #'ivy-switch-view)
       )
 
 
@@ -106,3 +111,8 @@
          ("C-d" . smart-hungry-delete-forward-char))
   :defer nil
   :config (smart-hungry-delete-add-default-hooks))
+
+(use-package! parrot
+  :config
+  (parrot-mode))
+

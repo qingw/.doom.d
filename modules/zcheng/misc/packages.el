@@ -18,3 +18,5 @@
 (package! multiple-cursors)
 (package! cnfonts)
 (package! string-inflection)
+(package! parrot)
+(package! osx-lib)
