@@ -75,6 +75,11 @@
     (define-key! evil-normal-state-map
       "g[" #'beginning-of-defun
       "g]" #'end-of-defun
+      "gd" #'xref-find-definitions
+      "gD" #'xref-find-references
+      "gb" #'xref-pop-marker-stack
+      "gjj" #'dumb-jump-go
+      "gjb" #'dumb-jump-back
       "z-" #'sp-splice-sexp
       "z." #'emmet-wrap-with-markup
       "+" #'evil-numbers/inc-at-pt

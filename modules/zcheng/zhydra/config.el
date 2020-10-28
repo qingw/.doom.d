@@ -5,14 +5,17 @@
 all hydra apps:
 ------------------------------------------------------------------
  [_a_]   Tip          [_h_]   Launcher     [_m_]   Multiple Cursors
- [_w_]   Window       [_t_]   Text Zoom    [_o_]   Org Agenda          
+ [_w_]   Window       [_t_]   Text Zoom    [_o_]   Org Agenda
+ [_j_]   Dump-Jump    [_e_]   Evil Mode
 "
   ("a" hydra-tip/body)
+  ("e" hydra-tip-evil/body)
   ("h" hydra-launcher/body)
   ("m" hydra-multiple-cursors/body)
   ("w" +hydra/window-nav/body)
   ("t" +hydra/text-zoom/body)
   ("o" hydra-org-agenda-view/body)
+  ("j" hydra-dumb-jump/body)
   )
 
 ;; 提示面板
@@ -78,25 +81,53 @@ Org-mode 按键提示
   "
 evil 模式下操作命令提示。
 ------------------------------------------------------------------
-  符号/字母                 <g>                         <z>
+  符号/字母                     <z>
 ------------------------------------------------------------------
-  [+]   数字+1              [g[] 函数开头               [z-] 取消括号 
-  [-]   数字-1              [g]] 函数结尾               [z.] wrap 标签
-  [K]   查文档              [g~] 大小写切换             [za] fold 所有 
-  [s/S] wrap 字符(选中)     [g0] 行首                   [zo] open 当前
-  [s/S] 文件内字符定位      [gd] 查找定义(definition)   [zj] fold 下一个
-  [f/F] 行内字符定位        [gD] 查找引用(reference)    [zk] fold 上一个
-  [t/T] 行内字符定位        [gt] 切换下一个workspace   [zr] open所有
-  [;]   向后重复查找        [gx] 交换两个选中区内容     [zm] close所有
-  [,]   向前重复查找        [gf] 查找光标处名称的文件   [zt] 当前行定位到顶部
-                            [gr] 执行选中内容           [zx] kill 当前buffer
-                            [gss] 按两个字符定位
-                            [gs/] 按单个字符定位
-                            [gsj] 按字符往后定位
-                            [gsk] 按字符往前定位
-                            [gs[] 按section向前定位
-                            [gs]] 按section向后定位
-")
+  [+]   数字+1                  [z-] 取消括号 
+  [-]   数字-1                  [z.] wrap 标签
+  [K]   查文档                  [za] fold 所有 
+  [s/S] wrap 字符(选中)         [zo] open 当前
+  [s/S] 文件内字符定位          [zj] fold 下一个
+  [f/F] 行内字符定位            [zk] fold 上一个
+  [t/T] 行内字符定位            [zr] open所有
+  [;]   向后重复查找            [zm] close所有
+  [,]   向前重复查找            [zt] 当前行定位到顶部
+                                [zx] kill 当前buffer
+------------------------------------------------------------------
+                                <g>
+------------------------------------------------------------------
+ [_g[_] 函数开头                  [_gd_] 查找定义(definition)       [_g0_] 行首
+ [_g]_] 函数结尾                  [_gD_] 查找引用(reference)
+ [_gsj_] 按字符往后定位           [_gr_] 执行选中内容
+ [_gss_] 按两个字符定位           [_gt_] 切换下一个workspace
+ [_gs/_] 按单个字符定位           [_gx_] 交换两个选中区内容
+ [_gsk_] 按字符往前定位           [_gf_] 查找光标处名称的文件
+ [_gs[[_] 按段首向前定位
+ [_gs[]_] 按断尾向前定位
+ [_gs]]_] 按段首向后定位
+ [_gs][_] 按断尾向后定位
+"
+  ("g[" beginning-of-defun)
+  ("g]" end-of-defun)
+  ("g0" evil-beginning-of-visual-line)
+  ("gd" xref-find-definitions)
+  ("gD" xref-find-references)
+  ("gb" xref-pop-marker-stack)
+  ("gr" +eval:region)
+  ("gjj" dumb-jump-go)
+  ("gjb" dumb-jump-back)
+  ("gt" +workspace:switch-next)
+  ("gx" evil-exchange)
+  ("gf" +lookup/file)
+  ("gss" evil-avy-goto-char-2)
+  ("gs/" evil-avy-goto-char-timer)
+  ("gsj" evilem-motion-next-line)
+  ("gsk" evilem-motion-previous-line)
+  ("gs[[" evilem-motion-backward-section-begin)
+  ("gs[]" evilem-motion-backward-section-end)
+  ("gs][" evilem-motion-forward-section-end)
+  ("gs]]" evilem-motion-forward-section-begin)
+  )
 
 ;; multiple cursors 按键提示
 (defhydra hydra-tip-mcursors (:color blue :hint nil)
@@ -123,3 +154,13 @@ all hydra apps or browse urls:
   ("s" shell)
   ("q" nil))
 
+;; dumb-jump
+(defhydra hydra-dumb-jump (:color blue :columns 3)
+    "Dumb Jump"
+    ("j" dumb-jump-go "Go")
+    ("o" dumb-jump-go-other-window "Other window")
+    ("e" dumb-jump-go-prefer-external "Go external")
+    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+    ("i" dumb-jump-go-prompt "Prompt")
+    ("l" dumb-jump-quick-look "Quick look")
+    ("b" dumb-jump-back "Back"))
