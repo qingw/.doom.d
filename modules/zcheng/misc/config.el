@@ -10,7 +10,8 @@
 
 ;;;; keybindings
 (map! :n "C-=" #'er/expand-region
-      :n "C-+" #'text-scale-increase
+      :n "C-+" #'cnfonts-increase-fontsize
+      :n "C--" #'cnfonts-decrease-fontsize
       :n "C-(" #'sp-backward-slurp-sexp
       :n "C-)" #'sp-forward-slurp-sexp
       :n "C-{" #'sp-backward-sexp
@@ -38,6 +39,10 @@
       "C-c h" nil
       "C-c h h" #'hydra-main/body
       "C-c h t" #'hydra-tip/body
+
+      ;; M-option/alt key
+      "M--" #'gcl/goto-match-paren
+      "M-i" #'gcl/string-inflection-cycle-auto
       )
 
 (map! :leader
@@ -86,7 +91,6 @@
   (progn
     (define-key global-map (kbd "C-c r") 'vr/replace)
     (define-key global-map (kbd "C-c q")' vr/query-replace)))
-
 
 (use-package! smart-hungry-delete
   :bind (("<backspace>" . smart-hungry-delete-backward-char)

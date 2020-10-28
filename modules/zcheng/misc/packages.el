@@ -16,3 +16,5 @@
 (package! crux)
 (package! pangu-spacing)
 (package! multiple-cursors)
+(package! cnfonts)
+(package! string-inflection)
