@@ -49,8 +49,6 @@
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
 ;;
-(load! "~/.doom.d/modules/spacemacs/+spacemacs")
-
 (add-load-path! "lisp")
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
