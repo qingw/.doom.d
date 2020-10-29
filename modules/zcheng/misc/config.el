@@ -65,6 +65,8 @@
       :n "lm" #'lsp-ui-imenu
       :n "lt" #'treemacs
       :n "ll" #'+workspace/switch-to
+      ;; w
+      :n "w-" #'evil-window-split
       ;; x
       :n "x" nil
       (:prefix ("x" . "Trash")
@@ -75,9 +77,7 @@
        :n "." #'ivy-switch-view)
       )
 
-
 ;;;; -end keybindings
-
 (use-package! evil
   :init
   (progn

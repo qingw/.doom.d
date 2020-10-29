@@ -33,7 +33,6 @@
         (:rot ("===" "!=="))
         (:rot ("." "->"))
         (:rot ("if" "else" "elif"))
-        (:rot ("if" "else" "else if"))
         (:rot ("ifdef" "ifndef"))
         ;; javascript
         (:rot ("var" "let" "const"))
