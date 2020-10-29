@@ -3,3 +3,4 @@
 
 (package! prettier-js)
 (package! js-doc)
+(package! vue-mode)

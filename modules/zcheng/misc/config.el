@@ -6,14 +6,18 @@
 (setq-default abbrev-mode t)
 (global-prettify-symbols-mode t)
 (global-pangu-spacing-mode 1)
+(global-eldoc-mode -1)
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 (setq-default fill-column 80)
 ;; enble the xref backend
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+(setenv "PATH" (concat (getenv "PATH") ":/Users/simon/go"))
+;; (add-hook 'kill-emacs-hook #'+workspace/kill-session)
 ;; --- end
 
 (map! "C-s" nil
-      "C-c h" nil)
+      "C-c h" nil
+      "s-q" nil)
 ;;;; keybindings
 (map! :n "C-=" #'er/expand-region
       :n "C-+" #'cnfonts-increase-fontsize
@@ -46,6 +50,9 @@
       ;; hydra
       "C-c h h" #'hydra-main/body
       "C-c h t" #'hydra-tip/body
+      "C-c h l" #'hydra-launcher/body
+      ;; s, Command
+      "s-q" #'+workspace/kill-session-and-quit
 
       ;; M-option/alt key
       "M--" #'gcl/goto-match-paren
