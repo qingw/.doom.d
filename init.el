@@ -192,16 +192,7 @@
 
        :config
        ;;literate
-       (default +bindings +smartparens)
-
-       :zcheng
-       zabbrev
-       ;; zhydra
-       ;; zmisc
-       ;; zweb
-       ;; zprog
-       ;; zvue
-       )
+       (default +bindings +smartparens))
 
 ;; (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
 ;;                          ("melpa" . "http://elpa.emacs-china.org/melpa/")))

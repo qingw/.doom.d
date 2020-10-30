@@ -1,5 +1,9 @@
 ;;; +bindings.el -*- lexical-binding: t; -*-
 
+
+(global-set-key (kbd "C-c d") 'insert-current-date-time)
+(global-set-key (kbd "C-c t") 'insert-current-time)
+
 ;; unbind
 (map! :leader
       "A" nil
@@ -71,6 +75,17 @@
        :desc "Instant rename tag"       "r" #'instant-rename-tag
        ))
 
+;; evil
+(map!
+ :desc "Go function header"     :n "g[" #'beginning-of-defun
+ :desc "Go function end"        :n "g]" #'end-of-defun
+ :desc "Find definition"        :n "gd" #'xref-find-definitions
+ :desc "Find reference"         :n "gD" #'xref-find-references
+ :desc "Go back find piont"     :n "gb" #'xref-pop-marker-stack
+ :desc "Delete parens"          :n "z-" #'sp-splice-sexp
+ :desc "Wrap with markup"       :nv "z." #'emmet-wrap-with-markup
+ :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
+ :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
 ;;;; keybindings
 (map! :n "C-=" #'er/expand-region
       :n "C-+" #'cnfonts-increase-fontsize
@@ -95,6 +110,8 @@
       ;; C-s(control - command)
       "C-s-," #'parrot-rotate-prev-word-at-point
       "C-s-." #'parrot-rotate-next-word-at-point
+      "C-c r" #'vr/replace
+      "C-c q" #'vr/query-replace
       ;; crux
       "C-c o" #'crux-open-with
       "C-c u" #'crux-view-url
