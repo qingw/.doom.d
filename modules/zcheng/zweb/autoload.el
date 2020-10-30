@@ -3,7 +3,7 @@
 ;;;###autoload
 (defun my/web-html-setup()
   "Setup for web-mode html files."
-  (message "web-mode useh tml related setup")
+  (message "web-mode use html related setup")
   ;; (flycheck-add-mode 'html-tidy 'web-mode)
   ;; (flycheck-select-checker 'html-tidy)
   (add-to-list (make-local-variable 'company-backends)

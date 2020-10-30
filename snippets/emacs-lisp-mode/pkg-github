@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pkg-github
+# key:  pkg-github
+# --
+:recipe (:host github :repo "$1")

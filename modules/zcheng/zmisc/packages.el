@@ -20,3 +20,4 @@
 (package! string-inflection)
 (package! parrot)
 (package! osx-lib)
+(package! delsel)

@@ -3,6 +3,8 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+(load! "+bindings")
+(load! "+editor")
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -21,7 +23,7 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Fira Code" :size 15 :weight 'semi-light))
+(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light))
 ;; (setq doom-font (font-spec :family "monospace" :size 13 :weight 'semi-light))
  ;;     doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
@@ -37,7 +39,6 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
-
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;

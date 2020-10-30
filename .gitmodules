@@ -1,3 +1,3 @@
-[submodule "lisp/visual-regexp-steroids.el"]
-	path = lisp/visual-regexp-steroids.el
-	url = https://github.com/benma/visual-regexp-steroids.el.git
+[submodule "site-lisp/snails"]
+	path = site-lisp/snails
+	url = https://github.com/manateelazycat/snails.git
