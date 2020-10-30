@@ -196,11 +196,10 @@
 
        :zcheng
        zabbrev
-       zmisc
-       zweb
-       zprog
-       zhydra
-       ztool            ; tiny tool
+       ;; zhydra
+       ;; zmisc
+       ;; zweb
+       ;; zprog
        ;; zvue
        )
 
