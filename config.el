@@ -11,7 +11,7 @@
       user-blog-url "https://www.cheng92.com")
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
-(setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light))
+;; (setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light))
 ;; (setq doom-font (font-spec :family "monospace" :size 13 :weight 'semi-light))
  ;;     doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-theme 'doom-one)
