@@ -24,3 +24,4 @@
   :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
 ;; more development
 (package! leetcode)
+(package! lsp-ivy)
