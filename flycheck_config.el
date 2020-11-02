@@ -97,7 +97,8 @@
          )
   :commands lsp
   :config
-  (setq lsp-idle-delay 0.500))
+  (setq lsp-idle-delay 0.500
+        lsp-enable-file-watchers nil))
 
 (use-package! lsp-ivy :commands lsp-ivy-workspace-symbol)
 
@@ -109,10 +110,10 @@
                          (lsp))))
 
 ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
-(setq lsp-eslint-server-command
-      '("node"
-        "/Users/simon/.vscode/extensions/dbaeumer.vscode-eslint-2.1.13/server/out/eslintServer.js"
-        "--stdio"))
+;; (setq lsp-eslint-server-command
+;;       '("node"
+;;         "/Users/simon/.vscode/extensions/dbaeumer.vscode-eslint-2.1.13/server/out/eslintServer.js"
+;;         "--stdio"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for web                                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
