@@ -94,6 +94,7 @@
       :n "C-)" #'sp-forward-slurp-sexp
       :n "C-{" #'sp-backward-sexp
       :n "C-}" #'sp-forward-sexp
+      :nv "C-e" #'evil-end-of-line
       :n "s-(" #'sp-forward-barf-sexp
       :n "s-)" #'sp-backward-barf-sexp
       :n "s-<" #'move-text-up

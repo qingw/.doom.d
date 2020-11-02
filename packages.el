@@ -14,11 +14,12 @@
 (package! osx-lib)
 (package! delsel)
 (package! parrot)
+(package! dash-at-point)
 
 ;; web development
 (package! prettier-js)
 (package! js-doc)
-(package! lsp-vue)
+;; (package! lsp-vue)
 (package! instant-rename-tag
   :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
 ;; more development

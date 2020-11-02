@@ -144,7 +144,7 @@ Multiple Cursors Mode Tip(C-Control, S-Shift).
 all hydra apps or browse urls:
 ------------------------------------------------------------------
  [_g_] Google论坛      [_h_] Man                [_r_] Reddit
- [_w_] EmacsWiki        [_z_] Zhihu
+ [_w_] EmacsWiki        [_z_] Zhihu              [_m_] 腾讯企业邮箱
  [_s_] Shell            [_l_] LSP Server         [_L_] LSP Languages
  [_q_] Cancel
 "
@@ -152,6 +152,7 @@ all hydra apps or browse urls:
   ("g" (browse-url "https://groups.google.com/my-groups"))
   ("l" (browse-url "https://langserver.org/"))
   ("L" (browse-url "https://emacs-lsp.github.io/lsp-mode/page/languages/"))
+  ("m" (browse-url "https://exmail.qq.com/cgi-bin/frame_html?sid=diaeJi-xOyi0fVQL,7&sign_type=&r=906b84d4c87dfa71afab479b4a35e0ff"))
   ("r" (browse-url "http://www.reddit.com/r/emacs"))
   ("w" (browse-url "http://www.emacswiki.org/"))
   ("z" (browse-url "https://www.zhihu.com/"))

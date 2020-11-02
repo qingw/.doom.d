@@ -44,6 +44,22 @@
   :hook (after-init . delete-selection-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                               for lsp                                       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; `python'
+(use-package! lsp-python-ms
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp))))
+
+;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
+(setq lsp-eslint-server-command
+      '("node"
+        "/Users/simon/.vscode/extensions/dbaeumer.vscode-eslint-2.1.13/server/out/eslintServer.js"
+        "--stdio"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for web                                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
@@ -60,7 +76,6 @@
       web-mode-markup-indent-offset 2
       web-mode-enable-current-element-highlight t)
 ( setq-default typescript-indent-level 2 )
-
 
 (use-package! js-doc
   :config
@@ -89,7 +104,7 @@
   :config
   (setq web-mode-content-type-alist
         '(("vue" . "\\.vue\'")))
-  (add-hook 'web-mode-hook 'lsp-vue-enable)
+  ;; (add-hook 'web-mode-hook 'lsp-vue-enable)
   (add-hook 'web-mode-hook (lambda()
                              (cond ((equal web-mode-content-type "html")
                                     (my/web-html-setup))
@@ -98,6 +113,8 @@
   )
 
 (use-package! instant-rename-tag)
+
+;; (use-package! lsp-vue)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for prog                                      ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
