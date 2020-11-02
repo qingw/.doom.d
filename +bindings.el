@@ -11,11 +11,15 @@
 
 (map! "C-s" nil
       "C-c h" nil
-      "s-q" nil)
+      "s-q" nil
+      "M-," nil
+      "M-." nil)
 
 ;; unbind functions
-(map! [remap swiper] #'swiper-isearch)
-(map! [remap org-capture] nil)
+(map! [remap swiper] #'swiper-isearch
+      [remap org-capture] nil
+      [remap xref-find-definitions] #'lsp-ui-peek-find-definitions
+      [remap xref-find-references] #'lsp-ui-peek-find-references)
 
 ;; leader
 (map! :leader
@@ -30,42 +34,39 @@
 ;; Prefix
 (map! :leader
       (:prefix ("a" . "Apps")
-       :desc "Dired ranger"             "r" #'ranger
+       "r" #'ranger
        ) ;; a - end
 
-      (:prefix ("b" . "buffer")
-       :desc "Open in finder"           "f" #'osx-lib-reveal-in-finder
-       ) ;; b - end
+      "bf" #'osx-lib-reveal-in-finder
 
       (:prefix ("e" . "errors")
-       :desc "Flycheck list errors"        "l" #'flycheck-list-errors
-       :desc "Disable flycheck"            "d" #'flycheck-disable-checker
-       :desc "Enable flycheck"             "C" #'flycheck-buffer
-       :desc "Flycheck next error"         "n" #'flycheck-next-error
-       :desc "Flycheck previous error"     "p" #'flycheck-previous-error
-       :desc "Flycheck clear errors"       "c" #'flycheck-clear
-       :desc "Flycheck which checker"      "w" #'flycheck-select-checker
+       "l" #'flycheck-list-errors
+       "d" #'flycheck-disable-checker
+       "C" #'flycheck-buffer
+       "n" #'flycheck-next-error
+       "p" #'flycheck-previous-error
+       "c" #'flycheck-clear
+       "w" #'flycheck-select-checker
        ) ;; e - end
 
-      (:prefix ("f" . "file")
-       :desc "Dired jump"                  "j" #'dired-jump
-       :desc "Open with specify app"       "o" #'crux-open-with
-       ) ;; f - end
+      "fj" #'dired-jump
+      "fo" #'crux-open-with
 
       (:prefix ("j" . "jump")
-       :desc "Jump to symbol"              "i" #'imenu
+       "i" #'imenu
        ) ;; j - end
 
+      ;; s
+      "sj" #'lsp-ivy-workspace-symbol
+      "sJ" #'+ivy/jump-list
+      ;; :desc "Jump to symbol in current ws" "sj" #'lsp-
       (:prefix ("v" . "view")
-       :desc "Push view"                "p" #'ivy-push-view
-       :desc "Pop view"                 "o" #'ivy-pop-view
-       :desc "Switch view"              "." #'ivy-switch-view
+       "p" #'ivy-push-view
+       "o" #'ivy-pop-view
+       "." #'ivy-switch-view
        ) ;; v - end
 
-      (:prefix ("w" . "+window")
-       :desc "Split window below"          "-" #'split-window-below
-       ) ;; w - end
-
+      "w-" #'split-window-below
       )  ;; map - end
 
 ;; 指定模式下按键映射
@@ -130,4 +131,3 @@
       "M--" #'gcl/goto-match-paren
       "M-i" #'gcl/string-inflection-cycle-auto
       )
-

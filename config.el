@@ -52,7 +52,7 @@
   :config
   (setq
    company-idle-delay 0 ; default 0.2
-   company-minimum-prefix-length 1 ; 敲一个字符弹出补全框
+   company-minimum-prefix-length 3 ; 敲一个字符弹出补全框
    company-show-numbers t ;不显示左侧的数字
    company-require-match nil) ; 允许输入不匹配的字符
   (global-company-mode)
@@ -64,13 +64,15 @@
    company-backends (delete 'company-eclim company-backends)
    company-backends (delete 'company-gtags company-backends)
    company-backends (delete 'company-etags company-backends)
-   company-backends (delete 'company-oddmuse company-backends))
-  (add-to-list 'company-backends 'company-files)
+   company-backends (delete 'company-oddmuse company-backends)
+   )
 
+  (add-to-list 'company-backends 'company-files)
   ;; 用 `TAB' 选择且同时补全
-  (company-tng-configure-default)
+  ;; (company-tng-configure-default)
   (setq company-frontends
-        '(company-tng-frontend
+        '(
+          ;; company-tng-frontend
           company-pseudo-tooltip-frontend
           company-echo-metadata-frontend))
 
@@ -78,6 +80,11 @@
   (setq company-dabbrev-downcase nil
         company-dabbrev-ignore-case t)
   )
+
+(use-package! lsp-mode
+  :hook (
+         (web-mode . lsp)
+         ))
 
 ;; `python'
 (use-package! lsp-python-ms
@@ -87,10 +94,10 @@
                          (lsp))))
 
 ;; https://github.com/emacs-lsp/lsp-mode/wiki/LSP-ESlint-integration
-(setq lsp-eslint-server-command
-      '("node"
-        "/Users/simon/.vscode/extensions/dbaeumer.vscode-eslint-2.1.13/server/out/eslintServer.js"
-        "--stdio"))
+;; (setq lsp-eslint-server-command
+;;       '("node"
+;;         "/Users/simon/.vscode/extensions/dbaeumer.vscode-eslint-2.1.13/server/out/eslintServer.js"
+;;         "--stdio"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for web                                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
