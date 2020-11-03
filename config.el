@@ -51,7 +51,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; `company'
-(use-package! company
+(after! company
   :config
   (setq
    company-idle-delay 0 ; default 0.2
@@ -117,7 +117,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for web                                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
+(setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
 ;; Indent
 (setq css-indent-offset 2
       js2-basic-offset 2
