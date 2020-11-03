@@ -11,6 +11,7 @@
       user-blog-url "https://www.cheng92.com")
 
 ;; (setq gc-cons-threshold 100000000)
+(cnfonts-increase-fontsize)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (setq doom-font (font-spec :family "Fira Code" :size 14 :weight 'semi-light))
@@ -61,14 +62,14 @@
   (global-company-mode)
 
   ;; backends
-  (setq
-   company-backends (delete 'company-xcode company-backends)
-   company-backends (delete 'company-bbdb company-backends)
-   company-backends (delete 'company-eclim company-backends)
-   company-backends (delete 'company-gtags company-backends)
-   company-backends (delete 'company-etags company-backends)
-   company-backends (delete 'company-oddmuse company-backends)
-   )
+  ;; (setq
+  ;;  company-backends (delete 'company-xcode company-backends)
+  ;;  company-backends (delete 'company-bbdb company-backends)
+  ;;  company-backends (delete 'company-eclim company-backends)
+  ;;  company-backends (delete 'company-gtags company-backends)
+  ;;  company-backends (delete 'company-etags company-backends)
+  ;;  company-backends (delete 'company-oddmuse company-backends)
+  ;;  )
 
   (add-to-list 'company-backends 'company-files)
   ;; 用 `TAB' 选择且同时补全
@@ -117,7 +118,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for web                                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
+(add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.mjs\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+;; (setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
 ;; Indent
 (setq css-indent-offset 2
       js2-basic-offset 2
@@ -131,6 +136,8 @@
       web-mode-markup-indent-offset 2
       web-mode-enable-current-element-highlight t)
 ( setq-default typescript-indent-level 2 )
+
+(use-package! rjsx-mode)
 
 (use-package! js-doc
   :config

@@ -37,7 +37,7 @@
         (:rot ("ifdef" "ifndef"))
         ;; javascript
         (:rot ("var" "let" "const"))
-        (:rot ("null" "undefined" "void 0"))
+        (:rot ("null" "undefined"))
         (:rot ("number" "object" "string" "symbol"))
 
         ;; c/...
