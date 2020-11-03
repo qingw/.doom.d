@@ -9,7 +9,6 @@
 (setq user-full-name "Zhicheng Lee"
       user-mail-address "gccll.love@gmail.com"
       user-blog-url "https://www.cheng92.com")
-
 ;; (setq gc-cons-threshold 100000000)
 (cnfonts-increase-fontsize)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
@@ -34,12 +33,6 @@
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
 
-;; (use-package! smart-hungry-delete
-;;   :bind (("<backspace>" . smart-hungry-delete-backward-char)
-;;          ("C-d" . smart-hungry-delete-forward-char))
-;;   :defer nil
-;;   :config (smart-hungry-delete-add-default-hooks))
-
 (use-package! parrot
   :config
   (parrot-mode))
@@ -62,14 +55,15 @@
   (global-company-mode)
 
   ;; backends
-  ;; (setq
-  ;;  company-backends (delete 'company-xcode company-backends)
-  ;;  company-backends (delete 'company-bbdb company-backends)
-  ;;  company-backends (delete 'company-eclim company-backends)
-  ;;  company-backends (delete 'company-gtags company-backends)
-  ;;  company-backends (delete 'company-etags company-backends)
-  ;;  company-backends (delete 'company-oddmuse company-backends)
-  ;;  )
+  (setq
+   company-backends (delete 'company-xcode company-backends)
+   company-backends (delete 'company-bbdb company-backends)
+   company-backends (delete 'company-eclim company-backends)
+   company-backends (delete 'company-gtags company-backends)
+   company-backends (delete 'company-etags company-backends)
+   company-backends (delete 'company-box company-backends)
+   company-backends (delete 'company-oddmuse company-backends)
+   )
 
   (add-to-list 'company-backends 'company-files)
   ;; 用 `TAB' 选择且同时补全
