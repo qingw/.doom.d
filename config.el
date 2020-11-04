@@ -110,7 +110,7 @@
 ;;         "/Users/simon/.vscode/extensions/dbaeumer.vscode-eslint-2.1.13/server/out/eslintServer.js"
 ;;         "--stdio"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                               for web                                       ;
+;                               for web: http://web-mode.org/                 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
@@ -128,7 +128,8 @@
       web-mode-code-indent-offset 2
       web-mode-css-indent-offset 2
       web-mode-markup-indent-offset 2
-      web-mode-enable-current-element-highlight t)
+      web-mode-enable-current-element-highlight t
+      web-mode-enable-current-column-highlight t)
 ( setq-default typescript-indent-level 2 )
 
 (use-package! rjsx-mode)
