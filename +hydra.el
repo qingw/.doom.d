@@ -29,6 +29,7 @@ Tips for modes or kyes.
   ("m" hydra-tip-mcursors/body)
   ("u" hydra-tip-useful/body)
   ("e" hydra-tip-evil/body)
+  ("w" hydra-web-mode/body)
   ("q" nil)
   )
 
@@ -169,3 +170,52 @@ all hydra apps or browse urls:
     ("i" dumb-jump-go-prompt "Prompt")
     ("l" dumb-jump-quick-look "Quick look")
     ("b" dumb-jump-back "Back"))
+
+;; (defvar web-mode-title (with-octicon))
+(defhydra hydra-web-mode (:color blue :quit-key "q" :hint nil)
+ "
+^Element^                       ^Element^                       ^Attribute^             ^Block&Other
+^^^^^^^^---------------------------------------------------------------------------------------------
+_a_ : Select content            _r_ : Rename                    _0_ : Start             _<_ : Begin 
+_b_ : Start                     _s_ : Select                    _9_ : End               _>_ : End
+_e_ : End                       _t_ : Move Down                 _*_ : Insert            _-_ : Select
+_f_ : Fold/unfold children      _u_ : Parent                    _K_ : Delete
+_i_ : Insert                    _v_ : Delete without content    _N_ : Next
+_I_ : Insert cursor             _w_ : Wrap Element              _P_ : Previous
+_k_ : Delete                    _t_ : Last(open/close)          _S_ : Select
+_n_ : Next                      _T_ : Next(open/close)
+_p_ : Previous                  _._ : Wrap Markup
+"
+ ("a" web-mode-element-content-select)
+ ("b" web-mode-element-beginning)
+ ("e" web-mode-element-end)
+ ("f" web-mode-element-children-fold-or-unfold)
+ ("F" web-mode-fold-unfold)
+ ("i" web-mode-element-insert)
+ ("I" web-mode-element-insert-at-point)
+ ("k" web-mode-element-kill)
+ ("m" web-mode-element-mute-blanks)
+ ("n" web-mode-element-next :exit nil :color "pink")
+ ("p" web-mode-element-previous :exit nil :color "pink")
+ ("r" web-mode-element-rename)
+ ("s" web-mode-element-select)
+ ("t" web-mode-element-transpose)
+ ("u" web-mode-element-parent :exit nil :color "pink")
+ ("v" web-mode-element-vanish)
+ ("w" web-mode-element-wrap)
+ ("t" web-mode-tag-previous :exit nil :color "pink")
+ ("T" web-mode-tag-next :exit nil :color "pink")
+ ("." emmet-wrap-with-markup)
+ ;; attribute
+ ("0" web-mode-attribute-beginning)
+ ("9" web-mode-attribute-end)
+ ("*" web-mode-attribute-insert)
+ ("K" web-mode-attribute-kill)
+ ("N" web-mode-attribute-next :exit nil :color "pink")
+ ("P" web-mode-attribute-previous :exit nil :color "pink")
+ ("S" web-mode-attribute-select)
+ ;; block
+ ("<" web-mode-block-next :exit nil :color "pink")
+ (">" web-mode-block-previous :exit nil :color "pink")
+ ("-" web-mode-block-select)
+  )

@@ -72,6 +72,7 @@
 ;; 指定模式下按键映射
 ;; web-mode
 (map! (:map web-mode-map
+       :desc "Hydra body"       :n      "." #'hydra-web-mode/body
        :localleader
        :desc "Instant rename tag"       "r" #'instant-rename-tag
        ))
@@ -124,6 +125,7 @@
       "C-c h h" #'hydra-main/body
       "C-c h t" #'hydra-tip/body
       "C-c h l" #'hydra-launcher/body
+      "C-c h w" #'hydra-web-mode/body
       ;; s, Command
       "s-q" #'+workspace/kill-session-and-quit
 
