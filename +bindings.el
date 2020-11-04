@@ -126,6 +126,8 @@
       "C-c h t" #'hydra-tip/body
       "C-c h l" #'hydra-launcher/body
       "C-c h w" #'hydra-web-mode/body
+      "C-c h T" #'hydra-toggle/body
+      "C-c h r" #'hydra-rectangle/body
       ;; s, Command
       "s-q" #'+workspace/kill-session-and-quit
 
