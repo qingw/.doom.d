@@ -19,7 +19,7 @@
 (setq doom-theme 'doom-one)
 (setq org-directory "~/github/documents/org")
 (setq display-line-numbers-type t)
-(delete-selection-mode 1)
+(delete-selection-mode)
 
 ;; hook
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -175,7 +175,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               for prog                                      ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (add-hook 'prog-mode-hook #'add-node-modules-path)
 
+(after! leetcode
+  (setq leetcode-prefer-language "javascript"
+        leetcode-prefer-sql "mysql"
+        leetcode-save-solutions t
+        leetcode-directory "~/github/make-leetcode"))
 ;; =========================
 (add-load-path! "lisp")

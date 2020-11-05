@@ -35,6 +35,16 @@
 (map! :leader
       (:prefix ("a" . "Apps")
        "r" #'ranger
+       (:prefix ("l" . "Leetcode")
+        "l" #'leetcode
+        "s" #'leetcode-submit
+        "t" #'leetcode-try
+        "r" #'leetcode-refresh
+        "R" #'leetcode-refresh-fetch
+        "f" #'leetcode-set-filter-difficulty
+        "." #'leetcode-reset-filter
+        )
+
        ) ;; a - end
 
       "bf" #'osx-lib-reveal-in-finder
@@ -75,7 +85,14 @@
        :desc "Hydra body"       :n      "." #'hydra-web-mode/body
        :localleader
        :desc "Instant rename tag"       "r" #'instant-rename-tag
-       ))
+       )
+      (:map leetcode--problems-mode-map
+       :n       "." #'hydra-leetcode/body
+       :n       "r" #'leetcode-refresh-fetch
+       :n       "R" #'leetcode-reset-filter
+       :n       "f" #'leetcode-set-filter-difficulty
+       :n       "t" #'leetcode-set-filter-tag
+       :n       "x" #'leetcode-set-filter-regex))
 
 ;; evil
 (map!
@@ -125,6 +142,7 @@
       "C-c h h" #'hydra-main/body
       "C-c h t" #'hydra-tip/body
       "C-c h l" #'hydra-launcher/body
+      "C-c h L" #'hydra-leetcode/body
       "C-c h w" #'hydra-web-mode/body
       "C-c h T" #'hydra-toggle/body
       "C-c h r" #'hydra-rectangle/body
