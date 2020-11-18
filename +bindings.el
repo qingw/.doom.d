@@ -62,6 +62,10 @@
       "fj" #'dired-jump
       "fo" #'crux-open-with
 
+      ;; g
+      "gp" #'smerge-vc-next-conflict
+      ;; g - end
+
       (:prefix ("j" . "jump")
        "i" #'imenu
        ) ;; j - end
@@ -92,7 +96,16 @@
        :n       "R" #'leetcode-reset-filter
        :n       "f" #'leetcode-set-filter-difficulty
        :n       "t" #'leetcode-set-filter-tag
-       :n       "x" #'leetcode-set-filter-regex))
+       :n       "x" #'leetcode-set-filter-regex)
+      (:map org-mode-map
+       :n       "," nil ; 用逗号做 org-mode 下的一个 leader-key
+       (:prefix ("," . "Leader")
+        :n      "x" #'org-toggle-checkbox
+        :n      "t" #'org-todo
+        :n      "T" #'org-todo-list
+        :n      "c" #'org-capture
+        :n      "A" #'org-agenda
+        )))
 
 ;; evil
 (map!
@@ -133,9 +146,10 @@
       "C-c r" #'vr/replace
       "C-c q" #'vr/query-replace
       ;; crux
+      "C-c a" #'org-mac-grab-link
       "C-c o" #'crux-open-with
-      "C-c u" #'crux-view-url
-      "C-c U" #'browse-url-at-point
+      "C-c U" #'crux-view-url
+      "C-c u" #'browse-url-at-point
       "C-c D" #'crux-delete-buffer-and-file
       "C-c S" #'crux-find-shell-init-file
       ;; hydra

@@ -99,6 +99,7 @@ window.g_need_fold = 1
                                             ("8vuecc" "https://img.cheng92.com/vue3/compiler-core/tests/")
                                             ("8plib" "/img/vue3/compiler-core/lib/")
                                             ("8pcg" "/img/vue3/compiler-core/pcg/")
+                                            ("8rea" "/img/vue3/reactivity/reactivity-")
                                             ("8plibo" "https://www.cheng92.com/img/vue3/compiler-core/lib/")
                                             ("8ipath" "https://gcclll.gitee.io/mind-maps/vue3/")
                                             ("8ipcc" "https://gcclll.gitee.io/mind-maps/vue3/compiler-core/")

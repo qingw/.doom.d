@@ -59,7 +59,6 @@ Uses `current-date-time-format' for the formatting the date/time."
     (when (and eslint (file-executable-p eslint))
       (setq-local flycheck-javascript-eslint-executable eslint))))
 
-
 ;;;###autoload
 (defun gcl/git-push ()
   "Execute the command."

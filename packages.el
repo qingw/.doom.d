@@ -25,3 +25,5 @@
 ;; more development
 (package! leetcode)
 (package! lsp-ivy)
+(package! org-mac-link
+  :recipe (:host github :repo "gcclll/org-mac-link"))
