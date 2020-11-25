@@ -5,6 +5,7 @@
 (global-set-key (kbd "C-c t") 'insert-current-time)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
+(global-set-key (kbd "<f10>") 'ebuku)
 
 ;; unbind
 (map! :leader
@@ -105,6 +106,7 @@
        :n       "g" #'ebuku-refresh
        :n       "RET" #'ebuku-open-url
        :n       "n" #'ebuku-next-bookmark
+       :n       "N" #'ebuku-previous-bookmark
        :n       "p" #'ebuku-previous-bookmark
        :n       "a" #'ebuku-add-bookmark
        :n       "d" #'ebuku-delete-bookmark
