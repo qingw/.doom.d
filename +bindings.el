@@ -3,6 +3,8 @@
 
 (global-set-key (kbd "C-c d") 'insert-current-date-time)
 (global-set-key (kbd "C-c t") 'insert-current-time)
+(global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
+(global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
 
 ;; unbind
 (map! :leader
@@ -35,6 +37,7 @@
 (map! :leader
       (:prefix ("a" . "Apps")
        "r" #'ranger
+       "a" #'ebuku
        (:prefix ("l" . "Leetcode")
         "l" #'leetcode
         "s" #'leetcode-submit
@@ -89,6 +92,23 @@
        :desc "Hydra body"       :n      "." #'hydra-web-mode/body
        :localleader
        :desc "Instant rename tag"       "r" #'instant-rename-tag
+       )
+      (:map ebuku-mode-map
+       :n       "." #'ebuku-search
+       :n       "t" #'ebuku-search-on-tag
+       :n       "r" #'ebuku-search-on-recent
+       :n       "R" #'ebuku-search-on-reg
+       :n       "A" #'ebuku-search-on-all
+       :n       "o" #'ebuku-search-on-any
+       :n       "*" #'ebuku-show-all
+       :n       "-" #'ebuku-toggle-results-limit
+       :n       "g" #'ebuku-refresh
+       :n       "RET" #'ebuku-open-url
+       :n       "n" #'ebuku-next-bookmark
+       :n       "p" #'ebuku-previous-bookmark
+       :n       "a" #'ebuku-add-bookmark
+       :n       "d" #'ebuku-delete-bookmark
+       :n       "e" #'ebuku-edit-bookmark
        )
       (:map leetcode--problems-mode-map
        :n       "." #'hydra-leetcode/body
