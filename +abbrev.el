@@ -109,8 +109,24 @@ window.g_need_fold = 1
                                             ("8ptag" "/vue/vue3-source-code-compiler-core/#parsetagcontext-type-parent")
                                             ("8pbase" "/vue/vue3-source-code-compiler-core/#baseparsecontext-options")
                                             ("8pele" "/vue/vue3-source-code-compiler-core/#parseelementcontext-mode" )
+                                            ;; vue relates
+                                            ("8vcc" "
+const {
+  baseParse,
+  baseCompile
+} = require(process.env.PWD + '/../../static/js/vue/compiler-core.global.js')
+")
+                                            ("8vccm" "
+try {
+  if (module) {
+    module.exports = VueCompilerCore;
+  }
+} catch (e) {}
+")
 
                                             ;; js import
+                                            ("8icom" "import {  } from '@commons/components/component'")
+                                            ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
                                             ("8idelay" "import { ndelay } from '@commons/timer/delay'")
                                             ("8idis" "import dispatch from '@commons/actions/dispatch'")
                                             ("8imarker" "import marker from '@commons/requests/marker'")
@@ -128,6 +144,7 @@ window.g_need_fold = 1
 
                                             ;; js
                                             ("8jlog" "console.log()")
+                                            ("8hasop" "hasOwnProperty")
 
                                             ;; css import
                                             ("81com" "@import '~@commons/styles/common';")

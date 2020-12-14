@@ -9,6 +9,7 @@
 (setq user-full-name "Zhicheng Lee"
       user-mail-address "gccll.love@gmail.com"
       user-blog-url "https://www.cheng92.com")
+(setq which-key-idle-delay 0.5)
 ;; (setq gc-cons-threshold 100000000)
 ;; (cnfonts-increase-fontsize)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
@@ -19,7 +20,7 @@
 (setq doom-theme 'doom-one)
 (setq org-directory "~/github/documents/org")
 (setq display-line-numbers-type t)
-(delete-selection-mode)
+(delete-selection-mode 1)
 
 ;; hook
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -61,7 +62,7 @@
    company-backends (delete 'company-eclim company-backends)
    company-backends (delete 'company-gtags company-backends)
    company-backends (delete 'company-etags company-backends)
-   company-backends (delete 'company-box company-backends)
+   ;; company-backends (delete 'company-box company-backends)
    company-backends (delete 'company-oddmuse company-backends)
    )
 
@@ -183,5 +184,13 @@
         leetcode-prefer-sql "mysql"
         leetcode-save-solutions t
         leetcode-directory "~/github/make-leetcode"))
+
+(setq which-key-allow-multiple-replacements t)
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+   ))
 ;; =========================
 (add-load-path! "lisp")
