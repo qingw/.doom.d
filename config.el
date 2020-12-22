@@ -20,7 +20,7 @@
 (setq doom-theme 'doom-one)
 (setq org-directory "~/github/documents/org")
 (setq display-line-numbers-type t)
-(delete-selection-mode 1)
+(setenv VNEXT_PKG_CS "~/github/vue/stb-vue-next/packages/compiler-sfc")
 
 ;; hook
 (add-hook 'org-mode-hook 'turn-on-auto-fill)

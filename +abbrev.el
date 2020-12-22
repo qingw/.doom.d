@@ -114,22 +114,32 @@ window.g_need_fold = 1
 const {
   baseParse,
   baseCompile
-} = require(process.env.PWD + '/../../static/js/vue/compiler-core.global.js')
+} = require(process.env.VNEXT_PKG_CC + '/dist/compiler-core.cjs.js')
 ")
-                                            ("8vccm" "
-try {
-  if (module) {
-    module.exports = VueCompilerCore;
-  }
-} catch (e) {}
+                                            ("8vcd" "
+const {
+  parse,
+  compile
+} = require(process.env.VNEXT_PKG_CD + '/dist/compiler-dom.cjs.js')
 ")
+                                           ("8vcs" "
+const {
+  compileTemplate,
+  parse
+} = require(process.env.VNEXT_PKG_CS + '/dist/compiler-sfc.cjs.js')
+")
+                                           ("8vutil" "
+const { log } = require(process.env.BLOG_JS + '/utils.js')")
+                                           ("8vsfc" "
+const { compileScript, parse } =
+  require(process.env.VNEXT_PKG_SFC + '/dist/compiler-sfc.cjs.js')")
 
                                             ;; js import
                                             ("8icom" "import {  } from '@commons/components/component'")
                                             ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
+                                            ("8imark" "import { marker } from '@commons/sunlight/marker'")
                                             ("8idelay" "import { ndelay } from '@commons/timer/delay'")
                                             ("8idis" "import dispatch from '@commons/actions/dispatch'")
-                                            ("8imarker" "import marker from '@commons/requests/marker'")
                                             ("8ilang" "import lang from '@commons/langs/t'")
                                             ("8ikeys" "import keys from '@commons/keymaps/'")
                                             ("8icls" "import cls from '@commons/cclass'")
