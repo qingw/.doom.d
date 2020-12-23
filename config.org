@@ -28,6 +28,58 @@
 #+end_export
 
 
+* 自定义函数
+#+begin_src emacs-lisp
+;;;###autoload
+(defun gcl/goto-match-paren (arg)
+  "Go to the matching if on (){}[], similar to vi style of % ."
+  (interactive "p")
+  (cond ((looking-at "[\[\(\{]") (evil-jump-item))
+        ((looking-back "[\]\)\}]" 1) (evil-jump-item))
+        ((looking-at "[\]\)\}]") (forward-char) (evil-jump-item))
+        ((looking-back "[\[\(\{]" 1) (backward-char) (evil-jump-item))
+        (t nil)))
+
+;;;###autoload
+(defun gcl/string-inflection-cycle-auto ()
+  "switching by major-mode"
+  (interactive)
+  (cond
+   ;; for emacs-lisp-mode
+   ((eq major-mode 'emacs-lisp-mode)
+    (string-inflection-all-cycle))
+   ;; for python
+   ((eq major-mode 'python-mode)
+    (string-inflection-python-style-cycle))
+   ;; for java
+   ((eq major-mode 'java-mode)
+    (string-inflection-java-style-cycle))
+   (t
+    ;; default
+    (string-inflection-all-cycle))))
+
+;; Current time and date
+(defvar current-date-time-format "%a %b %d %H:%M:%S %Z %Y"
+  "Format of date to insert with `insert-current-date-time' func
+See help of `format-time-string' for possible replacements")
+
+(defvar current-time-format "%H:%M"
+  "Format of date to insert with `insert-current-time' func.
+Note the weekly scope of the command's precision.")
+
+(defun insert-current-date-time ()
+  "insert the current date and time into current buffer.
+Uses `current-date-time-format' for the formatting the date/time."
+  (interactive)
+  (insert (format-time-string current-date-time-format (current-time)))
+  )
+
+(defun insert-current-time ()
+  "insert the current time (1-week scope) into the current buffer."
+  (interactive)
+  (insert (format-time-string current-time-format (current-time)))
+  )
+#+end_src
 * 模块(init.el)
 使用到的包：
 
@@ -240,13 +292,13 @@
 #+end_src
 
 ** 键值绑定
-
 *** 解绑按键
 
 #+begin_src emacs-lisp
 ;; 解绑一些按键，待用
 (map! "C-s" nil
       "C-d" nil
+      "C-i" nil
       "M-," nil
       "M-." nil
 
@@ -254,37 +306,73 @@
       "A" nil
       "X" nil
       "/" nil)
+
+(map! [remap swiper] #'swiper-isearch
+      [remap org-capture] nil
+      [remap xref-find-definitions] #'lsp-ui-peek-find-definitions
+      [remap xref-find-references] #'lsp-ui-peek-find-references)
 #+end_src
 
-*** 全局按键
+*** F1-F12
 
 #+begin_src emacs-lisp
-;; F<n> 按键绑定
-(global-set-key (kbd "<f5>") #'deadgrep)
-(global-set-key (kbd "<M-f5>") #'deadgrep-kill-all-buffers)
+(global-set-key (kbd "<f5>") 'deadgrep)
+(global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
+(global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
+(global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
+#+end_src
+*** SPC(空格)
 
-;; 全局按键绑定
-(map! :ni       "C-="           #'er/expand-region
-      :ni       "C-e"           #'evil-end-of-line
-      :ni       "C-d"           (cmd! (previous-line)
-                                      (kill-line)
-                                      (forward-line))
-      :ni       "C-s r"         #'instant-rename-tag
-
-      :ni       "M-i"           #'parrot-rotate-next-word-at-point
-
-      :ni       "s-<"           #'move-text-up
-      :ni       "s->"           #'move-text-down
-
-      :leader
+#+begin_src emacs-lisp
+(map! :leader
       :n        "SPC"   #'execute-extended-command
+      :n        "b f"    #'osx-lib-reveal-in-finder
       :n        "/ r"   #'deadgrep
+      (:prefix ("l" . "load")
+       :n       "i"     #'imenu-list
+       :n       "d"     #'deft)
+      (:prefix ( "v" . "view" )
+       :n       "o"     #'ivy-pop-view
+       :n       "p"     #'ivy-push-view))
+#+end_src
+*** s-(Command)
+
+#+begin_src emacs-lisp
+(map! "s-<"     #'move-text-up
+      "s->"     #'move-text-down
+      "s-i"     #'gcl/string-inflection-cycle-auto
       )
 #+end_src
-*** SPC 按键
-**** SPC d
+*** C-(Control)
 
-** 基本配置
+#+begin_src emacs-lisp
+(map! "C-e"     #'evil-end-of-line
+      "C-'"     #'imenu-list-smart-toggle
+      "C-d"     (cmd! (previous-line)
+                      (kill-line)
+                      (forward-line))
+      :niv      "C-="     #'er/expand-region
+      )
+#+end_src
+
+*** M-(Alt/Option)
+
+#+begin_src emacs-lisp
+(map! "M--"     #'gcl/goto-match-paren
+      "M-i"     #'parrot-rotate-next-word-at-point)
+#+end_src
+*** C-c(Control-c)
+
+#+begin_src emacs-lisp
+(map! :ni "C-c d"       #'insert-current-date-time
+      :ni "C-c t"       #'insert-current-time
+      :ni "C-c o"       #'crux-open-with
+      :ni "C-c r"       #'vr/replace
+      :ni "C-c q"       #'vr/query-replace
+      :ni "C-c u"       #'crux-view-url
+      )
+#+end_src
+** 基本配置(Basic)
 *** 个人信息
 
 #+begin_src emacs-lisp
@@ -304,6 +392,7 @@
 
 (setq-default
  fill-column 80
+ undo-limit 80000000
  delete-by-moving-to-trash t
  window-combination-resize t
  delete-trailing-lines t
@@ -354,6 +443,8 @@
 #+end_src
 
 ** Package 配置
+*** TODO
+1. anzu
 *** Company
 
 补全配置
@@ -386,6 +477,19 @@
 | ~g~       | 重新搜索                    |
 | ~TAB~     | 展开/闭合结果               |
 | ~C-c C-k~ | 停止正在执行的搜索          |
+*** deft
+
+~SPC l d~
+
+#+begin_src emacs-lisp
+(use-package deft
+  :after org
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension '("org" "md" "txt"))
+  (deft-directory "~/github/documents"))
+#+end_src
 *** evil 配置
 
 #+begin_src emacs-lisp
@@ -401,6 +505,15 @@
 ;; window 操作
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
+#+end_src
+*** leetcode
+
+#+begin_src emacs-lisp
+(after! leetcode
+  (setq leetcode-prefer-language "javascript"
+        leetcode-prefer-sql "mysql"
+        leetcode-save-solutions t
+        leetcode-directory "~/github/make-leetcode"))
 #+end_src
 *** lsp
 
@@ -497,6 +610,18 @@
   :config
   (setq ranger-show-literal nil))
 #+end_src
+*** search & replace
+
+~C-c r~
+
+#+begin_src emacs-lisp
+(use-package! visual-regexp
+  :commands (vr/select-replace vr/select-query-replace))
+
+(use-package! visual-regexp-steriods
+  :commands (vr/select-replace vr/select-query-replace))
+#+end_src
+
 *** treemacs
 
 忽略某些类型的文件：
@@ -549,6 +674,13 @@
 
 #+begin_src emacs-lisp
 (setq yas-triggers-in-field t)
+
+
+(use-package! doom-snippets             ; hlissner
+  :after yasnippet)
+
+(use-package! yasnippet-snippets        ; AndreaCrotti
+  :after yasnippet)
 #+end_src
 
 ** 开发配置
@@ -570,6 +702,14 @@
       web-mode-enable-current-element-highlight t
       web-mode-enable-current-column-highlight t)
 (setq-default typescript-indent-level 2)
+
+(use-package! import-js
+  :defer t
+  :init
+  (add-hook! (js2-mode rjsx-mode) (run-import-js))
+  (add-hook! (js2-mode rjsx-mode)
+    (add-hook 'after-save-hook #'import-js-fix nil t)))
+(advice-add '+javascript|cleanup-tide-processes :after 'kill-import-js)
 #+end_src
 * 包管理(packages.el)
 :PROPERTIES:
@@ -590,6 +730,15 @@ This file shouldn't be byte compiled.
 (package! ranger)
 (package! youdao-dictionary)
 (package! link-hint)
+(package! deft)
+(package! anzu)
+(package! visual-regexp)
+(package! visual-regexp-steriods
+  :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
+(package! osx-lib)
+(package! crux)
+(package! string-inflection)
+(package! pangu-spacing)
 #+end_src
 
 编程类：
@@ -599,9 +748,11 @@ This file shouldn't be byte compiled.
 (package! instant-rename-tag
   :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+(package! imenu-list)
+(package! yasnippet-snippets)
 
 ;; web dev
 (package! ob-typescript)
 (package! prettier-js)
-
+(package! import-js)
 #+end_src

@@ -7,13 +7,25 @@
 (package! ranger)
 (package! youdao-dictionary)
 (package! link-hint)
+(package! deft)
+(package! anzu)
+(package! visual-regexp)
+(package! visual-regexp-steriods
+  :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
+(package! osx-lib)
+(package! crux)
+(package! string-inflection)
+(package! pangu-spacing)
 
 ;; development
 (package! leetcode)
 (package! instant-rename-tag
   :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+(package! imenu-list)
+(package! yasnippet-snippets)
 
 ;; web dev
 (package! ob-typescript)
 (package! prettier-js)
+(package! import-js)
