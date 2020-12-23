@@ -10,7 +10,6 @@
       "A" nil
       "X" nil)
 
-;; 全局按键绑定
 (map! :ni       "C-="           #'er/expand-region
       :ni       "C-e"           #'evil-end-of-line
       :ni       "C-d"           (cmd! (previous-line)
