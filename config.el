@@ -101,12 +101,15 @@ Uses `current-date-time-format' for the formatting the date/time."
 (map! "M--"     #'gcl/goto-match-paren
       "M-i"     #'parrot-rotate-next-word-at-point)
 
-(map! :ni "C-c d"       #'insert-current-date-time
-      :ni "C-c t"       #'insert-current-time
-      :ni "C-c o"       #'crux-open-with
-      :ni "C-c r"       #'vr/replace
-      :ni "C-c q"       #'vr/query-replace
-      :ni "C-c u"       #'crux-view-url
+(map! "C-c a c"     #'org-mac-chrome-insert-frontmost-url
+      "C-c d"       #'insert-current-date-time
+      "C-c t"       #'insert-current-time
+      "C-c o"       #'crux-open-with
+      "C-c r"       #'vr/replace
+      "C-c q"       #'vr/query-replace
+      "C-c u"       #'crux-view-url
+
+
       )
 
 ;; 个人信息配置

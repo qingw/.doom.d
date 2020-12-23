@@ -27,6 +27,19 @@
 \newpage % because the contents are multi-page, this looks better
 #+end_export
 
+#+begin_quote
+他人配置列表：
+#+end_quote
+
+| name&link                                               | brief |
+|---------------------------------------------------------+-------|
+| [[https://github.com/zzamboni/dot-doom/blob/master/doom.org][dot-doom/doom.org at master · zzamboni/dot-doom]]         | -     |
+| [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's Emacs configuration]]                        | -     |
+| [[https://github.com/daedreth/UncleDavesEmacs#user-content-ido-and-why-i-started-using-helm][daedreth/UncleDavesEmacs: My personal ~/.emacs.d]]        | -     |
+| [[https://github.com/PythonNut/quark-emacs][PythonNut/quark-emacs: An incredible wonderland of code]] | -     |
+| [[https://www.masteringemacs.org/][Mastering Emacs]]                                         | -     |
+| [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]                                | -     |
+
 
 * 自定义函数
 #+begin_src emacs-lisp
@@ -364,12 +377,15 @@ Uses `current-date-time-format' for the formatting the date/time."
 *** C-c(Control-c)
 
 #+begin_src emacs-lisp
-(map! :ni "C-c d"       #'insert-current-date-time
-      :ni "C-c t"       #'insert-current-time
-      :ni "C-c o"       #'crux-open-with
-      :ni "C-c r"       #'vr/replace
-      :ni "C-c q"       #'vr/query-replace
-      :ni "C-c u"       #'crux-view-url
+(map! "C-c a c"     #'org-mac-chrome-insert-frontmost-url
+      "C-c d"       #'insert-current-date-time
+      "C-c t"       #'insert-current-time
+      "C-c o"       #'crux-open-with
+      "C-c r"       #'vr/replace
+      "C-c q"       #'vr/query-replace
+      "C-c u"       #'crux-view-url
+
+
       )
 #+end_src
 ** 基本配置(Basic)
@@ -444,7 +460,9 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ** Package 配置
 *** TODO
+
 1. anzu
+2. [[https://github.com/manateelazycat/color-rg][color-rg]]
 *** Company
 
 补全配置
