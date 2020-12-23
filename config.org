@@ -252,12 +252,17 @@
 
       :leader
       "A" nil
-      "X" nil)
+      "X" nil
+      "/" nil)
 #+end_src
 
 *** 全局按键
 
 #+begin_src emacs-lisp
+;; F<n> 按键绑定
+(global-set-key (kbd "<f5>") #'deadgrep)
+(global-set-key (kbd "<M-f5>") #'deadgrep-kill-all-buffers)
+
 ;; 全局按键绑定
 (map! :ni       "C-="           #'er/expand-region
       :ni       "C-e"           #'evil-end-of-line
@@ -273,8 +278,11 @@
 
       :leader
       :n        "SPC"   #'execute-extended-command
+      :n        "/ r"   #'deadgrep
       )
 #+end_src
+*** SPC 按键
+**** SPC d
 
 ** 基本配置
 *** 个人信息
@@ -291,15 +299,30 @@
 #+begin_src emacs-lisp
 ;; setq, set-default 统一配置的地方
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
-(setq which-key-idle-delay 0.5)
 (setq org-directory "~/github/documents/org")
 (setq display-line-numbers-type t)
+
+(setq-default
+ fill-column 80
+ delete-by-moving-to-trash t
+ window-combination-resize t
+ delete-trailing-lines t
+ x-stretch-cursor t)
+
+(setq-default custom-file (expand-file-name ".custom.el" doom-private-dir))
+(when (file-exists-p custom-file)
+  (load custom-file))
 #+end_src
 
 *** 模式开启
 #+begin_src emacs-lisp
 ;; 全局开启一些模式
 (abbrev-mode 1)
+(display-time-mode 1)                           ; 在 mode-line 中显示时间
+(unless (equal "Battery status not available"
+               (battery))
+  (display-battery-mode 1))                     ; 显示电量
+(global-subword-mode 1)                         ; Iterate through CamelCase words
 #+end_src
 *** abbrev 缩写表
 
@@ -311,20 +334,85 @@
                                             ("81com" "@import '~@commons/styles/common';")
                                             ))
 #+end_src
+*** add-hook
 
+#+begin_src emacs-lisp
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+#+end_src
 ** 主题配置
 #+begin_src emacs-lisp
 ;; 主题配置
-(setq doom-theme 'doom-one)
+
+(setq doom-theme 'doom-vibrant) ; doom-one
+(delq! t custom-theme-load-path)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 24)
-;; doom-big-font (font-spec :family "JetBrains Mono" :size 36)
+;; doom-big-font (font-spec :family "JetBrains Mono" :size 36))
 ;; doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
 ;; doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
 #+end_src
 
 ** Package 配置
-*** delsel, 删除选中模式
+*** Company
+
+补全配置
+
+#+begin_src emacs-lisp
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-numbers t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
+
+(setq-default history-length 1000)
+(setq-default prescient-history-length 1000)
+#+end_src
+*** deadgrep，支持正则
+
+正则搜索要在搜索的结果中，选中 _regexp_ 来筛选。
+
+按键绑定：
+
+| key       | func                        |
+|-----------+-----------------------------|
+| <f5>      | ~deadgrep~                  |
+| M-<f5>    | ~deadgrep-kill-all-buffers~ |
+|-----------+-----------------------------|
+| ~RET~     | 查看结果                    |
+| ~o~       | 在另一个窗口打开            |
+| ~n/p~     | 结果中上下移动              |
+| ~M-n/M-p~ | 文件头尾之间移动            |
+| ~g~       | 重新搜索                    |
+| ~TAB~     | 展开/闭合结果               |
+| ~C-c C-k~ | 停止正在执行的搜索          |
+*** evil 配置
+
+#+begin_src emacs-lisp
+
+(defalias 'ex! 'evil-ex-define-cmd)
+
+;; 快捷操作，通过 : 冒号进入 evil 命令模式
+;; File operations
+(ex! "cp"          #'+evil:copy-this-file)
+(ex! "mv"          #'+evil:move-this-file)
+(ex! "rm"          #'+evil:delete-this-file)
+
+;; window 操作
+(setq evil-split-window-below t
+      evil-vsplit-window-right t)
+#+end_src
+*** lsp
+
+#+begin_src emacs-lisp
+(use-package! lsp-ui
+  :commands
+  lsp-ui-mode)
+
+(use-package! company-lsp
+  :commands company-lsp)
+#+end_src
+*** org-mode
 *** parrot, 多单词切换
 
 开启全局模式：
@@ -382,7 +470,87 @@
         (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
         ))
 #+end_src
+*** Plaintext
+
+#+begin_src emacs-lisp
+;; 出文本模式下，开启拼写检查
+(set-company-backend!
+  '(text-mode
+    markdown-mode
+    gfm-mode)
+  '(:seperate
+    company-ispell
+    company-files
+    company-yasnippet))
+
+(after! text-mode
+  (add-hook! 'text-mode-hook
+             ;; Apply ANSI color codes
+             (with-silent-modifications
+               (ansi-color-apply-on-region (point-min) (point-max)))))
+#+end_src
+*** ranger
+
+#+begin_src emacs-lisp
+;; ranger
+(after! ranger
+  :config
+  (setq ranger-show-literal nil))
+#+end_src
+*** treemacs
+
+忽略某些类型的文件：
+#+begin_src emacs-lisp
+(setq treemacs-file-ignore-extensions
+      '(;; LaTeX
+        "aux"
+        "ptc"
+        "fdb_latexmk"
+        "fls"
+        "synctex.gz"
+        "toc"
+        ;; LaTeX - glossary
+        "glg"
+        "glo"
+        "gls"
+        "glsdefs"
+        "ist"
+        "acn"
+        "acr"
+        "alg"
+        ;; LaTeX - pgfplots
+        "mw"
+        ;; LaTeX - pdfx
+        "pdfa.xmpi"
+        ))
+(setq treemacs-file-ignore-globs
+      '(;; LaTeX
+        "*/_minted-*"
+        ;; AucTeX
+        "*/.auctex-auto"
+        "*/_region_.log"
+        "*/_region_.tex"))
+#+end_src
 *** which-key
+
+过滤掉 ~evilem--~ 开头的指令：
+#+begin_src emacs-lisp
+(setq which-key-idle-delay 0.5)
+
+(setq which-key-allow-multiple-replacements t)
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+   ))
+#+end_src
+*** yasnippets
+
+#+begin_src emacs-lisp
+(setq yas-triggers-in-field t)
+#+end_src
+
 ** 开发配置
 *** WEB 开发
 
@@ -413,17 +581,27 @@ This file shouldn't be byte compiled.
 ;; -*- no-byte-compile: t; -*-
 #+end_src
 
-辅助类：
+辅助/管理类：
 #+begin_src emacs-lisp
-(package! delsel)
 (package! move-text)
 (package! parrot)
+;; fast, friendly searching with ripgrep and Emacs
+(package! deadgrep)
+(package! ranger)
+(package! youdao-dictionary)
+(package! link-hint)
 #+end_src
 
 编程类：
 #+begin_src emacs-lisp
+;; development
 (package! leetcode)
 (package! instant-rename-tag
   :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+
+;; web dev
+(package! ob-typescript)
+(package! prettier-js)
+
 #+end_src
