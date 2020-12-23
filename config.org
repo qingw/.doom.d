@@ -296,17 +296,6 @@
 (setq display-line-numbers-type t)
 #+end_src
 
-*** 主题配置
-#+begin_src emacs-lisp
-;; 主题配置
-(setq doom-theme 'doom-one)
-
-(setq doom-font (font-spec :family "JetBrains Mono" :size 24)
-      doom-big-font (font-spec :family "JetBrains Mono" :size 36)
-      doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
-      doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
-#+end_src
-
 *** 模式开启
 #+begin_src emacs-lisp
 ;; 全局开启一些模式
@@ -321,6 +310,17 @@
                                             ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
                                             ("81com" "@import '~@commons/styles/common';")
                                             ))
+#+end_src
+
+** 主题配置
+#+begin_src emacs-lisp
+;; 主题配置
+(setq doom-theme 'doom-one)
+
+;; (setq doom-font (font-spec :family "JetBrains Mono" :size 24)
+;; doom-big-font (font-spec :family "JetBrains Mono" :size 36)
+;; doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
+;; doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
 #+end_src
 
 ** Package 配置
