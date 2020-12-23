@@ -1,3 +1,38 @@
+#+title: Doom Emacs Configuration
+#+subtitle: The Methods, Management, and Menagerie of Madness
+#+author: Zhicheng Lee
+#+date: {{{modification-time(%Y-%m-%d %H:%M, t)}}} ;{{{timezone}}}, {{{git-rev}}}
+#+macro: timezone (eval (substring (shell-command-to-string "date +%Z") 0 -1))
+#+macro: git-rev (eval (format "@@html:<a href=\"https://github.com/gcclll/.doom.d/commit/%1$s\" style=\"text-decoration: none\"><code style=\"padding: 0; color: var(--text-light); font-size: inherit; opacity: 0.7\">%1$s</code></a>@@@@latex:\\href{https://github.com/gcclll/.doom.d/commit/%1$s}{%1$s}@@" (substring (shell-command-to-string "git rev-parse --short HEAD") 0 -1)))
+#+startup: fold
+#+property: header-args:emacs-lisp :tangle yes :cache yes :results silent :comments link
+#+property: header-args:shell :tangle "setup.sh"
+#+property: header-args :tangle no :results silent
+#+html_head: <link rel='shortcut icon' type='image/png' href='https://www.gnu.org/software/emacs/favicon.png'>
+
+#+begin_quote
+用 config.org 文件来维护 doom emacs 配置。
+#+end_quote
+
+#+begin_export html
+<a href="https://github.com/gcclll/.doom.d/"
+   style="font-family: 'Open Sans'; background-image: none; color: inherit;
+   text-decoration: none; position: relative; top: clamp(-26px, calc(1280px - 100vw), 0px); opacity: 0.7;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
+       class="invertible" alt="GitHub Octicon"
+       style="height: 1em; position: relative; top: 0.1em;">
+  View on GitHub</a>
+#+end_export
+#+begin_export latex
+\newpage % because the contents are multi-page, this looks better
+#+end_export
+
+
+* 模块(init.el)
+使用到的包：
+
+#+name: init.el
+#+begin_src emacs-lisp :tangle "init.el" :noweb no-export :comments none
 ;;; init.el -*- lexical-binding: t; -*-
 
 (doom! :input
@@ -193,3 +228,198 @@
        :config
        ;;literate
        (default +bindings +smartparens))
+#+end_src
+
+* 配置(config.el)
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle "config.el" :comments no
+:END:
+
+#+begin_src emacs-lisp :comments no
+;;; config.el -*- lexical-binding: t; -*-
+#+end_src
+
+** 键值绑定
+
+*** 解绑按键
+
+#+begin_src emacs-lisp
+;; 解绑一些按键，待用
+(map! "C-s" nil
+      "C-d" nil
+      "M-," nil
+      "M-." nil
+
+      :leader
+      "A" nil
+      "X" nil)
+#+end_src
+
+*** 全局按键
+
+#+begin_src emacs-lisp
+;; 全局按键绑定
+(map! :ni       "C-="           #'er/expand-region
+      :ni       "C-e"           #'evil-end-of-line
+      :ni       "C-d"           (cmd! (previous-line)
+                                      (kill-line)
+                                      (forward-line))
+      :ni       "C-s r"         #'instant-rename-tag
+
+      :ni       "M-i"           #'parrot-rotate-next-word-at-point
+
+      :ni       "s-<"           #'move-text-up
+      :ni       "s->"           #'move-text-down
+
+      :leader
+      :n        "SPC"   #'execute-extended-command
+      )
+#+end_src
+
+** 基本配置
+*** 个人信息
+
+#+begin_src emacs-lisp
+;; 个人信息配置
+(setq user-full-name "Zhicheng Lee"
+      user-mail-address "gccll.love@gmail.com"
+      user-blog-url "https://www.cheng92.com")
+#+end_src
+
+*** 基本变量设置
+
+#+begin_src emacs-lisp
+;; setq, set-default 统一配置的地方
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq which-key-idle-delay 0.5)
+(setq org-directory "~/github/documents/org")
+(setq display-line-numbers-type t)
+#+end_src
+
+*** 主题配置
+#+begin_src emacs-lisp
+;; 主题配置
+(setq doom-theme 'doom-one)
+
+#+end_src
+
+*** 模式开启
+#+begin_src emacs-lisp
+;; 全局开启一些模式
+(abbrev-mode 1)
+#+end_src
+*** abbrev 缩写表
+
+#+begin_src emacs-lisp
+;; ------------------- 缩写表 ---------------------------------------------
+(define-abbrev-table 'global-abbrev-table '(
+                                            ("8imark" "import { marker } from '@commons/sunlight/marker'")
+                                            ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
+                                            ("81com" "@import '~@commons/styles/common';")
+                                            ))
+#+end_src
+
+** Package 配置
+*** delsel, 删除选中模式
+*** parrot, 多单词切换
+
+开启全局模式：
+#+begin_src emacs-lisp
+(use-package! parrot
+  :config
+  (parrot-mode))
+#+end_src
+
+具体切换数据配置：
+#+begin_src emacs-lisp
+(setq parrot-rotate-dict
+      '(
+        (:rot ("alpha" "beta") :caps t :lower nil)
+        ;; => rotations are "Alpha" "Beta"
+
+        (:rot ("snek" "snake" "stawp"))
+        ;; => rotations are "snek" "snake" "stawp"
+
+        (:rot ("yes" "no") :caps t :upcase t)
+        ;; => rotations are "yes" "no", "Yes" "No", "YES" "NO"
+
+        (:rot ("&" "|"))
+        ;; => rotations are "&" "|"
+        ;; default dictionary starts here ('v')
+        (:rot ("begin" "end") :caps t :upcase t)
+        (:rot ("enable" "disable") :caps t :upcase t)
+        (:rot ("enter" "exit") :caps t :upcase t)
+        (:rot ("forward" "backward") :caps t :upcase t)
+        (:rot ("front" "rear" "back") :caps t :upcase t)
+        (:rot ("get" "set") :caps t :upcase t)
+        (:rot ("high" "low") :caps t :upcase t)
+        (:rot ("in" "out") :caps t :upcase t)
+        (:rot ("left" "right") :caps t :upcase t)
+        (:rot ("min" "max") :caps t :upcase t)
+        (:rot ("on" "off") :caps t :upcase t)
+        (:rot ("prev" "next"))
+        (:rot ("start" "stop") :caps t :upcase t)
+        (:rot ("true" "false") :caps t :upcase t)
+        (:rot ("&&" "||"))
+        (:rot ("==" "!="))
+        (:rot ("===" "!=="))
+        (:rot ("." "->"))
+        (:rot ("if" "else" "elif"))
+        (:rot ("ifdef" "ifndef"))
+        ;; javascript
+        (:rot ("var" "let" "const"))
+        (:rot ("null" "undefined"))
+        (:rot ("number" "object" "string" "symbol"))
+
+        ;; c/...
+        (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
+        (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
+        (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+        (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
+        ))
+#+end_src
+*** which-key
+** 开发配置
+*** WEB 开发
+
+设置 js/html/css 模式缩进
+#+begin_src emacs-lisp
+;; web 开发配置
+(setq css-indent-offset 2
+      js2-basic-offset 2
+      js-switch-indent-offset 2
+      js-indent-level 2
+      js2-mode-show-parse-errors nil
+      js2-mode-show-strict-warnings nil
+      web-mode-attr-indent-offset 2
+      web-mode-code-indent-offset 2
+      web-mode-css-indent-offset 2
+      web-mode-markup-indent-offset 2
+      web-mode-enable-current-element-highlight t
+      web-mode-enable-current-column-highlight t)
+(setq-default typescript-indent-level 2)
+#+end_src
+* 包管理(packages.el)
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle "packages.el" :comments no
+:END:
+
+This file shouldn't be byte compiled.
+#+begin_src emacs-lisp :tangle "packages.el" :comments no
+;; -*- no-byte-compile: t; -*-
+#+end_src
+
+辅助类：
+#+begin_src emacs-lisp
+(package! delsel)
+(package! move-text)
+(package! parrot)
+#+end_src
+
+编程类：
+#+begin_src emacs-lisp
+(package! leetcode)
+(package! instant-rename-tag
+  :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
+(package! js-doc)
+#+end_src

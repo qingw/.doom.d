@@ -1,37 +1,107 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
+;; 解绑一些按键，待用
+(map! "C-s" nil
+      "C-d" nil
+      "M-," nil
+      "M-." nil
 
-(load! "+abbrev")
-(load! "+bindings")
+      :leader
+      "A" nil
+      "X" nil)
 
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
+;; 全局按键绑定
+(map! :ni       "C-="           #'er/expand-region
+      :ni       "C-e"           #'evil-end-of-line
+      :ni       "C-d"           (cmd! (previous-line)
+                                      (kill-line)
+                                      (forward-line))
+      :ni       "C-s r"         #'instant-rename-tag
+
+      :ni       "M-i"           #'parrot-rotate-next-word-at-point
+
+      :ni       "s-<"           #'move-text-up
+      :ni       "s->"           #'move-text-down
+
+      :leader
+      :n        "SPC"   #'execute-extended-command
+      )
+
+;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"
       user-mail-address "gccll.love@gmail.com"
       user-blog-url "https://www.cheng92.com")
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-(setq org-directory "~/github/documents/org")
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-(add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-(setq doom-theme 'doom-one)
+;; setq, set-default 统一配置的地方
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq which-key-idle-delay 0.5)
+(setq org-directory "~/github/documents/org")
 (setq display-line-numbers-type t)
 
-(use-package! delsel
-  :hook (after-init . delete-selection-mode))
+;; 主题配置
+(setq doom-theme 'doom-one)
+
+;; 全局开启一些模式
+(abbrev-mode 1)
+
+;; ------------------- 缩写表 ---------------------------------------------
+(define-abbrev-table 'global-abbrev-table '(
+                                            ("8imark" "import { marker } from '@commons/sunlight/marker'")
+                                            ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
+                                            ("81com" "@import '~@commons/styles/common';")
+                                            ))
 
 (use-package! parrot
   :config
   (parrot-mode))
 
+(setq parrot-rotate-dict
+      '(
+        (:rot ("alpha" "beta") :caps t :lower nil)
+        ;; => rotations are "Alpha" "Beta"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;               Programmer                                                    ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        (:rot ("snek" "snake" "stawp"))
+        ;; => rotations are "snek" "snake" "stawp"
 
-;; indent
+        (:rot ("yes" "no") :caps t :upcase t)
+        ;; => rotations are "yes" "no", "Yes" "No", "YES" "NO"
+
+        (:rot ("&" "|"))
+        ;; => rotations are "&" "|"
+        ;; default dictionary starts here ('v')
+        (:rot ("begin" "end") :caps t :upcase t)
+        (:rot ("enable" "disable") :caps t :upcase t)
+        (:rot ("enter" "exit") :caps t :upcase t)
+        (:rot ("forward" "backward") :caps t :upcase t)
+        (:rot ("front" "rear" "back") :caps t :upcase t)
+        (:rot ("get" "set") :caps t :upcase t)
+        (:rot ("high" "low") :caps t :upcase t)
+        (:rot ("in" "out") :caps t :upcase t)
+        (:rot ("left" "right") :caps t :upcase t)
+        (:rot ("min" "max") :caps t :upcase t)
+        (:rot ("on" "off") :caps t :upcase t)
+        (:rot ("prev" "next"))
+        (:rot ("start" "stop") :caps t :upcase t)
+        (:rot ("true" "false") :caps t :upcase t)
+        (:rot ("&&" "||"))
+        (:rot ("==" "!="))
+        (:rot ("===" "!=="))
+        (:rot ("." "->"))
+        (:rot ("if" "else" "elif"))
+        (:rot ("ifdef" "ifndef"))
+        ;; javascript
+        (:rot ("var" "let" "const"))
+        (:rot ("null" "undefined"))
+        (:rot ("number" "object" "string" "symbol"))
+
+        ;; c/...
+        (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
+        (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
+        (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+        (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
+        ))
+
+;; web 开发配置
 (setq css-indent-offset 2
       js2-basic-offset 2
       js-switch-indent-offset 2
@@ -45,35 +115,3 @@
       web-mode-enable-current-element-highlight t
       web-mode-enable-current-column-highlight t)
 (setq-default typescript-indent-level 2)
-
-(after! leetcode
-  (setq leetcode-prefer-language "javascript"
-        leetcode-prefer-sql "mysql"
-        leetcode-save-solutions t
-        leetcode-directory "~/github/make-leetcode"))
-
-(use-package! instant-rename-tag)
-
-(use-package! js-doc
-  :config
-  (setq js-doc-mail-address user-mail-address
-        js-doc-author (format "%s <%s>" (user-full-name) js-doc-mail-address)
-        js-doc-url user-blog-url
-        js-doc-license "MIT"))
-
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
