@@ -41,6 +41,11 @@
 ;; 主题配置
 (setq doom-theme 'doom-one)
 
+(setq doom-font (font-spec :family "JetBrains Mono" :size 24)
+      doom-big-font (font-spec :family "JetBrains Mono" :size 36)
+      doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
+      doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
+
 ;; 全局开启一些模式
 (abbrev-mode 1)
 
