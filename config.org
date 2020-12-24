@@ -329,6 +329,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 *** F1-F12
 
 #+begin_src emacs-lisp
+(global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
@@ -377,8 +378,30 @@ Uses `current-date-time-format' for the formatting the date/time."
                       (forward-line))
       "C-s"     #'+default/search-buffer
 
+      ;; smartparen
       "C-("     #'sp-backward-slurp-sexp
       "C-)"     #'sp-forward-slurp-sexp
+
+
+      ;; multiple cursors
+      "C->"     #'mc/mark-next-like-this
+      "C-<"     #'mc/mark-previous-like-this
+      "C-c C-<" #'mc/mark-all-like-this
+      "C-S-c C-S-c" #'mc/edit-lines
+      "C-S-c 0" #'mc/insert-numbers
+      "C-S-c 1" #'mc/insert-letters
+      "C-S-c s" #'mc/mark-all-in-region
+      "C-S-c S" #'mc/mark-all-in-region-regexp
+
+      ;; prefix C-c
+      "C-c a c"     #'org-mac-chrome-insert-frontmost-url
+      "C-c d"       #'insert-current-date-time
+      "C-c t"       #'insert-current-time
+      "C-c o"       #'crux-open-with
+      "C-c r"       #'vr/replace
+      "C-c q"       #'vr/query-replace
+      "C-c u"       #'crux-view-url
+      "C-c y"       #'youdao-dictrionary-search-at-point+
 
       :niv      "C--"     #'cnfonts-decrease-fontsize
       :niv      "C-+"     #'cnfonts-increase-fontsize
@@ -392,20 +415,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 #+begin_src emacs-lisp
 (map! "M--"     #'gcl/goto-match-paren
       "M-i"     #'parrot-rotate-next-word-at-point)
-#+end_src
-*** C-c(Control-c)
-
-#+begin_src emacs-lisp
-(map! "C-c a c"     #'org-mac-chrome-insert-frontmost-url
-      "C-c d"       #'insert-current-date-time
-      "C-c t"       #'insert-current-time
-      "C-c o"       #'crux-open-with
-      "C-c r"       #'vr/replace
-      "C-c q"       #'vr/query-replace
-      "C-c u"       #'crux-view-url
-
-
-      )
 #+end_src
 *** evil bindings
 
@@ -833,6 +842,36 @@ _p_ : Previous
   :config (smart-hungry-delete-add-default-hooks)
   )
 #+end_src
+*** multiple cursors
+
+#+begin_src emacs-lisp
+;; multiple cursors hydra
+(defhydra hydra-multiple-cursors (:color blue :hint nil)
+  "
+ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
+------------------------------------------------------------------
+ [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
+ [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
+ [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
+ [Click] Cursor at point       [_q_] Quit"
+  ("l" mc/edit-lines :exit t)
+  ("a" mc/mark-all-like-this :exit t)
+  ("n" mc/mark-next-like-this)
+  ("N" mc/skip-to-next-like-this)
+  ("M-n" mc/unmark-next-like-this)
+  ("p" mc/mark-previous-like-this)
+  ("P" mc/skip-to-previous-like-this)
+  ("M-p" mc/unmark-previous-like-this)
+  ("s" mc/mark-all-in-region-regexp :exit t)
+  ("0" mc/insert-numbers :exit t)
+  ("A" mc/insert-letters :exit t)
+  ("<mouse-1>" mc/add-cursor-on-click)
+  ;; Help with click recognition in this hydra
+  ("<down-mouse-1>" ignore)
+  ("<drag-mouse-1>" ignore)
+  ("q" nil))
+#+end_src
+
 ** 开发配置
 *** WEB 开发
 
