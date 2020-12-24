@@ -17,6 +17,7 @@
 (package! crux)
 (package! string-inflection)
 (package! pangu-spacing)
+(package! cnfonts)
 
 ;; development
 (package! leetcode)

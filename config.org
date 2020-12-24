@@ -930,6 +930,7 @@ This file shouldn't be byte compiled.
 (package! crux)
 (package! string-inflection)
 (package! pangu-spacing)
+(package! cnfonts)
 #+end_src
 
 编程类：
