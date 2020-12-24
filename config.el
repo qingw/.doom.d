@@ -80,7 +80,8 @@ Uses `current-date-time-format' for the formatting the date/time."
       :n        "/ r"   #'deadgrep
       (:prefix ("l" . "load")
        :n       "i"     #'imenu-list
-       :n       "d"     #'deft)
+       :n       "d"     #'deft
+       :n       "l"     #'+workspace/switch-to)
       (:prefix ( "v" . "view" )
        :n       "o"     #'ivy-pop-view
        :n       "p"     #'ivy-push-view)
@@ -227,6 +228,22 @@ Uses `current-date-time-format' for the formatting the date/time."
 (use-package! company-lsp
   :commands company-lsp)
 
+(use-package! lsp-mode
+  :hook (
+         (web-mode . lsp)
+         (typescript-mode . lsp)
+         (rjsx-mode . lsp)
+         (javascript-mode . lsp)
+         (js2-mode . lsp)
+         (python-mode . lsp)
+         (go-mode . lsp)
+         (css-mode . lsp)
+         )
+  :commands lsp
+  :config
+  (setq lsp-idle-delay 0.500
+        lsp-enable-file-watchers nil))
+
 (use-package! parrot
   :config
   (parrot-mode))
@@ -368,6 +385,7 @@ Uses `current-date-time-format' for the formatting the date/time."
       web-mode-enable-current-column-highlight t)
 (setq-default typescript-indent-level 2)
 
+(use-package! rjsx-mode)
 (use-package! import-js
   :defer t
   :init
