@@ -1,4 +1,3 @@
-;; [[file:~/.doom.d/config.org::*自定义函数][自定义函数:1]]
 ;;;###autoload
 (defun gcl/goto-match-paren (arg)
   "Go to the matching if on (){}[], similar to vi style of % ."
@@ -48,7 +47,6 @@ Uses `current-date-time-format' for the formatting the date/time."
   (interactive)
   (insert (format-time-string current-time-format (current-time)))
   )
-;; 自定义函数:1 ends here
 
 ;;; config.el -*- lexical-binding: t; -*-
 
@@ -76,12 +74,16 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (map! :leader
       :n        "SPC"   #'execute-extended-command
-      :n        "b f"    #'osx-lib-reveal-in-finder
-      :n        "/ r"   #'deadgrep
+      :n        "bf"   #'osx-lib-reveal-in-finder
+      :n        "fo"   #'crux-open-with
+      :n        "fj"   #'dired-jump
+      :n        "/r"   #'deadgrep
+
       (:prefix ("l" . "load")
        :n       "i"     #'imenu-list
        :n       "d"     #'deft
        :n       "l"     #'+workspace/switch-to)
+
       (:prefix ( "v" . "view" )
        :n       "o"     #'ivy-pop-view
        :n       "p"     #'ivy-push-view)
@@ -107,6 +109,8 @@ Uses `current-date-time-format' for the formatting the date/time."
       "C-("     #'sp-backward-slurp-sexp
       "C-)"     #'sp-forward-slurp-sexp
 
+      :niv      "C--"     #'cnfonts-decrease-fontsize
+      :niv      "C-+"     #'cnfonts-increase-fontsize
       :niv      "C-="     #'er/expand-region
 
       )
@@ -135,6 +139,9 @@ Uses `current-date-time-format' for the formatting the date/time."
  :desc "Wrap with markup"       :nv "z." #'emmet-wrap-with-markup
  :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
  :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
+
+(map! :map web-mode-map
+      "<f2>"    #'hydra-web-mode/body)
 
 ;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"
@@ -351,6 +358,66 @@ Uses `current-date-time-format' for the formatting the date/time."
         "*/_region_.log"
         "*/_region_.tex"))
 
+;; web-mode hydra
+(defhydra hydra-web-mode (:color blue :quit-key "q" :hint nil)
+  "
+^Element^                       ^Element^                       ^Attribute^             ^Block
+^^^^^^^^---------------------------------------------------------------------------------------------
+_a_ : Select content            _r_ : Rename                    _0_ : Start             _<_ : Begin
+_b_ : Start                     _s_ : Select                    _9_ : End               _>_ : End
+_c_ : Clone                     _t_ : Move Down                 _*_ : Insert            _-_ : Select
+_e_ : End                       _u_ : Parent                    _N_ : Next
+_f_ : Fold/unfold children      _v_ : Delete without content    _P_ : Previous                  _k_
+_i_ : Insert                    _w_ : Wrap Element              _S_ : Select                _h_      _l_
+_I_ : Insert cursor             _t_ : Last(open/close)          _X_ : Delete                    _j_
+_K_ : Delete                    _T_ : Next(open/close)          _M_ : Match tag
+_n_ : Next                      _._ : Wrap Markup               _A_ : Sort
+_p_ : Previous
+"
+  ("a" web-mode-element-content-select)
+  ("b" web-mode-element-beginning :exit nil)
+  ("c" web-mode-element-clone)
+  ("e" web-mode-element-end :exit nil)
+  ("f" web-mode-element-children-fold-or-unfold :exit nil)
+  ("F" web-mode-fold-unfold :exit nil)
+  ("i" web-mode-element-insert)
+  ("I" web-mode-element-insert-at-point)
+  ("K" web-mode-element-kill)
+  ("m" web-mode-element-mute-blanks)
+  ("n" web-mode-element-next :color "pink" :exit nil)
+  ("p" web-mode-element-previous :color "pink" :exit nil)
+  ("r" web-mode-element-rename)
+  ("s" web-mode-element-select)
+  ("t" web-mode-element-transpose)
+  ("u" web-mode-element-parent :color "pink" :exit nil)
+  ("v" web-mode-element-vanish)
+  ("w" web-mode-element-wrap)
+  ("t" web-mode-tag-previous :color "pink" :exit nil)
+  ("T" web-mode-tag-next :color "pink" :exit nil)
+  ("." emmet-wrap-with-markup)
+  ("q" nil "quit" :exit t)
+  ;; attribute
+  ("0" web-mode-attribute-beginning :exit nil)
+  ("9" web-mode-attribute-end :exit nil)
+  ("*" web-mode-attribute-insert)
+  ("X" web-mode-attribute-kill)
+  ("A" web-mode-tag-attributes-sort :exit nil)
+  ("K" web-mode-element-kill)
+  ("M" web-mode-tag-match :exit nil :color "pink")
+  ("N" web-mode-attribute-next :exit nil :color "pink")
+  ("P" web-mode-attribute-previous :exit nil :color "pink")
+  ("S" web-mode-attribute-select)
+  ;; block
+  ("<" web-mode-block-next :exit nil :color "pink")
+  (">" web-mode-block-previous :exit nil :color "pink")
+  ("-" web-mode-block-select)
+  ;; movement
+  ("j" next-line :exit nil :color "blue")
+  ("k" previous-line :exit nil :color "blue")
+  ("h" backward-char :exit nil :color "blue")
+  ("l" forward-char :exit nil :color "blue")
+  )
+
 (setq which-key-idle-delay 0.5)
 
 (setq which-key-allow-multiple-replacements t)
@@ -369,6 +436,15 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
+
+;; hungry delete
+(use-package! smart-hungry-delete
+  :ensure t
+  :bind (("<backspace>" . smart-hungry-delete-backward-char)
+         ("C-d" . smart-hungry-delete-forward-char))
+  :defer nil ;; dont defer so we can add our functions to hooks
+  :config (smart-hungry-delete-add-default-hooks)
+  )
 
 ;; web 开发配置
 (setq css-indent-offset 2

@@ -1,5 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 
+(package! smart-hungry-delete)
 (package! move-text)
 (package! parrot)
 ;; fast, friendly searching with ripgrep and Emacs
