@@ -83,11 +83,17 @@ Uses `current-date-time-format' for the formatting the date/time."
        :n       "d"     #'deft)
       (:prefix ( "v" . "view" )
        :n       "o"     #'ivy-pop-view
-       :n       "p"     #'ivy-push-view))
+       :n       "p"     #'ivy-push-view)
+
+      :n        "w -"   #'split-window-below
+      )
 
 (map! "s-<"     #'move-text-up
       "s->"     #'move-text-down
       "s-i"     #'gcl/string-inflection-cycle-auto
+      "s-("     #'sp-backward-barf-sexp
+      "s-)"     #'sp-forward-barf-sexp
+
       )
 
 (map! "C-e"     #'evil-end-of-line
@@ -95,7 +101,13 @@ Uses `current-date-time-format' for the formatting the date/time."
       "C-d"     (cmd! (previous-line)
                       (kill-line)
                       (forward-line))
+      "C-s"     #'+default/search-buffer
+
+      "C-("     #'sp-backward-slurp-sexp
+      "C-)"     #'sp-forward-slurp-sexp
+
       :niv      "C-="     #'er/expand-region
+
       )
 
 (map! "M--"     #'gcl/goto-match-paren
@@ -111,6 +123,17 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 
       )
+
+(map!
+ :desc "Go function header"     :n "g[" #'beginning-of-defun
+ :desc "Go function end"        :n "g]" #'end-of-defun
+ :desc "Find definition"        :n "gd" #'xref-find-definitions
+ :desc "Find reference"         :n "gD" #'xref-find-references
+ :desc "Go back find piont"     :n "gb" #'xref-pop-marker-stack
+ :desc "Delete parens"          :n "z-" #'sp-splice-sexp
+ :desc "Wrap with markup"       :nv "z." #'emmet-wrap-with-markup
+ :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
+ :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
 
 ;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"
