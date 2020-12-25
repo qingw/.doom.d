@@ -100,43 +100,44 @@ Uses `current-date-time-format' for the formatting the date/time."
 
       )
 
-(map! "C-e"     #'evil-end-of-line
-      "C-'"     #'imenu-list-smart-toggle
-      "C-d"     (cmd! (previous-line)
-                      (kill-line)
-                      (forward-line))
-      "C-s"     #'+default/search-buffer
+(map!
+ "C-'"     #'imenu-list-smart-toggle
+ "C-d"     (cmd! (previous-line)
+                 (kill-line)
+                 (forward-line))
+ "C-s"     #'+default/search-buffer
 
-      ;; smartparen
-      "C-("     #'sp-backward-slurp-sexp
-      "C-)"     #'sp-forward-slurp-sexp
+ ;; smartparen
+ "C-("     #'sp-backward-slurp-sexp
+ "C-)"     #'sp-forward-slurp-sexp
 
 
-      ;; multiple cursors
-      "C->"     #'mc/mark-next-like-this
-      "C-<"     #'mc/mark-previous-like-this
-      "C-c C-<" #'mc/mark-all-like-this
-      "C-S-c C-S-c" #'mc/edit-lines
-      "C-S-c 0" #'mc/insert-numbers
-      "C-S-c 1" #'mc/insert-letters
-      "C-S-c s" #'mc/mark-all-in-region
-      "C-S-c S" #'mc/mark-all-in-region-regexp
+ ;; multiple cursors
+ "C->"     #'mc/mark-next-like-this
+ "C-<"     #'mc/mark-previous-like-this
+ "C-c C-<" #'mc/mark-all-like-this
+ "C-S-c C-S-c" #'mc/edit-lines
+ "C-S-c 0" #'mc/insert-numbers
+ "C-S-c 1" #'mc/insert-letters
+ "C-S-c s" #'mc/mark-all-in-region
+ "C-S-c S" #'mc/mark-all-in-region-regexp
 
-      ;; prefix C-c
-      "C-c a c"     #'org-mac-chrome-insert-frontmost-url
-      "C-c d"       #'insert-current-date-time
-      "C-c t"       #'insert-current-time
-      "C-c o"       #'crux-open-with
-      "C-c r"       #'vr/replace
-      "C-c q"       #'vr/query-replace
-      "C-c u"       #'crux-view-url
-      "C-c y"       #'youdao-dictrionary-search-at-point+
+ ;; prefix C-c
+ "C-c a c"     #'org-mac-chrome-insert-frontmost-url
+ "C-c d"       #'insert-current-date-time
+ "C-c t"       #'insert-current-time
+ "C-c o"       #'crux-open-with
+ "C-c r"       #'vr/replace
+ "C-c q"       #'vr/query-replace
+ "C-c u"       #'crux-view-url
+ "C-c y"       #'youdao-dictrionary-search-at-point+
 
-      :niv      "C--"     #'cnfonts-decrease-fontsize
-      :niv      "C-+"     #'cnfonts-increase-fontsize
-      :niv      "C-="     #'er/expand-region
+ :niv      "C-e"     #'evil-end-of-line
+ :niv      "C--"     #'cnfonts-decrease-fontsize
+ :niv      "C-+"     #'cnfonts-increase-fontsize
+ :niv      "C-="     #'er/expand-region
 
-      )
+ )
 
 (map! "M--"     #'gcl/goto-match-paren
       "M-i"     #'parrot-rotate-next-word-at-point)
@@ -339,6 +340,11 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
+
+(sp-local-pair
+ '(org-mode)
+ "<<" ">>"
+ :actions '(insert))
 
 (setq treemacs-file-ignore-extensions
       '(;; LaTeX
