@@ -28,6 +28,6 @@
 (package! yasnippet-snippets)
 
 ;; web dev
-(package! ob-typescript)
+;; (package! ob-typescript)
 (package! prettier-js)
-(package! import-js)
+(package! import-js :disable t)

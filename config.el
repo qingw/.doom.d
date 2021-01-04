@@ -179,7 +179,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   (load custom-file))
 
 ;; 全局开启一些模式
-(abbrev-mode 1)
+(setq-default abbrev-mode t)
 (display-time-mode 1)                           ; 在 mode-line 中显示时间
 (unless (equal "Battery status not available"
                (battery))
@@ -191,6 +191,36 @@ Uses `current-date-time-format' for the formatting the date/time."
                                             ("8imark" "import { marker } from '@commons/sunlight/marker'")
                                             ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
                                             ("81com" "@import '~@commons/styles/common';")
+                                            ;; for blog
+                                            ("82sfc" "
+const { compileScript, parse } =
+  require(process.env.VNEXT_PKG_SFC + '/dist/compiler-sfc.cjs.js')
+const { log } = require(process.env.BLOG_JS + '/utils.js')
+const compile = (src, options) => {
+  const { descriptor } = parse(src)
+  return compileScript(descriptor, { ...options, id: 'xxxx' })
+}
+")
+                                            ("82lib" "
+// 源文件：/js/vue/lib.js
+const { compileSFCScript, compileStyle, log } = require(process.env.BLOG_JS + '/vue/lib.js')")
+
+                                            ;; org prop, tags
+                                            ("8cid" "
+:PROPERTIES:
+:COLUMNS: %CUSTOM_ID[(Custom Id)]
+:CUSTOM_ID: literal_eg
+:END:")
+                                            ;; markdown
+                                            ("8font" "<font color='red' size='2'>xx</font>")
+                                            ;; html template for hugo
+                                            ("8red" "@@html:<font color='red'>@@text@@html:</font>@@")
+                                            ("8sup" "@@html:<sup><font color='red'>@@官方@@html:</font></sup>@@")
+                                            ("8sub" "@@html:<sub><font color='red'>@@官方@@html:</font></sub>@@")
+                                            ("8img" "
+#+BEGIN_EXPORT html
+<img src='' alt='some picture'/>
+#+END_EXPORT")
                                             ))
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -199,12 +229,10 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; 主题配置
 
 (setq doom-theme 'doom-vibrant) ; doom-one
-(delq! t custom-theme-load-path)
+;; (delq! t custom-theme-load-path)
 
-;; (setq doom-font (font-spec :family "JetBrains Mono" :size 24)
-;; doom-big-font (font-spec :family "JetBrains Mono" :size 36))
-;; doom-variable-pitch-font (font-spec :family "Overpass" :size 24)
-;; doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
+;; (setq doom-font (font-spec :family "Source Code Pro" :size 16))
+(setq doom-font (font-spec :family "Fira Code" :size 16))
 
 (after! company
   (setq company-idle-delay 0.5
@@ -513,3 +541,27 @@ _p_ : Previous
   (add-hook! (js2-mode rjsx-mode)
     (add-hook 'after-save-hook #'import-js-fix nil t)))
 (advice-add '+javascript|cleanup-tide-processes :after 'kill-import-js)
+
+;; fix true/false symbols for javascript
+;; (setq +pretty-code-enabled-modes nil)
+;; or
+;; (remove-hook 'after-change-major-mode-hook #'+pretty-code-init-pretty-symbols-h)
+;; (defun setup-js2-prettify-symbols ()
+;;   "Set prettify symbols alist."
+;;   (interactive)
+;;   (setq prettify-symbols-alist '(("lambda" . "λ")
+;;                                  ("->" . "→")
+;;                                  ("!=" . "≠")
+;;                                  ("<=" . "≤")
+;;                                  (">=" . "≥")
+;;                                  ("=<<" . "=≪")
+;;                                  ("!" . "￢")
+;;                                  ("null" . "∅")
+;;                                  ("function" . "ƒ")
+;;                                  (">>=" . "≫=")))
+;;   (delete '("false" . "𝔽") prettify-symbols-alist)
+;;   (delete '("true" . "𝕋") prettify-symbols-alist)
+;;   (prettify-symbols-mode -1)
+;;   )
+
+;; (add-hook! 'js2-mode-hook 'setup-js2-prettify-symbols)
