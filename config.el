@@ -203,7 +203,13 @@ const compile = (src, options) => {
 ")
                                             ("82lib" "
 // 源文件：/js/vue/lib.js
-const { compileSFCScript, compileStyle, log } = require(process.env.BLOG_JS + '/vue/lib.js')")
+const { compileSFCScript, compileStyle, getCompiledSSRString: ssr, compileSSR, log } = require(process.env.BLOG_JS + '/vue/lib.js')")
+                                            ("82rc" "
+// 源文件：/js/vue/lib.js
+const { rc: { h, createVNode: c }, f, log } = require(process.env.BLOG_JS + '/vue/lib.js')
+const _h = (...args) => f(h(...args))
+")
+
 
                                             ;; org prop, tags
                                             ("8cid" "
@@ -235,7 +241,7 @@ const { compileSFCScript, compileStyle, log } = require(process.env.BLOG_JS + '/
 (setq doom-font (font-spec :family "Fira Code" :size 16))
 
 (after! company
-  (setq company-idle-delay 0.5
+  (setq company-idle-delay 0.2
         company-minimum-prefix-length 2)
   (setq company-show-numbers t)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
