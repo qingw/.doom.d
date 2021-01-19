@@ -51,11 +51,11 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;;; config.el -*- lexical-binding: t; -*-
 
 ;; 解绑一些按键，待用
-(map! "C-s" nil
-      "C-d" nil
-      "C-i" nil
-      "M-," nil
-      "M-." nil
+(map! :niv      "C-s" nil
+      :niv      "C-d" nil
+      :niv      "C-i" nil
+      :niv      "M-," nil
+      :niv      "M-." nil
 
       :leader
       "A" nil
