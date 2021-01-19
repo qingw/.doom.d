@@ -130,7 +130,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c r"       #'vr/replace
  "C-c q"       #'vr/query-replace
  "C-c u"       #'crux-view-url
- "C-c y"       #'youdao-dictrionary-search-at-point+
+ "C-c y"       #'youdao-dictionary-search-at-point+
 
  :niv      "C-e"     #'evil-end-of-line
  :niv      "C--"     #'cnfonts-decrease-fontsize
@@ -188,6 +188,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;; ------------------- 缩写表 ---------------------------------------------
 (define-abbrev-table 'global-abbrev-table '(
+                                            ("8ireq" "import '../require'")
                                             ("8imark" "import { marker } from '@commons/sunlight/marker'")
                                             ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
                                             ("81com" "@import '~@commons/styles/common';")
@@ -239,6 +240,12 @@ const _h = (...args) => f(h(...args))
 
 ;; (setq doom-font (font-spec :family "Source Code Pro" :size 16))
 (setq doom-font (font-spec :family "Fira Code" :size 16))
+
+(use-package! valign
+  :custom
+  (valign-fancy-bar t)
+  :hook
+  (org-mode . valign-mode))
 
 (after! company
   (setq company-idle-delay 0.2
@@ -297,6 +304,9 @@ const _h = (...args) => f(h(...args))
   :config
   (setq lsp-idle-delay 0.500
         lsp-enable-file-watchers nil))
+
+(add-hook 'org-mode-hook
+          (lambda () (display-line-numbers-mode -1)))
 
 (use-package! parrot
   :config

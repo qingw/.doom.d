@@ -18,6 +18,7 @@
 (package! string-inflection)
 (package! pangu-spacing)
 (package! cnfonts)
+(package! valign)
 
 ;; development
 (package! leetcode)
