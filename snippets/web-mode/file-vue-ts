@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: file-vue-ts
+# key: vue-ts
+# --
+<template>
+$1
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+/* import components */
+$2
+
+export default defineComponent({
+  name: '$3',
+  components: {
+    $4
+  }
+})
+</script>
+<style>
+$5
+</style>

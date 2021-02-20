@@ -32,3 +32,5 @@
 ;; (package! ob-typescript)
 (package! prettier-js)
 (package! import-js :disable t)
+(package! tide :disable t)
+(package! eldoc :disable t)
