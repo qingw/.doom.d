@@ -660,6 +660,14 @@ tables.]]
   (setq lsp-idle-delay 0.500
         lsp-enable-file-watchers nil))
 #+end_src
+
+2021-02-23 11:17:14
+
+增加 vls:
+
+~$ npm install -g vls~
+
+~emacs: lsp-install-server -> vls~
 *** org-mode
 
 #+begin_src emacs-lisp
