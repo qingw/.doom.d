@@ -132,6 +132,8 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c u"       #'crux-view-url
  "C-c y"       #'youdao-dictionary-search-at-point+
 
+ "C-c C-f"     #'json-mode-beautify
+
  :niv      "C-e"     #'evil-end-of-line
  :niv      "C--"     #'cnfonts-decrease-fontsize
  :niv      "C-+"     #'cnfonts-increase-fontsize
