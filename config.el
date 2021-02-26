@@ -358,6 +358,10 @@ const _h = (...args) => f(h(...args))
         (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
         (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
         (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
+
+        ;; org
+        (:rot ("DONE" "DOING" "WAITING" "PENDING"))
+
         ))
 
 ;; 出文本模式下，开启拼写检查
