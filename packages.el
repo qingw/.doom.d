@@ -30,6 +30,7 @@
 
 ;; web dev
 ;; (package! ob-typescript)
+(package! web-beautify)
 (package! prettier-js)
 (package! import-js :disable t)
 (package! tide :disable t)

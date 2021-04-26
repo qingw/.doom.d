@@ -84,8 +84,7 @@
        (lookup              ; navigate your code and its documentation
         +dictionary
         +docsets)
-       (lsp +peek
-            +eglot)
+       (lsp +peek)
        (magit             ; a git porcelain for Emacs
         +forge)
        ;;make              ; run make tasks from Emacs
