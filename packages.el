@@ -20,6 +20,10 @@
 (package! cnfonts)
 (package! valign)
 
+;; org
+(package! org-fancy-priorities)
+(package! org-pretty-tags)
+
 ;; development
 (package! leetcode)
 (package! instant-rename-tag
@@ -35,3 +39,7 @@
 (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
+
+;; java
+(package! lsp-java)
+(package! dap-mode)

@@ -310,8 +310,32 @@ const _h = (...args) => f(h(...args))
   (setq lsp-idle-delay 0.500
         lsp-enable-file-watchers nil))
 
+(use-package! lsp-java
+  :config (add-hook 'java-mode-hook 'lsp))
+(use-package! dap-mode
+  :after lsp-mode
+  :config (dap-auto-configure-mode))
+(use-package! dap-java
+  :ensure nil)
+
 (add-hook 'org-mode-hook
           (lambda () (display-line-numbers-mode -1)))
+
+(use-package! org-fancy-priorities
+  :diminish
+  :ensure t
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴")))
+
+(use-package! org-pretty-tags
+  :diminish org-pretty-tags-mode
+  :ensure t
+  :config
+  (setq org-pretty-tags-surrogate-strings
+        '(("work"  . "⚒")))
+
+  (org-pretty-tags-global-mode))
 
 (use-package! parrot
   :config

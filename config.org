@@ -664,6 +664,14 @@ tables.]]
   :config
   (setq lsp-idle-delay 0.500
         lsp-enable-file-watchers nil))
+
+(use-package! lsp-java
+  :config (add-hook 'java-mode-hook 'lsp))
+(use-package! dap-mode
+  :after lsp-mode
+  :config (dap-auto-configure-mode))
+(use-package! dap-java
+  :ensure nil)
 #+end_src
 
 2021-02-23 11:17:14
@@ -678,6 +686,22 @@ tables.]]
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook
           (lambda () (display-line-numbers-mode -1)))
+
+(use-package! org-fancy-priorities
+  :diminish
+  :ensure t
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴")))
+
+(use-package! org-pretty-tags
+  :diminish org-pretty-tags-mode
+  :ensure t
+  :config
+  (setq org-pretty-tags-surrogate-strings
+        '(("work"  . "⚒")))
+
+  (org-pretty-tags-global-mode))
 #+end_src
 *** parrot, 多单词切换
 
@@ -823,6 +847,8 @@ tables.]]
         "*/_region_.tex"))
 #+end_src
 *** web-mode
+
+prettier-js 配置
 
 hydra 配置
 #+begin_src emacs-lisp
@@ -1047,6 +1073,10 @@ This file shouldn't be byte compiled.
 (package! pangu-spacing)
 (package! cnfonts)
 (package! valign)
+
+;; org
+(package! org-fancy-priorities)
+(package! org-pretty-tags)
 #+end_src
 
 编程类：
@@ -1066,4 +1096,12 @@ This file shouldn't be byte compiled.
 (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
+
+;; java
+(package! lsp-java)
+(package! dap-mode)
 #+end_src
+* 任务
+** DONE test [2/2]
+1. [X] xx
+2. [X] yy
