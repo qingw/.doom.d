@@ -187,7 +187,8 @@ Uses `current-date-time-format' for the formatting the date/time."
                (battery))
   (display-battery-mode 1))                     ; 显示电量
 (global-subword-mode 1)                         ; Iterate through CamelCase words
-(prettier-js-mode)
+(prettier-js-mode 1)
+(delete-selection-mode 1)
 
 ;; ------------------- 缩写表 ---------------------------------------------
 (define-abbrev-table 'global-abbrev-table '(
@@ -297,6 +298,7 @@ const _h = (...args) => f(h(...args))
          (web-mode . lsp)
          (typescript-mode . lsp)
          (rjsx-mode . lsp)
+         (java-mode . lsp)
          (javascript-mode . lsp)
          (js2-mode . lsp)
          (python-mode . lsp)
