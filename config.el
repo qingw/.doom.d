@@ -362,6 +362,7 @@ const _h = (...args) => f(h(...args))
 
         ;; org
         (:rot ("DONE" "DOING" "WAITING" "PENDING"))
+        (:rot ("increment", "decrement"))
 
         ))
 
