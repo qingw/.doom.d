@@ -156,7 +156,15 @@ Uses `current-date-time-format' for the formatting the date/time."
  :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
 
 (map! :map web-mode-map
-      "<f2>"    #'hydra-web-mode/body)
+      "<f2>"    #'hydra-web-mode/body
+
+      :map org-mode-map
+      :n       "tt" #'org-todo
+      :n       "tc" #'org-toggle-checkbox
+      :n       "tpp" #'org-priority
+      :n       "tpu" #'org-priority-up
+      :n       "tpd" #'org-priority-down
+      )
 
 ;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"

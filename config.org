@@ -438,7 +438,15 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 #+begin_src emacs-lisp
  (map! :map web-mode-map
-       "<f2>"    #'hydra-web-mode/body)
+       "<f2>"    #'hydra-web-mode/body
+
+       :map org-mode-map
+       :n       "tt" #'org-todo
+       :n       "tc" #'org-toggle-checkbox
+       :n       "tpp" #'org-priority
+       :n       "tpu" #'org-priority-up
+       :n       "tpd" #'org-priority-down
+       )
 #+end_src
 
 ** 基本配置(Basic)
@@ -1102,6 +1110,11 @@ This file shouldn't be byte compiled.
 (package! dap-mode)
 #+end_src
 * 任务
-** DONE test [2/2]
+** HOLD [#A] test [2/2]
 1. [X] xx
 2. [X] yy
+** WAIT test2
+** TODO [#B] test2
+** TODO [#B] test2
+** TODO test2
+** TODO test2
