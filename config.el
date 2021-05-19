@@ -48,6 +48,19 @@ Uses `current-date-time-format' for the formatting the date/time."
   (insert (format-time-string current-time-format (current-time)))
   )
 
+(defun my/capitalize-first-char (&optional string)
+  "Capitalize only the first character of the input STRING."
+  (when (and string (> (length string) 0))
+    (let ((first-char (substring string nil 1))
+          (rest-str   (substring string 1)))
+      (concat (capitalize first-char) rest-str))))
+(defun my/lowcase-first-char (&optional string)
+  "Capitalize only the first character of the input STRING."
+  (when (and string (> (length string) 0))
+    (let ((first-char (substring string nil 1))
+          (rest-str   (substring string 1)))
+      (concat first-char rest-str))))
+
 ;;; config.el -*- lexical-binding: t; -*-
 
 ;; 解绑一些按键，待用
@@ -224,12 +237,6 @@ const _h = (...args) => f(h(...args))
 ")
 
 
-                                            ;; org prop, tags
-                                            ("8cid" "
-:PROPERTIES:
-:COLUMNS: %CUSTOM_ID[(Custom Id)]
-:CUSTOM_ID: literal_eg
-:END:")
                                             ;; markdown
                                             ("8font" "<font color='red' size='2'>xx</font>")
                                             ;; html template for hugo

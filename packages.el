@@ -23,6 +23,7 @@
 ;; org
 (package! org-fancy-priorities)
 (package! org-pretty-tags)
+;; (package! org-special-block-extras)
 
 ;; development
 (package! leetcode)
