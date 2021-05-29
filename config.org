@@ -361,6 +361,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
       (:prefix ("l" . "load")
        :n       "i"     #'imenu-list
+       :n       "o"     #'lsp-ui-imenu
        :n       "d"     #'deft
        :n       "l"     #'+workspace/switch-to)
 
@@ -667,7 +668,11 @@ tables.]]
 #+begin_src emacs-lisp
 (use-package! lsp-ui
   :commands
-  lsp-ui-mode)
+  lsp-ui-mode
+  :config
+  (setq lsp-headerline-breadcrumb-enable t ; 左上角显示文件路径
+        lsp-lens-enable t                  ; 显示被引用次数
+        ))
 
 (use-package! company-lsp
   :commands company-lsp)
@@ -1134,6 +1139,9 @@ This file shouldn't be byte compiled.
 #+end_src
 * 问题
 1. lsp 不能识别 webpack/vite 别名？
+
+   [[https://github.com/vuejs/vetur/issues/890][Default FAQ js(ts)config for webpack aliases doesn't work. · Issue #890 ·
+   vuejs/vetur]]
 
    #+begin_src diff
    {

@@ -312,7 +312,9 @@ const _h = (...args) => f(h(...args))
 
 (use-package! lsp-ui
   :commands
-  lsp-ui-mode)
+  lsp-ui-mode
+  :config
+  (setq lsp-headerline-breadcrumb-enable t))
 
 (use-package! company-lsp
   :commands company-lsp)
