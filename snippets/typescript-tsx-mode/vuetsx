@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: vue-tsx
+# key: vuetsx
+# --
+import { defineComponent } from "@vue/runtime-core";
+
+export default defineComponent({
+    setup() {
+        return () => <div>
+            $1
+        </div>
+    }
+})

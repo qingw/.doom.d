@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: file-vue-ts
-# key: vue-ts
+# key: vuefile
 # --
 <template>
 $1
@@ -8,16 +8,13 @@ $1
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-/* import components */
 $2
 
 export default defineComponent({
   name: '$3',
-  components: {
-    $4
-  }
+  setup() {}
 })
 </script>
-<style>
-$5
+<style lang="scss" scoped>
+$4
 </style>

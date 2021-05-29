@@ -208,8 +208,8 @@ Uses `current-date-time-format' for the formatting the date/time."
                (battery))
   (display-battery-mode 1))                     ; 显示电量
 (global-subword-mode 1)                         ; Iterate through CamelCase words
-(prettier-js-mode 1)
-(delete-selection-mode 1)
+;; (prettier-js-mode 1)
+;; (delete-selection-mode 1)
 
 ;; ------------------- 缩写表 ---------------------------------------------
 (define-abbrev-table 'global-abbrev-table '(
@@ -251,6 +251,15 @@ const _h = (...args) => f(h(...args))
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+(defun maybe-use-prettier ()
+  "Enable prettier-js-mode if an rc file is located."
+  (if (locate-dominating-file default-directory ".prettierrc")
+      (prettier-js-mode +1)))
+(add-hook 'typescript-mode-hook 'maybe-use-prettier)
+(add-hook 'js2-mode-hook 'maybe-use-prettier)
+(add-hook 'web-mode-hook 'maybe-use-prettier)
+(add-hook 'rjsx-mode-hook 'maybe-use-prettier)
 
 ;; 主题配置
 
@@ -332,6 +341,12 @@ const _h = (...args) => f(h(...args))
   :config (dap-auto-configure-mode))
 (use-package! dap-java
   :ensure nil)
+
+;; 关闭自动格式化，全局关闭
+;; (setq +form-with-lsp nil)
+;; 指定模式
+(setq-hook! 'typescript-mode-hook +format-with-lsp nil)
+(setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
 
 (add-hook 'org-mode-hook
           (lambda () (display-line-numbers-mode -1)))
