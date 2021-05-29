@@ -1132,12 +1132,27 @@ This file shouldn't be byte compiled.
 (package! lsp-java)
 (package! dap-mode)
 #+end_src
-* 任务
-** HOLD [#A] test [2/2]
-1. [X] xx
-2. [X] yy
-** WAIT test2
-** TODO [#B] test2
-** TODO [#B] test2
-** TODO test2
-** TODO test2
+* 问题
+1. lsp 不能识别 webpack/vite 别名？
+
+   #+begin_src diff
+   {
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "strict": true,
+        "jsx": "preserve",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "lib": ["esnext", "dom"],
++        "paths": {
++          "@/*": ["src/*"]
++        }
+      },
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+    }
+   #+end_src
+
+   在 ~tsconfig.json~ 中增加一项配置 ~paths~ 告诉 lsp 别名含义。
