@@ -44,3 +44,8 @@
 ;; java
 (package! lsp-java)
 (package! dap-mode)
+
+(package! ox-rst
+  :recipe (:host github :repo "msnoigrs/ox-rst"))
+(package! scrollkeeper
+  :recipe (:host github :repo "alphapapa/scrollkeeper.el"))

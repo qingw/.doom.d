@@ -69,6 +69,7 @@ Uses `current-date-time-format' for the formatting the date/time."
       :niv      "C-i" nil
       :niv      "M-," nil
       :niv      "M-." nil
+      :niv      "M-f" nil
 
       :leader
       "A" nil
@@ -78,7 +79,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 (map! [remap swiper] #'swiper-isearch
       [remap org-capture] nil
       [remap xref-find-definitions] #'lsp-ui-peek-find-definitions
-      [remap xref-find-references] #'lsp-ui-peek-find-references)
+      [remap xref-find-references] #'lsp-ui-peek-find-references
+      )
 
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
@@ -95,6 +97,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
       (:prefix ("l" . "load")
        :n       "i"     #'imenu-list
+       :n       "o"     #'lsp-ui-imenu
        :n       "d"     #'deft
        :n       "l"     #'+workspace/switch-to)
 
@@ -148,14 +151,13 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c C-f"     #'json-mode-beautify
 
  :niv      "C-e"     #'evil-end-of-line
- :niv      "C--"     #'cnfonts-decrease-fontsize
- :niv      "C-+"     #'cnfonts-increase-fontsize
  :niv      "C-="     #'er/expand-region
 
  )
 
 (map! "M--"     #'gcl/goto-match-paren
-      "M-i"     #'parrot-rotate-next-word-at-point)
+      "M-i"     #'parrot-rotate-next-word-at-point
+      "M-f"     #'scrollkeeper-contents-up)
 
 (map!
  :desc "Go function header"     :n "g[" #'beginning-of-defun
@@ -314,7 +316,9 @@ const _h = (...args) => f(h(...args))
   :commands
   lsp-ui-mode
   :config
-  (setq lsp-headerline-breadcrumb-enable t))
+  (setq lsp-headerline-breadcrumb-enable t ; 左上角显示文件路径
+        lsp-lens-enable t                  ; 显示被引用次数
+        ))
 
 (use-package! company-lsp
   :commands company-lsp)
@@ -599,6 +603,10 @@ _p_ : Previous
   ("<down-mouse-1>" ignore)
   ("<drag-mouse-1>" ignore)
   ("q" nil))
+
+(use-package! scrollkeeper)
+(global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
+(global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
 
 ;; web 开发配置
 (setq css-indent-offset 2

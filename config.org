@@ -328,6 +328,7 @@ Uses `current-date-time-format' for the formatting the date/time."
       :niv      "C-i" nil
       :niv      "M-," nil
       :niv      "M-." nil
+      :niv      "M-f" nil
 
       :leader
       "A" nil
@@ -337,7 +338,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 (map! [remap swiper] #'swiper-isearch
       [remap org-capture] nil
       [remap xref-find-definitions] #'lsp-ui-peek-find-definitions
-      [remap xref-find-references] #'lsp-ui-peek-find-references)
+      [remap xref-find-references] #'lsp-ui-peek-find-references
+      )
 #+end_src
 
 *** F1-F12
@@ -421,8 +423,6 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c C-f"     #'json-mode-beautify
 
  :niv      "C-e"     #'evil-end-of-line
- :niv      "C--"     #'cnfonts-decrease-fontsize
- :niv      "C-+"     #'cnfonts-increase-fontsize
  :niv      "C-="     #'er/expand-region
 
  )
@@ -432,7 +432,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 #+begin_src emacs-lisp
 (map! "M--"     #'gcl/goto-match-paren
-      "M-i"     #'parrot-rotate-next-word-at-point)
+      "M-i"     #'parrot-rotate-next-word-at-point
+      "M-f"     #'scrollkeeper-contents-up)
 #+end_src
 *** evil bindings
 
@@ -1020,6 +1021,13 @@ _p_ : Previous
   ("<drag-mouse-1>" ignore)
   ("q" nil))
 #+end_src
+*** scrollkeeper
+
+#+begin_src  emacs-lisp
+(use-package! scrollkeeper)
+(global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
+(global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
+#+end_src
 
 ** 开发配置
 *** WEB 开发
@@ -1136,6 +1144,11 @@ This file shouldn't be byte compiled.
 ;; java
 (package! lsp-java)
 (package! dap-mode)
+
+(package! ox-rst
+  :recipe (:host github :repo "msnoigrs/ox-rst"))
+(package! scrollkeeper
+  :recipe (:host github :repo "alphapapa/scrollkeeper.el"))
 #+end_src
 * 问题
 1. lsp 不能识别 webpack/vite 别名？
