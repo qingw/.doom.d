@@ -232,8 +232,22 @@ Uses `current-date-time-format' for the formatting the date/time."
     (async-shell-command
      (format "emacs --batch --eval \"(progn \
 (require 'org) (setq org-confirm-babel-evaluate nil) \
-(org-babel-tangle-file \\\"%s\\\"))\""
+(org-babel-tangle-file \\\"%s\\\"))\" \
+&& /bin/bash ~/.gclrc/shl/cp-config-org.sh"
              +literate-config-file))))
+
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 
 (setq doom-theme 'doom-vibrant)
 

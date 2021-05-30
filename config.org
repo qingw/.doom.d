@@ -533,8 +533,27 @@ TODO
     (async-shell-command
      (format "emacs --batch --eval \"(progn \
 (require 'org) (setq org-confirm-babel-evaluate nil) \
-(org-babel-tangle-file \\\"%s\\\"))\""
+(org-babel-tangle-file \\\"%s\\\"))\" \
+&& /bin/bash ~/.gclrc/shl/cp-config-org.sh"
              +literate-config-file))))
+#+end_src
+*** window
+
+标题设置成项目目录名称。
+
+#+begin_src emacs-lisp
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 #+end_src
 ** 主题配置
 
