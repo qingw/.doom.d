@@ -170,16 +170,16 @@ Uses `current-date-time-format' for the formatting the date/time."
  :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
  :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
 
- (map! :map web-mode-map
-       "<f2>"    #'hydra-web-mode/body
+(map! :map web-mode-map
+      "<f2>"    #'hydra-web-mode/body
 
-       :map org-mode-map
-       :n       "tt" #'org-todo
-       :n       "tc" #'org-toggle-checkbox
-       :n       "tpp" #'org-priority
-       :n       "tpu" #'org-priority-up
-       :n       "tpd" #'org-priority-down
-       )
+      :map org-mode-map
+      :n       "tt" #'org-todo
+      :n       "tc" #'org-toggle-checkbox
+      :n       "tpp" #'org-priority
+      :n       "tpu" #'org-priority-up
+      :n       "tpd" #'org-priority-down
+      )
 
 ;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"
@@ -239,11 +239,11 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
 
- (use-package! valign
-   :custom
-   (valign-fancy-bar t)
-   :hook
-   (org-mode . valign-mode))
+(use-package! valign
+  :custom
+  (valign-fancy-bar t)
+  :hook
+  (org-mode . valign-mode))
 
 (after! company
   (setq company-idle-delay 0.2
