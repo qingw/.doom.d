@@ -157,7 +157,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (map! "M--"     #'gcl/goto-match-paren
       "M-i"     #'parrot-rotate-next-word-at-point
-      "M-f"     #'scrollkeeper-contents-up)
+      "M-f"     #'scroll-up-command)
 
 (map!
  :desc "Go function header"     :n "g[" #'beginning-of-defun
@@ -170,16 +170,16 @@ Uses `current-date-time-format' for the formatting the date/time."
  :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
  :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
 
-(map! :map web-mode-map
-      "<f2>"    #'hydra-web-mode/body
+ (map! :map web-mode-map
+       "<f2>"    #'hydra-web-mode/body
 
-      :map org-mode-map
-      :n       "tt" #'org-todo
-      :n       "tc" #'org-toggle-checkbox
-      :n       "tpp" #'org-priority
-      :n       "tpu" #'org-priority-up
-      :n       "tpd" #'org-priority-down
-      )
+       :map org-mode-map
+       :n       "tt" #'org-todo
+       :n       "tc" #'org-toggle-checkbox
+       :n       "tpp" #'org-priority
+       :n       "tpu" #'org-priority-up
+       :n       "tpd" #'org-priority-down
+       )
 
 ;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"
@@ -213,44 +213,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; (prettier-js-mode 1)
 ;; (delete-selection-mode 1)
 
-;; ------------------- 缩写表 ---------------------------------------------
-(define-abbrev-table 'global-abbrev-table '(
-                                            ("8ireq" "import '../require'")
-                                            ("8imark" "import { marker } from '@commons/sunlight/marker'")
-                                            ("8ilib" "import { isArray } from '@commons/sunlight/lib'")
-                                            ("81com" "@import '~@commons/styles/common';")
-                                            ;; for blog
-                                            ("82sfc" "
-const { compileScript, parse } =
-  require(process.env.VNEXT_PKG_SFC + '/dist/compiler-sfc.cjs.js')
-const { log } = require(process.env.BLOG_JS + '/utils.js')
-const compile = (src, options) => {
-  const { descriptor } = parse(src)
-  return compileScript(descriptor, { ...options, id: 'xxxx' })
-}
-")
-                                            ("82lib" "
-// 源文件：/js/vue/lib.js
-const { compileSFCScript, compileStyle, getCompiledSSRString: ssr, compileSSR, log } = require(process.env.BLOG_JS + '/vue/lib.js')")
-                                            ("82rc" "
-// 源文件：/js/vue/lib.js
-const { rc: { h, createVNode: c }, f, log } = require(process.env.BLOG_JS + '/vue/lib.js')
-const _h = (...args) => f(h(...args))
-")
-
-
-                                            ;; markdown
-                                            ("8font" "<font color='red' size='2'>xx</font>")
-                                            ;; html template for hugo
-                                            ("8red" "@@html:<font color='red'>@@text@@html:</font>@@")
-                                            ("8sup" "@@html:<sup><font color='red'>@@官方@@html:</font></sup>@@")
-                                            ("8sub" "@@html:<sub><font color='red'>@@官方@@html:</font></sub>@@")
-                                            ("8img" "
-#+BEGIN_EXPORT html
-<img src='' alt='some picture'/>
-#+END_EXPORT")
-                                            ))
-
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -263,19 +225,25 @@ const _h = (...args) => f(h(...args))
 (add-hook 'web-mode-hook 'maybe-use-prettier)
 (add-hook 'rjsx-mode-hook 'maybe-use-prettier)
 
-;; 主题配置
+(defadvice! +literate-tangle-async-h ()
+  "A very simplified version of `+literate-tangle-h', but async."
+  :override #'+literate-tangle-h
+  (let ((default-directory doom-private-dir))
+    (async-shell-command
+     (format "emacs --batch --eval \"(progn \
+(require 'org) (setq org-confirm-babel-evaluate nil) \
+(org-babel-tangle-file \\\"%s\\\"))\""
+             +literate-config-file))))
 
-(setq doom-theme 'doom-vibrant) ; doom-one
-;; (delq! t custom-theme-load-path)
+(setq doom-theme 'doom-vibrant)
 
-;; (setq doom-font (font-spec :family "Source Code Pro" :size 16))
-(setq doom-font (font-spec :family "Fira Code" :size 16))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 16))
 
-(use-package! valign
-  :custom
-  (valign-fancy-bar t)
-  :hook
-  (org-mode . valign-mode))
+ (use-package! valign
+   :custom
+   (valign-fancy-bar t)
+   :hook
+   (org-mode . valign-mode))
 
 (after! company
   (setq company-idle-delay 0.2
