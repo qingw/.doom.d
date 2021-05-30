@@ -23,6 +23,7 @@
 ;; org
 (package! org-fancy-priorities)
 (package! org-pretty-tags)
+(package! org-roam :disable t)
 ;; (package! org-special-block-extras)
 
 ;; development
@@ -49,3 +50,4 @@
   :recipe (:host github :repo "msnoigrs/ox-rst"))
 (package! scrollkeeper
   :recipe (:host github :repo "alphapapa/scrollkeeper.el"))
+(package! gif-screencast)

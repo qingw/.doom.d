@@ -61,6 +61,18 @@ Uses `current-date-time-format' for the formatting the date/time."
           (rest-str   (substring string 1)))
       (concat first-char rest-str))))
 
+(defun gcl/async-shell-command-silently (command)
+  "async shell command silently."
+  (interactive)
+  (let
+      ((display-buffer-alist
+        (list
+         (cons
+          "\\*Async Shell Command\\*.*"
+          (cons #'display-buffer-no-window nil)))))
+    (async-shell-command
+     command)))
+
 ;;; config.el -*- lexical-binding: t; -*-
 
 ;; 解绑一些按键，待用
@@ -229,8 +241,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   "A very simplified version of `+literate-tangle-h', but async."
   :override #'+literate-tangle-h
   (let ((default-directory doom-private-dir))
-    (async-shell-command
-     (format "emacs --batch --eval \"(progn \
+    (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
 (require 'org) (setq org-confirm-babel-evaluate nil) \
 (org-babel-tangle-file \\\"%s\\\"))\" \
 && /bin/bash ~/.gclrc/shl/cp-config-org.sh"
@@ -327,8 +338,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 (use-package! dap-mode
   :after lsp-mode
   :config (dap-auto-configure-mode))
-(use-package! dap-java
-  :ensure nil)
+(use-package! dap-java)
 
 ;; 关闭自动格式化，全局关闭
 ;; (setq +form-with-lsp nil)
@@ -354,6 +364,8 @@ Uses `current-date-time-format' for the formatting the date/time."
         '(("work"  . "⚒")))
 
   (org-pretty-tags-global-mode))
+
+(setq org-roam-directory "~/.doom.d/.local/roam/")
 
 (use-package! parrot
   :config
