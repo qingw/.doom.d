@@ -351,14 +351,12 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (use-package! org-fancy-priorities
   :diminish
-  :ensure t
   :hook (org-mode . org-fancy-priorities-mode)
   :config
   (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴")))
 
 (use-package! org-pretty-tags
   :diminish org-pretty-tags-mode
-  :ensure t
   :config
   (setq org-pretty-tags-surrogate-strings
         '(("work"  . "⚒")))
@@ -565,7 +563,6 @@ _p_ : Previous
 
 ;; hungry delete
 (use-package! smart-hungry-delete
-  :ensure t
   :bind (("<backspace>" . smart-hungry-delete-backward-char)
          ("C-d" . smart-hungry-delete-forward-char))
   :defer nil ;; dont defer so we can add our functions to hooks
