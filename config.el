@@ -1,55 +1,3 @@
-#+title: Doom Emacs Configuration
-#+subtitle: The Methods, Management, and Menagerie of Madness
-#+author: Zhicheng Lee
-#+date: {{{modification-time(%Y-%m-%d %H:%M, t)}}} ;{{{timezone}}}, {{{git-rev}}}
-#+macro: timezone (eval (substring (shell-command-to-string "date +%Z") 0 -1))
-#+macro: git-rev (eval (format "@@html:<a href=\"https://github.com/gcclll/.doom.d/commit/%1$s\" style=\"text-decoration: none\"><code style=\"padding: 0; color: var(--text-light); font-size: inherit; opacity: 0.7\">%1$s</code></a>@@@@latex:\\href{https://github.com/gcclll/.doom.d/commit/%1$s}{%1$s}@@" (substring (shell-command-to-string "git rev-parse --short HEAD") 0 -1)))
-#+startup: fold
-#+property: header-args:emacs-lisp :tangle yes :cache yes :results silent :comments link
-#+property: header-args:shell :tangle "setup.sh"
-#+property: header-args :tangle no :results silent
-#+html_head: <link rel='shortcut icon' type='image/png' href='https://www.gnu.org/software/emacs/favicon.png'>
-
-#+begin_quote
-用 config.org 文件来维护 doom emacs 配置。
-#+end_quote
-
-#+begin_export html
-<a href="https://github.com/gcclll/.doom.d/"
-   style="font-family: 'Open Sans'; background-image: none; color: inherit;
-   text-decoration: none; position: relative; top: clamp(-26px, calc(1280px - 100vw), 0px); opacity: 0.7;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
-       class="invertible" alt="GitHub Octicon"
-       style="height: 1em; position: relative; top: 0.1em;">
-  View on GitHub</a>
-#+end_export
-#+begin_export latex
-\newpage % because the contents are multi-page, this looks better
-#+end_export
-
-#+begin_quote
-他人配置列表：
-#+end_quote
-
-| name&link                                                        | brief |
-|------------------------------------------------------------------+-------|
-| [[https://github.com/zzamboni/dot-doom/blob/master/doom.org][dot-doom/doom.org at master · zzamboni/dot-doom]]                  | -     |
-| [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's Emacs configuration]]                                 | -     |
-| [[https://github.com/daedreth/UncleDavesEmacs#user-content-ido-and-why-i-started-using-helm][daedreth/UncleDavesEmacs: My personal ~/.emacs.d]]                 | -     |
-| [[https://github.com/PythonNut/quark-emacs][PythonNut/quark-emacs: An incredible wonderland of code]]          | -     |
-| [[https://www.masteringemacs.org/][Mastering Emacs]]                                                  | -     |
-| [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]                                         | -     |
-| [[https://github.com/KaratasFurkan/.emacs.d][GitHub - KaratasFurkan/.emacs.d: My literate Emacs configuration]] | -     |
-
-
-* 更新日志
-[2021-05-30]
-
-1. add scrollkeeper 定位行时闪烁(~M-v,M-f~)
-2. add cacltext 数学计算
-3. add ~gcl/async-shell-command-silently~
-* 自定义函数
-#+begin_src emacs-lisp :comments no
 ;;;###autoload
 (defun gcl/goto-match-paren (arg)
   "Go to the matching if on (){}[], similar to vi style of % ."
@@ -124,222 +72,9 @@ Uses `current-date-time-format' for the formatting the date/time."
           (cons #'display-buffer-no-window nil)))))
     (async-shell-command
      command)))
-#+end_src
-* 模块(init.el)
-使用到的包：
 
-#+name: init.el
-#+begin_src emacs-lisp :tangle "init.el" :noweb no-export :comments none
-;;; init.el -*- lexical-binding: t; -*-
-
-(doom! :input
-       ;;chinese
-       ;;japanese
-       ;;layout            ; auie,ctsrnm is the superior home row
-
-       :completion
-       company           ; the ultimate code completion backend
-       ;;helm              ; the *other* search engine for love and life
-       ;;ido               ; the other *other* search engine...
-       (ivy               ; a search engine for love and life
-        +icons
-        +prescient)
-
-       :ui
-       ;;deft              ; notational velocity for Emacs
-       doom              ; what makes DOOM look the way it does
-       doom-dashboard    ; a nifty splash screen for Emacs
-       doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       (emoji +unicode)  ; 🙂
-       fill-column       ; a `fill-column' indicator
-       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       hydra
-       ;;indent-guides     ; highlighted indent columns
-       (ligatures         ; ligatures and symbols to make your code pretty again
-        +extra)
-       ;;minimap           ; show a map of the code on the side
-       modeline          ; snazzy, Atom-inspired modeline, plus API
-       nav-flash         ; blink cursor line after big motions
-       ;;neotree           ; a project drawer, like NERDTree for vim
-       ophints           ; highlight the region an operation acts on
-       (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       ;;tabs              ; a tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
-       unicode           ; extended unicode support for various languages
-       vc-gutter         ; vcs diff in the fringe
-       vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       window-select     ; visually switch windows
-       workspaces        ; tab emulation, persistence & separate workspaces
-       ;;zen               ; distraction-free coding or writing
-
-       :editor
-       (evil +everywhere); come to the dark side, we have cookies
-       file-templates    ; auto-snippets for empty files
-       fold              ; (nigh) universal code folding
-       (format +onsave)  ; automated prettiness
-       ;;god               ; run Emacs commands without modifier keys
-       ;;lispy             ; vim for lisp, for people who don't like vim
-       multiple-cursors  ; editing in many places at once
-       ;;objed             ; text object editing for the innocent
-       ;;parinfer          ; turn lisp into python, sort of
-       rotate-text       ; cycle region at point between text candidates
-       snippets          ; my elves. They type so I don't have to
-       word-wrap         ; soft wrapping with language-aware indent
-
-       :emacs
-       (dired +icons)    ; making dired pretty [functional]
-       electric          ; smarter, keyword-based electric-indent
-       (ibuffer +icons)  ; interactive buffer management
-       undo              ; persistent, smarter undo for your inevitable mistakes
-       vc                ; version-control and Emacs, sitting in a tree
-
-       :term
-       ;;eshell            ; the elisp shell that works everywhere
-       ;;shell             ; simple shell REPL for Emacs
-       ;;term              ; basic terminal emulator for Emacs
-       vterm             ; the best terminal emulation in Emacs
-
-       :checkers
-       syntax              ; tasing you for every semicolon you forget
-       ;;spell             ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
-
-       :tools
-       ;;ansible
-       ;;debugger          ; FIXME stepping through code, to help you add bugs
-       ;;direnv
-       ;;docker
-       editorconfig      ; let someone else argue about tabs vs spaces
-       ;;ein               ; tame Jupyter notebooks with emacs
-       (eval +overlay)     ; run code, run (also, repls)
-       ;;gist              ; interacting with github gists
-       (lookup              ; navigate your code and its documentation
-        +dictionary
-        +docsets)
-       (lsp +peek)
-       (magit             ; a git porcelain for Emacs
-        +forge)
-       ;;make              ; run make tasks from Emacs
-       ;;pass              ; password manager for nerds
-       ;;pdf               ; pdf enhancements
-       ;;prodigy           ; FIXME managing external services & code builders
-       rgb               ; creating color strings
-       ;;taskrunner        ; taskrunner for all your projects
-       ;;terraform         ; infrastructure as code
-       ;;tmux              ; an API for interacting with tmux
-       upload            ; map local to remote projects via ssh/ftp
-
-       :os
-       (:if IS-MAC macos)  ; improve compatibility with macOS
-       tty               ; improve the terminal Emacs experience
-
-       :lang
-       ;;agda              ; types of types of types of types...
-       (cc +lsp)                ; C/C++/Obj-C madness
-       ;;clojure           ; java with a lisp
-       ;;common-lisp       ; if you've seen one lisp, you've seen them all
-       ;;coq               ; proofs-as-programs
-       ;;crystal           ; ruby at the speed of c
-       ;;csharp            ; unity, .NET, and mono shenanigans
-       data              ; config/data formats
-       ;;(dart +flutter)   ; paint ui and not much else
-       ;;elixir            ; erlang done right
-       ;;elm               ; care for a cup of TEA?
-       emacs-lisp        ; drown in parentheses
-       ;;erlang            ; an elegant language for a more civilized age
-       ;;ess               ; emacs speaks statistics
-       ;;faust             ; dsp, but you get to keep your soul
-       ;;fsharp            ; ML stands for Microsoft's Language
-       ;;fstar             ; (dependent) types and (monadic) effects and Z3
-       ;;gdscript          ; the language you waited for
-       (go +lsp)         ; the hipster dialect
-       ;;(haskell +dante)  ; a language that's lazier than I am
-       ;;hy                ; readability of scheme w/ speed of python
-       ;;idris             ; a language you can depend on
-       (json)              ; At least it ain't XML
-       ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       (javascript)        ; all(hope(abandon(ye(who(enter(here))))))
-       ;;julia             ; a better, faster MATLAB
-       ;;kotlin            ; a better, slicker Java(Script)
-       (latex             ; writing papers in Emacs has never been so fun
-        +latexmk
-        +cdlatex
-        +fold)
-       ;;lean
-       ;;factor
-       ;;ledger            ; an accounting system in Emacs
-       ;;lua               ; one-based indices? one-based indices
-       markdown          ; writing docs for people to ignore
-       ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
-       ;;ocaml             ; an objective camel
-       (org               ; organize your plain life in plain text
-        +attach
-        +babel
-        +capture
-        +dragndrop
-        +hugo
-        +jupyter
-        +export
-        +pandoc
-        +gnuplot
-        +pretty
-        +present
-        +protocol
-        +pomodoro
-        +roam
-        )
-       php               ; perl's insecure younger brother
-       ;;plantuml          ; diagrams for confusing people more
-       ;;purescript        ; javascript, but functional
-       (python +lsp)            ; beautiful is better than ugly
-       ;;qt                ; the 'cutest' gui framework ever
-       ;;racket            ; a DSL for DSLs
-       ;;raku              ; the artist formerly known as perl6
-       rest                ; Emacs as a REST client
-       ;;rst               ; ReST in peace
-       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       (rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-        +lsp)
-       ;;scala             ; java, but good
-       scheme            ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
-       ;;sml
-       ;;solidity          ; do you need a blockchain? No.
-       ;;swift             ; who asked for emoji variables?
-       ;;terra             ; Earth and Moon in alignment for performance.
-       (web)               ; the tubes
-       yaml              ; JSON, but readable
-
-       :email
-       ;;(mu4e +gmail)
-       ;;notmuch
-       ;;(wanderlust +gmail)
-
-       :app
-       ;;calendar
-       ;;irc               ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an RSS reader
-       ;;twitter           ; twitter client https://twitter.com/vnought
-
-       :config
-       literate
-       (default +bindings +smartparens))
-#+end_src
-
-* 配置(config.el)
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle "config.el" :comments no
-:END:
-
-#+begin_src emacs-lisp :comments no
 ;;; config.el -*- lexical-binding: t; -*-
-#+end_src
 
-** 键值绑定
-*** 解绑按键
-
-#+begin_src emacs-lisp
 ;; 解绑一些按键，待用
 (map! :niv      "C-s" nil
       :niv      "C-d" nil
@@ -358,20 +93,13 @@ Uses `current-date-time-format' for the formatting the date/time."
       [remap xref-find-definitions] #'lsp-ui-peek-find-definitions
       [remap xref-find-references] #'lsp-ui-peek-find-references
       )
-#+end_src
 
-*** F1-F12
-
-#+begin_src emacs-lisp
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
-#+end_src
-*** SPC(空格)
 
-#+begin_src emacs-lisp
 (map! :leader
       :n        "SPC"   #'execute-extended-command
       :n        "bf"   #'osx-lib-reveal-in-finder
@@ -391,10 +119,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 
       :n        "w -"   #'split-window-below
       )
-#+end_src
-*** s-(Command)
 
-#+begin_src emacs-lisp
 (map! "s-<"     #'move-text-up
       "s->"     #'move-text-down
       "s-i"     #'gcl/string-inflection-cycle-auto
@@ -402,10 +127,7 @@ Uses `current-date-time-format' for the formatting the date/time."
       "s-)"     #'sp-forward-barf-sexp
 
       )
-#+end_src
-*** C-(Control)
 
-#+begin_src emacs-lisp
 (map!
  "C-'"     #'imenu-list-smart-toggle
  "C-d"     (cmd! (previous-line)
@@ -444,18 +166,11 @@ Uses `current-date-time-format' for the formatting the date/time."
  :niv      "C-="     #'er/expand-region
 
  )
-#+end_src
 
-*** M-(Alt/Option)
-
-#+begin_src emacs-lisp
 (map! "M--"     #'gcl/goto-match-paren
       "M-i"     #'parrot-rotate-next-word-at-point
       "M-f"     #'scroll-up-command)
-#+end_src
-*** evil bindings
 
-#+begin_src emacs-lisp
 (map!
  :desc "Go function header"     :n "g[" #'beginning-of-defun
  :desc "Go function end"        :n "g]" #'end-of-defun
@@ -466,34 +181,23 @@ Uses `current-date-time-format' for the formatting the date/time."
  :desc "Wrap with markup"       :nv "z." #'emmet-wrap-with-markup
  :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
  :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
-#+end_src
-*** 指定模式按键
 
-#+begin_src emacs-lisp
- (map! :map web-mode-map
-       "<f2>"    #'hydra-web-mode/body
+(map! :map web-mode-map
+      "<f2>"    #'hydra-web-mode/body
 
-       :map org-mode-map
-       :n       "tt" #'org-todo
-       :n       "tc" #'org-toggle-checkbox
-       :n       "tpp" #'org-priority
-       :n       "tpu" #'org-priority-up
-       :n       "tpd" #'org-priority-down
-       )
-#+end_src
+      :map org-mode-map
+      :n       "tt" #'org-todo
+      :n       "tc" #'org-toggle-checkbox
+      :n       "tpp" #'org-priority
+      :n       "tpu" #'org-priority-up
+      :n       "tpd" #'org-priority-down
+      )
 
-** 基本配置(Basic)
-*** 个人信息
-
-#+begin_src emacs-lisp
 ;; 个人信息配置
 (setq user-full-name "Zhicheng Lee"
       user-mail-address "gccll.love@gmail.com"
       user-blog-url "https://www.cheng92.com")
-#+end_src
-*** 基本变量设置
 
-#+begin_src emacs-lisp
 ;; setq, set-default 统一配置的地方
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq org-directory "~/github/documents/org")
@@ -510,10 +214,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 (setq-default custom-file (expand-file-name ".custom.el" doom-private-dir))
 (when (file-exists-p custom-file)
   (load custom-file))
-#+end_src
 
-*** 模式开启
-#+begin_src emacs-lisp
 ;; 全局开启一些模式
 (setq-default abbrev-mode t)
 (display-time-mode 1)                           ; 在 mode-line 中显示时间
@@ -523,12 +224,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 (global-subword-mode 1)                         ; Iterate through CamelCase words
 ;; (prettier-js-mode 1)
 ;; (delete-selection-mode 1)
-#+end_src
-*** abbrev 缩写表
-TODO
-*** add-hook
 
-#+begin_src emacs-lisp
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -540,15 +236,7 @@ TODO
 (add-hook 'js2-mode-hook 'maybe-use-prettier)
 (add-hook 'web-mode-hook 'maybe-use-prettier)
 (add-hook 'rjsx-mode-hook 'maybe-use-prettier)
-#+end_src
-*** 同步配置
 
-怎么不每次都弹出 ~*Async Shell Command*~ 窗口()？
-
-~gcl/async-shell-command-silently~ 静默异步执行命令，命令会在 ~*mini buffer*~ 中
-显示。
-
-#+begin_src emacs-lisp
 (defadvice! +literate-tangle-async-h ()
   "A very simplified version of `+literate-tangle-h', but async."
   :override #'+literate-tangle-h
@@ -558,12 +246,7 @@ TODO
 (org-babel-tangle-file \\\"%s\\\"))\" \
 && /bin/bash ~/.gclrc/shl/cp-config-org.sh"
              +literate-config-file))))
-#+end_src
-*** window
 
-标题设置成项目目录名称。
-
-#+begin_src emacs-lisp
 (setq frame-title-format
       '(""
         (:eval
@@ -576,40 +259,17 @@ TODO
          (let ((project-name (projectile-project-name)))
            (unless (string= "-" project-name)
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
-#+end_src
-** 主题配置
 
-#+begin_src emacs-lisp
 (setq doom-theme 'doom-vibrant)
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
-#+end_src
 
-** Package 配置
-*** TODO
+(use-package! valign
+  :custom
+  (valign-fancy-bar t)
+  :hook
+  (org-mode . valign-mode))
 
-1. anzu
-2. [[https://github.com/manateelazycat/color-rg][color-rg]]
-*** valign
-
-表格插件： valign
-
-[[https://github.com/casouri/valign][GitHub - casouri/valign: Pixel-perfect visual alignment for Org and Markdown
-tables.]]
-
-#+begin_src emacs-lisp
- (use-package! valign
-   :custom
-   (valign-fancy-bar t)
-   :hook
-   (org-mode . valign-mode))
-#+end_src
-
-*** Company
-
-补全配置
-
-#+begin_src emacs-lisp
 (after! company
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 2)
@@ -618,30 +278,7 @@ tables.]]
 
 (setq-default history-length 1000)
 (setq-default prescient-history-length 1000)
-#+end_src
-*** deadgrep，支持正则
 
-正则搜索要在搜索的结果中，选中 _regexp_ 来筛选。
-
-按键绑定：
-
-| key       | func                        |
-|-----------+-----------------------------|
-| <f5>      | ~deadgrep~                  |
-| M-<f5>    | ~deadgrep-kill-all-buffers~ |
-|-----------+-----------------------------|
-| ~RET~     | 查看结果                    |
-| ~o~       | 在另一个窗口打开            |
-| ~n/p~     | 结果中上下移动              |
-| ~M-n/M-p~ | 文件头尾之间移动            |
-| ~g~       | 重新搜索                    |
-| ~TAB~     | 展开/闭合结果               |
-| ~C-c C-k~ | 停止正在执行的搜索          |
-*** deft
-
-~SPC l d~
-
-#+begin_src emacs-lisp
 (use-package deft
   :after org
   :custom
@@ -649,10 +286,6 @@ tables.]]
   (deft-use-filter-string-for-filename t)
   (deft-default-extension '("org" "md" "txt"))
   (deft-directory "~/github/documents"))
-#+end_src
-*** evil 配置
-
-#+begin_src emacs-lisp
 
 (defalias 'ex! 'evil-ex-define-cmd)
 
@@ -665,20 +298,13 @@ tables.]]
 ;; window 操作
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
-#+end_src
-*** hydra
-*** leetcode
 
-#+begin_src emacs-lisp
 (after! leetcode
   (setq leetcode-prefer-language "javascript"
         leetcode-prefer-sql "mysql"
         leetcode-save-solutions t
         leetcode-directory "~/github/make-leetcode"))
-#+end_src
-*** lsp
 
-#+begin_src emacs-lisp
 (use-package! lsp-ui
   :commands
   lsp-ui-mode
@@ -719,18 +345,7 @@ tables.]]
 ;; 指定模式
 (setq-hook! 'typescript-mode-hook +format-with-lsp nil)
 (setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
-#+end_src
 
-2021-02-23 11:17:14
-
-增加 vls:
-
-~$ npm install -g vls~
-
-~emacs: lsp-install-server -> vls~
-*** org-mode
-
-#+begin_src emacs-lisp
 (add-hook 'org-mode-hook
           (lambda () (display-line-numbers-mode -1)))
 
@@ -747,24 +362,13 @@ tables.]]
         '(("work"  . "⚒")))
 
   (org-pretty-tags-global-mode))
-#+end_src
 
-**** org-roam
-
-#+begin_src emacs-lisp
 (setq org-roam-directory "~/.doom.d/.local/roam/")
-#+end_src
-*** parrot, 多单词切换
 
-开启全局模式：
-#+begin_src emacs-lisp
 (use-package! parrot
   :config
   (parrot-mode))
-#+end_src
 
-具体切换数据配置：
-#+begin_src emacs-lisp
 (setq parrot-rotate-dict
       '(
         (:rot ("alpha" "beta") :caps t :lower nil)
@@ -815,10 +419,7 @@ tables.]]
         (:rot ("increment", "decrement"))
 
         ))
-#+end_src
-*** Plaintext
 
-#+begin_src emacs-lisp
 ;; 出文本模式下，开启拼写检查
 (set-company-backend!
   '(text-mode
@@ -834,39 +435,23 @@ tables.]]
              ;; Apply ANSI color codes
              (with-silent-modifications
                (ansi-color-apply-on-region (point-min) (point-max)))))
-#+end_src
-*** ranger
 
-#+begin_src emacs-lisp
 ;; ranger
 (after! ranger
   :config
   (setq ranger-show-literal nil))
-#+end_src
-*** search & replace
 
-~C-c r~
-
-#+begin_src emacs-lisp
 (use-package! visual-regexp
   :commands (vr/select-replace vr/select-query-replace))
 
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
-#+end_src
-*** smartparen
 
-#+begin_src emacs-lisp
 (sp-local-pair
  '(org-mode)
  "<<" ">>"
  :actions '(insert))
-#+end_src
 
-*** treemacs
-
-忽略某些类型的文件：
-#+begin_src emacs-lisp
 (setq treemacs-file-ignore-extensions
       '(;; LaTeX
         "aux"
@@ -896,13 +481,7 @@ tables.]]
         "*/.auctex-auto"
         "*/_region_.log"
         "*/_region_.tex"))
-#+end_src
-*** web-mode
 
-prettier-js 配置
-
-hydra 配置
-#+begin_src emacs-lisp
 ;; web-mode hydra
 (defhydra hydra-web-mode (:color blue :quit-key "q" :hint nil)
   "
@@ -962,11 +541,7 @@ _p_ : Previous
   ("h" backward-char :exit nil :color "blue")
   ("l" forward-char :exit nil :color "blue")
   )
-#+end_src
-*** which-key
 
-过滤掉 ~evilem--~ 开头的指令：
-#+begin_src emacs-lisp
 (setq which-key-idle-delay 0.5)
 
 (setq which-key-allow-multiple-replacements t)
@@ -976,16 +551,7 @@ _p_ : Previous
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
-#+end_src
-*** yasnippets
 
-参考链接：
-#+begin_quote
-1. [[https://joaotavora.github.io/yasnippet/snippet-development.html][snippet-development]]
-#+end_quote
-
-
-#+begin_src emacs-lisp
 (setq yas-triggers-in-field t)
 
 
@@ -994,10 +560,7 @@ _p_ : Previous
 
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
-#+end_src
-*** smart-hungry-delete
 
-#+begin_src emacs-lisp
 ;; hungry delete
 (use-package! smart-hungry-delete
   :bind (("<backspace>" . smart-hungry-delete-backward-char)
@@ -1005,10 +568,7 @@ _p_ : Previous
   :defer nil ;; dont defer so we can add our functions to hooks
   :config (smart-hungry-delete-add-default-hooks)
   )
-#+end_src
-*** multiple cursors
 
-#+begin_src emacs-lisp
 ;; multiple cursors hydra
 (defhydra hydra-multiple-cursors (:color blue :hint nil)
   "
@@ -1034,19 +594,11 @@ _p_ : Previous
   ("<down-mouse-1>" ignore)
   ("<drag-mouse-1>" ignore)
   ("q" nil))
-#+end_src
-*** scrollkeeper
 
-#+begin_src  emacs-lisp
 (use-package! scrollkeeper)
 (global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
 (global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
-#+end_src
-** 开发配置
-*** WEB 开发
 
-设置 js/html/css 模式缩进
-#+begin_src emacs-lisp
 ;; web 开发配置
 (setq css-indent-offset 2
       js2-basic-offset 2
@@ -1070,10 +622,7 @@ _p_ : Previous
   (add-hook! (js2-mode rjsx-mode)
     (add-hook 'after-save-hook #'import-js-fix nil t)))
 (advice-add '+javascript|cleanup-tide-processes :after 'kill-import-js)
-#+end_src
-** FIXs
 
-#+begin_src emacs-lisp
 ;; fix true/false symbols for javascript
 ;; (setq +pretty-code-enabled-modes nil)
 ;; or
@@ -1097,98 +646,3 @@ _p_ : Previous
 ;;   )
 
 ;; (add-hook! 'js2-mode-hook 'setup-js2-prettify-symbols)
-#+end_src
-* 包管理(packages.el)
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle "packages.el" :comments no
-:END:
-
-This file shouldn't be byte compiled.
-#+begin_src emacs-lisp :tangle "packages.el" :comments no
-;; -*- no-byte-compile: t; -*-
-#+end_src
-
-辅助/管理类：
-#+begin_src emacs-lisp
-(package! smart-hungry-delete)
-(package! move-text)
-(package! parrot)
-;; fast, friendly searching with ripgrep and Emacs
-(package! deadgrep)
-(package! ranger)
-(package! youdao-dictionary)
-(package! link-hint)
-(package! deft)
-(package! anzu)
-(package! visual-regexp)
-(package! visual-regexp-steriods
-  :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
-(package! osx-lib)
-(package! crux)
-(package! string-inflection)
-(package! pangu-spacing)
-(package! cnfonts)
-(package! valign)
-
-;; org
-(package! org-fancy-priorities)
-(package! org-pretty-tags)
-(package! org-roam :disable t)
-;; (package! org-special-block-extras)
-#+end_src
-
-编程类：
-#+begin_src emacs-lisp
-;; development
-(package! leetcode)
-(package! instant-rename-tag
-  :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
-(package! js-doc)
-(package! imenu-list)
-(package! yasnippet-snippets)
-
-;; web dev
-;; (package! ob-typescript)
-(package! web-beautify)
-(package! prettier-js)
-(package! import-js :disable t)
-(package! tide :disable t)
-(package! eldoc :disable t)
-
-;; java
-(package! lsp-java)
-(package! dap-mode)
-
-(package! ox-rst
-  :recipe (:host github :repo "msnoigrs/ox-rst"))
-(package! scrollkeeper
-  :recipe (:host github :repo "alphapapa/scrollkeeper.el"))
-;; (package! gif-screencast)
-#+end_src
-* 问题
-1. lsp 不能识别 webpack/vite 别名？
-
-   [[https://github.com/vuejs/vetur/issues/890][Default FAQ js(ts)config for webpack aliases doesn't work. · Issue #890 ·
-   vuejs/vetur]]
-
-   #+begin_src diff
-   {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "strict": true,
-        "jsx": "preserve",
-        "sourceMap": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "lib": ["esnext", "dom"],
-+        "paths": {
-+          "@/*": ["src/*"]
-+        }
-      },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
-    }
-   #+end_src
-
-   在 ~tsconfig.json~ 中增加一项配置 ~paths~ 告诉 lsp 别名含义。
