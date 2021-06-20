@@ -262,7 +262,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (setq doom-theme 'doom-vibrant)
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 16))
+;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
+(setq doom-font (font-spec :family "Fira Code" :size 16))
 
 (use-package! valign
   :custom
@@ -314,7 +315,9 @@ Uses `current-date-time-format' for the formatting the date/time."
         ))
 
 (use-package! company-lsp
-  :commands company-lsp)
+  :commands company-lsp
+  :config
+  (set-company-backend! 'lsp-mode 'company-lsp))
 
 (use-package! lsp-mode
   :hook (
@@ -332,6 +335,9 @@ Uses `current-date-time-format' for the formatting the date/time."
   :config
   (setq lsp-idle-delay 0.500
         lsp-enable-file-watchers nil))
+
+;; (use-package! lsp-css
+;;   :hook ((css-mode less-mode scss-mode) . lsp-css-enable))
 
 (use-package! lsp-java
   :config (add-hook 'java-mode-hook 'lsp))

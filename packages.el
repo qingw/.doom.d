@@ -41,6 +41,10 @@
 (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
+;; (package! lsp-css
+;;       :recipe (:host
+;;                github
+;;                :repo "emacs-lsp/lsp-css"))
 
 ;; java
 (package! lsp-java)

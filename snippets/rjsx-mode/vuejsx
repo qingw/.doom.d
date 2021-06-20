@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: tsx-vue
-# key: vuetsx
+# name: vuejsx
+# key: vuejsx
 # --
 import { defineComponent } from "vue";
 
