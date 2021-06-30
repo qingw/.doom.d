@@ -1,0 +1,3 @@
+[submodule "extras/pyim-greatdict"]
+	path = extras/pyim-greatdict
+	url = https://github.com/tumashu/pyim-greatdict.git

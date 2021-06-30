@@ -133,7 +133,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;;; init.el -*- lexical-binding: t; -*-
 
 (doom! :input
-       ;;chinese
+       chinese
        ;;japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
@@ -436,7 +436,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c r"       #'vr/replace
  "C-c q"       #'vr/query-replace
  "C-c u"       #'crux-view-url
- "C-c y"       #'youdao-dictionary-search-at-point+
+ "C-c y"       #'youdao-dictionary-search-at-point-posframe
 
  "C-c C-f"     #'json-mode-beautify
 
@@ -1044,10 +1044,65 @@ _p_ : Previous
 *** scrollkeeper
 
 #+begin_src  emacs-lisp
-(use-package! scrollkeeper)
-(global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
-(global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
+;; (use-package! scrollkeeper)
+;; (global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
+;; (global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
 #+end_src
+*** pyim
+
+#+begin_src emacs-lisp
+(use-package! liberime)
+;; https://github.com/tumashu/pyim-greatdict/blob/master/pyim-greatdict.pyim.gz
+(use-package! pyim-greatdict
+  :config
+  (pyim-greatdict-enable))
+(use-package! pyim
+  ;; :quelpa (pyim :fetcher github :repo "merrickluo/pyim")
+  :init
+  (setq pyim-title "R")
+  :config
+  ;; (use-package pyim-basedict
+  ;;   :config
+  ;;   (pyim-basedict-enable))
+
+  (global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
+  (setq pyim-dcache-auto-update nil)
+  (setq default-input-method "pyim")
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'rime)
+  (setq pyim-page-tooltip 'posframe)
+  ;; (setq pyim-page-tooltip 'child-frame)
+  ;; (setq pyim-page-tooltip 'popup)
+
+  ;;
+  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+  ;; 我自己使用的中英文动态切换规则是：
+  ;; 1. 光标只有在注释里面时，才可以输入中文。
+  ;; 2. 光标前是汉字字符时，才能输入中文。
+  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+  (setq-default pyim-english-input-switch-functions
+		        '(pyim-probe-dynamic-english
+		          pyim-probe-isearch-mode
+		          pyim-probe-program-mode
+                  pyim-probe-evil-normal-mode
+		          pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+		        '(pyim-probe-punctuation-line-beginning
+		          pyim-probe-punctuation-after-punctuation)))
+#+end_src
+
+[[https://gist.github.com/merrickluo/553f39c131d0eb717cd59f72c9d4b60d][Use pyim + liberime in doom-emacs]]
+
+[[https://github.com/merrickluo/liberime][merrickluo/liberime: A emacs dynamic module provide librime bindings for emacs]]
+
+[[https://github.com/tumashu/pyim][tumashu/pyim: 一个 emacs 中文输入法，支持全拼，双拼，五笔，仓颉和Rime，pyim 是 GNU elpa 包。]]
+
+[[https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org][emacs-rime/INSTALLATION.org at master · DogLooksGood/emacs-rime]]
+
+[[https://rime.im/download/][下載及安裝 | RIME | 中州韻輸入法引擎]]
+
+词库(80M)： [[https://github.com/tumashu/pyim-greatdict][tumashu/pyim-greatdict: A chinese-pyim dict, which include three million words!]]
 ** 开发配置
 *** WEB 开发
 
@@ -1169,11 +1224,19 @@ This file shouldn't be byte compiled.
 (package! lsp-java)
 (package! dap-mode)
 
-(package! ox-rst
-  :recipe (:host github :repo "msnoigrs/ox-rst"))
-(package! scrollkeeper
-  :recipe (:host github :repo "alphapapa/scrollkeeper.el"))
+;; (package! ox-rst
+;;   :recipe (:host github :repo "msnoigrs/ox-rst"))
+;; (package! scrollkeeper
+;;   :recipe (:host github :repo "alphapapa/scrollkeeper.el"))
 ;; (package! gif-screencast)
+
+;; pyim
+(package! liberime
+  :recipe (:host github :repo "merrickluo/liberime"
+           :files ("CMakeLists.txt" "Makefile" "src" "*.el")))
+(package! pyim-greatdict
+  :recipe (:host github :repo "tumashu/pyim-greatdict"))
+(package! pyim)
 #+end_src
 * 问题
 1. lsp 不能识别 webpack/vite 别名？

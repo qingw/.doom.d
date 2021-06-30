@@ -158,7 +158,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c r"       #'vr/replace
  "C-c q"       #'vr/query-replace
  "C-c u"       #'crux-view-url
- "C-c y"       #'youdao-dictionary-search-at-point+
+ "C-c y"       #'youdao-dictionary-search-at-point-posframe
 
  "C-c C-f"     #'json-mode-beautify
 
@@ -601,9 +601,49 @@ _p_ : Previous
   ("<drag-mouse-1>" ignore)
   ("q" nil))
 
-(use-package! scrollkeeper)
-(global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
-(global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
+;; (use-package! scrollkeeper)
+;; (global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
+;; (global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
+
+(use-package! liberime)
+;; https://github.com/tumashu/pyim-greatdict/blob/master/pyim-greatdict.pyim.gz
+(use-package! pyim-greatdict
+  :config
+  (pyim-greatdict-enable))
+(use-package! pyim
+  ;; :quelpa (pyim :fetcher github :repo "merrickluo/pyim")
+  :init
+  (setq pyim-title "R")
+  :config
+  ;; (use-package pyim-basedict
+  ;;   :config
+  ;;   (pyim-basedict-enable))
+
+  (global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
+  (setq pyim-dcache-auto-update nil)
+  (setq default-input-method "pyim")
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'rime)
+  (setq pyim-page-tooltip 'posframe)
+  ;; (setq pyim-page-tooltip 'child-frame)
+  ;; (setq pyim-page-tooltip 'popup)
+
+  ;;
+  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+  ;; 我自己使用的中英文动态切换规则是：
+  ;; 1. 光标只有在注释里面时，才可以输入中文。
+  ;; 2. 光标前是汉字字符时，才能输入中文。
+  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+  (setq-default pyim-english-input-switch-functions
+		        '(pyim-probe-dynamic-english
+		          pyim-probe-isearch-mode
+		          pyim-probe-program-mode
+                  pyim-probe-evil-normal-mode
+		          pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+		        '(pyim-probe-punctuation-line-beginning
+		          pyim-probe-punctuation-after-punctuation)))
 
 ;; web 开发配置
 (setq css-indent-offset 2
