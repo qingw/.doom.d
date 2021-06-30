@@ -62,4 +62,7 @@
            :files ("CMakeLists.txt" "Makefile" "src" "*.el")))
 (package! pyim-greatdict
   :recipe (:host github :repo "tumashu/pyim-greatdict"))
+(package! pyim-wbdict
+  :recipe (:host github :repo "tumashu/pyim-wbdict"
+           :files ("*.el")))
 (package! pyim)

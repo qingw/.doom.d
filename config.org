@@ -452,6 +452,9 @@ Uses `current-date-time-format' for the formatting the date/time."
 (map! "M--"     #'gcl/goto-match-paren
       "M-i"     #'parrot-rotate-next-word-at-point
       "M-f"     #'scroll-up-command)
+
+(global-set-key (kbd "M-f") 'pyim-forward-word)
+(global-set-key (kbd "M-b") 'pyim-backward-word)
 #+end_src
 *** evil bindings
 
@@ -1051,29 +1054,66 @@ _p_ : Previous
 *** pyim
 
 #+begin_src emacs-lisp
-(use-package! liberime)
+;; (use-package! liberime
+;;   :config
+;;   ((liberime-try-select-schema "luna_pinyin_simp")
+;;     (pyim-default-scheme 'rime-quanpin)))
 ;; https://github.com/tumashu/pyim-greatdict/blob/master/pyim-greatdict.pyim.gz
-(use-package! pyim-greatdict
+;; (use-package! pyim-greatdict
+;;   :config
+;;   (pyim-greatdict-enable))
+(use-package! pyim-wbdict
   :config
-  (pyim-greatdict-enable))
+  ;; (pyim-wbdict-v86-enable) ;86版五笔用户使用这个命令
+  (pyim-wbdict-v98-enable) ;98版五笔用户使用这个命令
+;; (pyim-wbdict-v98-morphe-enable) ;98版五笔（单字）用户使用这个命令，该词库为超大字符集，部分生僻字形可能需要安装支持EXT-B的字体（如HanaMinB等）才能正确显示
+  )
 (use-package! pyim
-  ;; :quelpa (pyim :fetcher github :repo "merrickluo/pyim")
   :init
   (setq pyim-title "R")
   :config
   ;; (use-package pyim-basedict
   ;;   :config
   ;;   (pyim-basedict-enable))
+  ;; (use-package pyim-wbdict
+  ;;   :config
+  ;;   (pyim-wbdict-v98-enable))
 
   (global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
+  (define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
   (setq pyim-dcache-auto-update nil)
   (setq default-input-method "pyim")
   ;; 我使用全拼
-  (setq pyim-default-scheme 'rime)
-  (setq pyim-page-tooltip 'posframe)
+  (setq pyim-default-scheme 'quanpin)
+  (if (posframe-workable-p)
+    (setq pyim-page-tooltip 'posframe)
+    (setq pyim-page-tooltip 'popup))
+  (setq pyim-enable-shortcode nil)
   ;; (setq pyim-page-tooltip 'child-frame)
   ;; (setq pyim-page-tooltip 'popup)
+  (setq pyim-dicts '(
+                     ;; (:name "wubi"
+                     ;;  :file (concat doom-private-dir "extras/pyim-wbdict/pyim-wbdict-v98.pyim" )
+                     ;;  :coding utf-8-unix
+                     ;;  )
+                     (:name "tsinghua"
+                      :file (concat doom-private-dir "/extras/pyim-tsinghua-dict/pyim-tsinghua-dict.pyim" )
+                      :coding utf-8-unix
+                      :dict-type pinyin-dict)
+                     (:name "greatdict"
+                      :file (concat doom-private-dir "extras/pyim-greatdict/pyim-greatdict.pyim")
+                      :coding utf-8-unix
+                      :dict-type pinyin-dict
+                      )
 
+                     ))
+
+  ;; (setq ivy-re-builders-alist
+  ;;       '((t . pyim-cregexp-ivy)))
+  ;; 开启代码搜索中文功能（比如拼音，五笔码等）
+  (pyim-isearch-mode 1)
+  ;; 显示5个候选词。
+  (setq pyim-page-length 5)
   ;;
   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
   ;; 我自己使用的中英文动态切换规则是：
@@ -1081,15 +1121,15 @@ _p_ : Previous
   ;; 2. 光标前是汉字字符时，才能输入中文。
   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
   (setq-default pyim-english-input-switch-functions
-		        '(pyim-probe-dynamic-english
-		          pyim-probe-isearch-mode
-		          pyim-probe-program-mode
-                  pyim-probe-evil-normal-mode
-		          pyim-probe-org-structure-template))
+        	'(pyim-probe-dynamic-english
+        	  pyim-probe-isearch-mode
+        	  pyim-probe-program-mode
+            pyim-probe-evil-normal-mode
+        	  pyim-probe-org-structure-template))
 
   (setq-default pyim-punctuation-half-width-functions
-		        '(pyim-probe-punctuation-line-beginning
-		          pyim-probe-punctuation-after-punctuation)))
+        	'(pyim-probe-punctuation-line-beginning
+        	  pyim-probe-punctuation-after-punctuation)))
 #+end_src
 
 [[https://gist.github.com/merrickluo/553f39c131d0eb717cd59f72c9d4b60d][Use pyim + liberime in doom-emacs]]
@@ -1236,6 +1276,9 @@ This file shouldn't be byte compiled.
            :files ("CMakeLists.txt" "Makefile" "src" "*.el")))
 (package! pyim-greatdict
   :recipe (:host github :repo "tumashu/pyim-greatdict"))
+(package! pyim-wbdict
+  :recipe (:host github :repo "tumashu/pyim-wbdict"
+           :files ("*.el")))
 (package! pyim)
 #+end_src
 * 问题
