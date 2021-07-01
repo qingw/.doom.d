@@ -7,3 +7,6 @@
 [submodule "extensions/librime"]
 	path = extensions/librime
 	url = https://github.com/rime/librime.git
+[submodule "extensions/my-rime-config"]
+	path = extensions/my-rime-config
+	url = git@github.com:gcclll/rime.git
