@@ -1,9 +1,3 @@
-[submodule "extras/pyim-greatdict"]
-	path = extras/pyim-greatdict
-	url = https://github.com/tumashu/pyim-greatdict.git
-[submodule "extras/pyim-tsinghua-dict"]
-	path = extras/pyim-tsinghua-dict
-	url = https://github.com/redguardtoo/pyim-tsinghua-dict.git
-[submodule "extras/pyim-wbdict"]
-	path = extras/pyim-wbdict
-	url = https://github.com/tumashu/pyim-wbdict.git
+[submodule "extensions/liberime"]
+	path = extensions/liberime
+	url = https://github.com/merrickluo/liberime.git
