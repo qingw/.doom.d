@@ -608,10 +608,15 @@ _p_ : Previous
 ;; (global-set-key [remap scroll-up-command] #'scrollkeeper-contents-up)
 ;; (global-set-key [remap scroll-down-command] #'scrollkeeper-contents-down)
 
-;; (use-package! liberime
-;;   :config
-;;   ((liberime-try-select-schema "luna_pinyin_simp")
-;;     (pyim-default-scheme 'rime-quanpin)))
+(use-package! liberime
+  :when (featurep! +rime)
+  :load
+  :config
+  (
+   (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
+                   (file-truename "~/.emacs.d/.local/straight/repos/pyim"))
+   (liberime-try-select-schema "luna_pinyin_simp")
+    ))
 ;; https://github.com/tumashu/pyim-greatdict/blob/master/pyim-greatdict.pyim.gz
 ;; (use-package! pyim-greatdict
 ;;   :config
@@ -638,7 +643,8 @@ _p_ : Previous
   (setq pyim-dcache-auto-update nil)
   (setq default-input-method "pyim")
   ;; 我使用全拼
-  (setq pyim-default-scheme 'quanpin)
+  ;; (setq pyim-default-scheme 'quanpin)
+  (setq pyim-default-scheme 'rime-quanpin)
   (if (posframe-workable-p)
     (setq pyim-page-tooltip 'posframe)
     (setq pyim-page-tooltip 'popup))

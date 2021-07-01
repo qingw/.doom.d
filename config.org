@@ -133,7 +133,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;;; init.el -*- lexical-binding: t; -*-
 
 (doom! :input
-       chinese
+       ;; chinese
        ;;japanese
        ;;layout            ; auie,ctsrnm is the superior home row
 
@@ -1054,10 +1054,15 @@ _p_ : Previous
 *** pyim
 
 #+begin_src emacs-lisp
-;; (use-package! liberime
-;;   :config
-;;   ((liberime-try-select-schema "luna_pinyin_simp")
-;;     (pyim-default-scheme 'rime-quanpin)))
+(use-package! liberime
+  :when (featurep! +rime)
+  :load
+  :config
+  (
+   (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
+                   (file-truename "~/.emacs.d/.local/straight/repos/pyim"))
+   (liberime-try-select-schema "luna_pinyin_simp")
+    ))
 ;; https://github.com/tumashu/pyim-greatdict/blob/master/pyim-greatdict.pyim.gz
 ;; (use-package! pyim-greatdict
 ;;   :config
@@ -1084,7 +1089,8 @@ _p_ : Previous
   (setq pyim-dcache-auto-update nil)
   (setq default-input-method "pyim")
   ;; 我使用全拼
-  (setq pyim-default-scheme 'quanpin)
+  ;; (setq pyim-default-scheme 'quanpin)
+  (setq pyim-default-scheme 'rime-quanpin)
   (if (posframe-workable-p)
     (setq pyim-page-tooltip 'posframe)
     (setq pyim-page-tooltip 'popup))
@@ -1141,6 +1147,8 @@ _p_ : Previous
 [[https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org][emacs-rime/INSTALLATION.org at master · DogLooksGood/emacs-rime]]
 
 [[https://rime.im/download/][下載及安裝 | RIME | 中州韻輸入法引擎]]
+
+[[https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html][在Mac版的Emacs中使用RIME输入法]]
 
 词库(80M)： [[https://github.com/tumashu/pyim-greatdict][tumashu/pyim-greatdict: A chinese-pyim dict, which include three million words!]]
 ** 开发配置
