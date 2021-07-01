@@ -1281,33 +1281,9 @@ This file shouldn't be byte compiled.
 (package! pangu-spacing)
 (package! posframe :recipe (:host github :repo "tumashu/posframe"))
 #+end_src
-* 问题
-1. lsp 不能识别 webpack/vite 别名？
-
-   [[https://github.com/vuejs/vetur/issues/890][Default FAQ js(ts)config for webpack aliases doesn't work. · Issue #890 ·
-   vuejs/vetur]]
-
-   #+begin_src diff
-   {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "strict": true,
-        "jsx": "preserve",
-        "sourceMap": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "lib": ["esnext", "dom"],
-+        "paths": {
-+          "@/*": ["src/*"]
-+        }
-      },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
-    }
-   #+end_src
-
-   在 ~tsconfig.json~ 中增加一项配置 ~paths~ 告诉 lsp 别名含义。
 * rime
 
 [[https://github.com/maomiui/rime][maomiui/rime: Rime 鼠须管（Squirrel）朙月拼音｜小鹤双拼｜自然码双拼配置]]
+* emacs install
+
+[[https://emacs-china.org/t/nix-mac-emacs-nativecomp/14509/20][Nix + Mac 用户现在可以直接下载编译好的 emacs-nativecomp 可执行文件了 - Emacs-general - Emacs China]]
