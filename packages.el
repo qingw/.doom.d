@@ -49,25 +49,8 @@
 (package! lsp-java)
 (package! dap-mode)
 
-;; (package! ox-rst
-;;   :recipe (:host github :repo "msnoigrs/ox-rst"))
-;; (package! scrollkeeper
-;;   :recipe (:host github :repo "alphapapa/scrollkeeper.el"))
-;; (package! gif-screencast)
-
-;; pyim
-;; (package! liberime
-;;   :recipe (:host github :repo "merrickluo/liberime"
-;;            :files ("CMakeLists.txt" "Makefile" "src" "*.el")))
-;; (package! pyim-greatdict
-;;   :recipe (:host github :repo "tumashu/pyim-greatdict"))
-;; (package! pyim-wbdict
-;;   :recipe (:host github :repo "tumashu/pyim-wbdict"
-;;            :files ("*.el")))
-;; (package! pyim)
-;; (when (featurep! +rime)
-;;   (package! liberime-config :ignore t))
-
+(package! rime)
+(package! liberime)
 (package! pyim)
 (package! fcitx)
 (package! ace-pinyin)
