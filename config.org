@@ -31,15 +31,16 @@
 他人配置列表：
 #+end_quote
 
-| name&link                                                        | brief |
-|------------------------------------------------------------------+-------|
-| [[https://github.com/zzamboni/dot-doom/blob/master/doom.org][dot-doom/doom.org at master · zzamboni/dot-doom]]                  | -     |
-| [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's Emacs configuration]]                                 | -     |
-| [[https://github.com/daedreth/UncleDavesEmacs#user-content-ido-and-why-i-started-using-helm][daedreth/UncleDavesEmacs: My personal ~/.emacs.d]]                 | -     |
-| [[https://github.com/PythonNut/quark-emacs][PythonNut/quark-emacs: An incredible wonderland of code]]          | -     |
-| [[https://www.masteringemacs.org/][Mastering Emacs]]                                                  | -     |
-| [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]                                         | -     |
-| [[https://github.com/KaratasFurkan/.emacs.d][GitHub - KaratasFurkan/.emacs.d: My literate Emacs configuration]] | -     |
+| name&link                                                        | brief       |
+|------------------------------------------------------------------+-------------|
+| [[https://github.com/zzamboni/dot-doom/blob/master/doom.org][dot-doom/doom.org at master · zzamboni/dot-doom]]                  | -           |
+| [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's Emacs configuration]]                                 | -           |
+| [[https://github.com/daedreth/UncleDavesEmacs#user-content-ido-and-why-i-started-using-helm][daedreth/UncleDavesEmacs: My personal ~/.emacs.d]]                 | -           |
+| [[https://github.com/PythonNut/quark-emacs][PythonNut/quark-emacs: An incredible wonderland of code]]          | -           |
+| [[https://www.masteringemacs.org/][Mastering Emacs]]                                                  | -           |
+| [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]                                         | -           |
+| [[https://github.com/KaratasFurkan/.emacs.d][GitHub - KaratasFurkan/.emacs.d: My literate Emacs configuration]] | -           |
+| [[https://github.com/eggcaker/.doom.d][eggcaker/.doom.d: My private doom-emacs configurations]]           | rime + pyim |
 
 
 * 更新日志
@@ -1053,8 +1054,90 @@ _p_ : Previous
 #+end_src
 *** pyim
 
-#+begin_src emacs-lisp
+[[https://github.com/eggcaker/.doom.d/blob/main/modules/private/my-chinese/config.el][.doom.d/config.el at main · eggcaker/.doom.d]]
 
+#+begin_src emacs-lisp
+(defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
+(setq-default pyim-english-input-switch-functions
+              '(pyim-probe-dynamic-english
+                pyim-probe-isearch-mode
+                pyim-probe-program-mode
+                pyim-probe-org-structure-template))
+(setq-default pyim-punctuation-half-width-functions
+              '(pyim-probe-punctuation-line-beginning
+                pyim-probe-punctuation-after-punctuation))
+
+(use-package! pyim
+  :demand t
+  :defer 1
+  :diminish pyim-isearch-mode
+  :init
+  (setq default-input-method "pyim"
+        pyim-title "ㄓ"
+        pyim-default-scheme 'rime
+        pyim-page-length 7
+        pyim-page-tooltip 'posframe) ;;'popup) ;;proframe)
+
+  :config
+  (setq-default pyim-english-input-switch-functions
+                '(pyim-probe-dynamic-english
+                  pyim-probe-evil-normal-mode
+                  pyim-probe-program-mode
+                  pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation)))
+
+(defvar liberime-is-loaded nil)
+
+(use-package! liberime
+  :when (featurep! +rime)
+  :load-path (lambda()(expand-file-name "liberime" +my-ext-dir))
+  :defer 1
+  :unless liberime-is-loaded
+  :custom
+  (rime_share_data_dir "/Library/Input Methods/Squirrel.app/Contents/SharedSupport/")
+  (rime_user_data_dir (expand-file-name "rime" +my-ext-dir))
+  :init
+  (module-load (expand-file-name "liberime.so" +my-ext-dir))
+  :config
+  (setq liberime-is-loaded t)
+  (liberime-start rime_share_data_dir rime_user_data_dir)
+  (liberime-select-schema  "wubi_pinyin")) ;;"wubi_pinyin"))  luna_pinyin_simp"))
+
+;; 中英文之间添加空格
+(use-package! pangu-spacing
+  :hook (text-mode . pangu-spacing-mode)
+  :config
+  ;; Always insert `real' space in org-mode.
+  (setq-hook! 'org-mode-hook pangu-spacing-real-insert-separtor t))
+
+(use-package! fcitx
+  :after evil
+  :config
+  (when (executable-find "fcitx-remote")
+    (fcitx-evil-turn-on)))
+
+(use-package! ace-pinyin
+  :after avy
+  :init (setq ace-pinyin-use-avy t)
+  :config (ace-pinyin-global-mode t))
+
+;;; Hacks
+
+(defun +chinese*org-html-paragraph (paragraph contents info)
+  "Join consecutive Chinese lines into a single long line without unwanted space
+when exporting org-mode to html."
+  (let* ((fix-regexp "[[:multibyte:]]")
+         (origin-contents contents)
+         (fixed-contents
+          (replace-regexp-in-string
+           (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)")
+           "\\1\\2"
+           origin-contents)))
+    (list paragraph fixed-contents info)))
+;; (advice-add #'org-html-paragraph :filter-args #'+chinese*org-html-paragraph)
 #+end_src
 
 
@@ -1328,3 +1411,6 @@ This file shouldn't be byte compiled.
    #+end_src
 
    在 ~tsconfig.json~ 中增加一项配置 ~paths~ 告诉 lsp 别名含义。
+* rime
+
+[[https://github.com/maomiui/rime][maomiui/rime: Rime 鼠须管（Squirrel）朙月拼音｜小鹤双拼｜自然码双拼配置]]
