@@ -49,6 +49,9 @@
 1. add scrollkeeper 定位行时闪烁(~M-v,M-f~)
 2. add cacltext 数学计算
 3. add ~gcl/async-shell-command-silently~
+
+[2021-07-02]
+1. 升级 emacs27 -> emacs28 native
 * 自定义函数
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
