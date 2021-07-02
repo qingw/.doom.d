@@ -146,7 +146,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c r"       #'vr/replace
  "C-c q"       #'vr/query-replace
  "C-c u"       #'crux-view-url
- "C-c y"       #'youdao-dictionary-search-at-point-posframe
+ "C-c y"       #'youdao-dictionary-search-at-point+
 
  ;; C-c l
  "C-c l o"      #'link-hint-open-link
@@ -242,6 +242,18 @@ Uses `current-date-time-format' for the formatting the date/time."
          (let ((project-name (projectile-project-name)))
            (unless (string= "-" project-name)
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+
+(defalias 'ex! 'evil-ex-define-cmd)
+
+;; 快捷操作，通过 : 冒号进入 evil 命令模式
+;; File operations
+(ex! "cp"          #'+evil:copy-this-file)
+(ex! "mv"          #'+evil:move-this-file)
+(ex! "rm"          #'+evil:delete-this-file)
+
+;; window 操作
+(setq evil-split-window-below t
+      evil-vsplit-window-right t)
 
 (use-package! link-hint
   :config
@@ -351,9 +363,100 @@ when exporting org-mode to html."
     (add-hook 'after-init-hook 'global-flycheck-mode)
     (add-hook 'flycheck-mode-hook 'gcl/use-eslint-from-node-modules))
 
+(after! leetcode
+  (setq leetcode-prefer-language "javascript"
+        leetcode-prefer-sql "mysql"
+        leetcode-save-solutions t
+        leetcode-directory "~/github/make-leetcode"))
+
 (use-package! git-gutter
   :config
   (global-git-gutter-mode 't))
+
+(add-hook 'org-mode-hook
+          (lambda () (display-line-numbers-mode -1)))
+
+(use-package! org-fancy-priorities
+  :diminish
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("🅰" "🅱" "🅲" "🅳" "🅴")))
+
+(use-package! org-pretty-tags
+  :diminish org-pretty-tags-mode
+  :config
+  (setq org-pretty-tags-surrogate-strings
+        '(("work"  . "⚒")))
+
+  (org-pretty-tags-global-mode))
+
+(use-package! valign
+  :custom
+  (valign-fancy-bar t)
+  :hook
+  (org-mode . valign-mode))
+
+(setq org-roam-directory "~/.doom.d/.local/roam/")
+
+(use-package! parrot
+  :config
+  (parrot-mode))
+
+(setq parrot-rotate-dict
+      '(
+        (:rot ("alpha" "beta") :caps t :lower nil)
+        ;; => rotations are "Alpha" "Beta"
+
+        (:rot ("snek" "snake" "stawp"))
+        ;; => rotations are "snek" "snake" "stawp"
+
+        (:rot ("yes" "no") :caps t :upcase t)
+        ;; => rotations are "yes" "no", "Yes" "No", "YES" "NO"
+
+        (:rot ("&" "|"))
+        ;; => rotations are "&" "|"
+        ;; default dictionary starts here ('v')
+        (:rot ("begin" "end") :caps t :upcase t)
+        (:rot ("enable" "disable") :caps t :upcase t)
+        (:rot ("enter" "exit") :caps t :upcase t)
+        (:rot ("forward" "backward") :caps t :upcase t)
+        (:rot ("front" "rear" "back") :caps t :upcase t)
+        (:rot ("get" "set") :caps t :upcase t)
+        (:rot ("high" "low") :caps t :upcase t)
+        (:rot ("in" "out") :caps t :upcase t)
+        (:rot ("left" "right") :caps t :upcase t)
+        (:rot ("min" "max") :caps t :upcase t)
+        (:rot ("on" "off") :caps t :upcase t)
+        (:rot ("prev" "next"))
+        (:rot ("start" "stop") :caps t :upcase t)
+        (:rot ("true" "false") :caps t :upcase t)
+        (:rot ("&&" "||"))
+        (:rot ("==" "!="))
+        (:rot ("===" "!=="))
+        (:rot ("." "->"))
+        (:rot ("if" "else" "elif"))
+        (:rot ("ifdef" "ifndef"))
+        ;; javascript
+        (:rot ("var" "let" "const"))
+        (:rot ("null" "undefined"))
+        (:rot ("number" "object" "string" "symbol"))
+
+        ;; c/...
+        (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
+        (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
+        (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+        (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
+
+        ;; org
+        (:rot ("DONE" "DOING" "WAITING" "PENDING"))
+        (:rot ("increment", "decrement"))
+
+        ))
+
+;; ranger true
+(after! ranger
+  :config
+  (setq ranger-show-literal nil))
 
 (setq yas-triggers-in-field t)
 
@@ -392,3 +495,63 @@ when exporting org-mode to html."
 (add-hook 'js2-mode-hook 'maybe-use-prettier)
 (add-hook 'web-mode-hook 'maybe-use-prettier)
 (add-hook 'rjsx-mode-hook 'maybe-use-prettier)
+
+;; web-mode hydra
+(defhydra hydra-web-mode (:color blue :quit-key "q" :hint nil)
+  "
+^Element^                       ^Element^                       ^Attribute^             ^Block
+^^^^^^^^---------------------------------------------------------------------------------------------
+_a_ : Select content            _r_ : Rename                    _0_ : Start             _<_ : Begin
+_b_ : Start                     _s_ : Select                    _9_ : End               _>_ : End
+_c_ : Clone                     _t_ : Move Down                 _*_ : Insert            _-_ : Select
+_e_ : End                       _u_ : Parent                    _N_ : Next
+_f_ : Fold/unfold children      _v_ : Delete without content    _P_ : Previous                  _k_
+_i_ : Insert                    _w_ : Wrap Element              _S_ : Select                _h_      _l_
+_I_ : Insert cursor             _t_ : Last(open/close)          _X_ : Delete                    _j_
+_K_ : Delete                    _T_ : Next(open/close)          _M_ : Match tag
+_n_ : Next                      _._ : Wrap Markup               _A_ : Sort
+_p_ : Previous
+"
+  ("a" web-mode-element-content-select)
+  ("b" web-mode-element-beginning :exit nil)
+  ("c" web-mode-element-clone)
+  ("e" web-mode-element-end :exit nil)
+  ("f" web-mode-element-children-fold-or-unfold :exit nil)
+  ("F" web-mode-fold-unfold :exit nil)
+  ("i" web-mode-element-insert)
+  ("I" web-mode-element-insert-at-point)
+  ("K" web-mode-element-kill)
+  ("m" web-mode-element-mute-blanks)
+  ("n" web-mode-element-next :color "pink" :exit nil)
+  ("p" web-mode-element-previous :color "pink" :exit nil)
+  ("r" web-mode-element-rename)
+  ("s" web-mode-element-select)
+  ("t" web-mode-element-transpose)
+  ("u" web-mode-element-parent :color "pink" :exit nil)
+  ("v" web-mode-element-vanish)
+  ("w" web-mode-element-wrap)
+  ("t" web-mode-tag-previous :color "pink" :exit nil)
+  ("T" web-mode-tag-next :color "pink" :exit nil)
+  ("." emmet-wrap-with-markup)
+  ("q" nil "quit" :exit t)
+  ;; attribute
+  ("0" web-mode-attribute-beginning :exit nil)
+  ("9" web-mode-attribute-end :exit nil)
+  ("*" web-mode-attribute-insert)
+  ("X" web-mode-attribute-kill)
+  ("A" web-mode-tag-attributes-sort :exit nil)
+  ("K" web-mode-element-kill)
+  ("M" web-mode-tag-match :exit nil :color "pink")
+  ("N" web-mode-attribute-next :exit nil :color "pink")
+  ("P" web-mode-attribute-previous :exit nil :color "pink")
+  ("S" web-mode-attribute-select)
+  ;; block
+  ("<" web-mode-block-next :exit nil :color "pink")
+  (">" web-mode-block-previous :exit nil :color "pink")
+  ("-" web-mode-block-select)
+  ;; movement
+  ("j" next-line :exit nil :color "blue")
+  ("k" previous-line :exit nil :color "blue")
+  ("h" backward-char :exit nil :color "blue")
+  ("l" forward-char :exit nil :color "blue")
+  )
