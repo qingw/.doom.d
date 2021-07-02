@@ -87,16 +87,25 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;;; config.el -*- lexical-binding: t; -*-
 
+(global-set-key (kbd "M-g f") 'avy-goto-line)
+(global-set-key (kbd "M-g w") 'avy-goto-word-1)
+(global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
+
 (map! :niv      "C-s" nil
       :niv      "C-d" nil
       :niv      "C-i" nil
       :niv      "M-," nil
       :niv      "M-." nil
 
+      "C-'" nil
+
       :leader
       "A" nil
       "X" nil
-      "/" nil)
+      "/" nil
+
+      ;; remap
+      [remap evil-undo] #'undo-tree-undo)
 
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
@@ -131,7 +140,8 @@ Uses `current-date-time-format' for the formatting the date/time."
       "s-)"     #'sp-forward-barf-sexp)
 
 (map!
- "C-'"     #'imenu-list-smart-toggle
+ "C-:"     #'avy-goto-char
+ "C-;"     #'avy-goto-char-2
  "C-s"     #'+default/search-buffer
 
  ;; smartparen
@@ -154,6 +164,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c l a"      #'link-hint-open-link-at-point
  "C-c l C"      #'link-hint-copy-link-at-point
 
+ "C-a"          #'crux-move-beginning-of-line
  :niv      "C-e"     #'evil-end-of-line
  :niv      "C-="     #'er/expand-region
  )
@@ -224,6 +235,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   (load custom-file))
 
 ;; 开启模式
+(global-undo-tree-mode 1)
 
 (setq doom-theme 'doom-vibrant)
 
@@ -242,6 +254,16 @@ Uses `current-date-time-format' for the formatting the date/time."
          (let ((project-name (projectile-project-name)))
            (unless (string= "-" project-name)
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+
+(after! avy
+  ;; home row priorities: 8 6 4 5 - - 1 2 3 7
+  (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
+
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-numbers t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
 
 (defalias 'ex! 'evil-ex-define-cmd)
 
@@ -397,6 +419,59 @@ Uses `current-date-time-format' for the formatting the date/time."
   (org-mode . valign-mode))
 
 (setq org-roam-directory "~/.doom.d/.local/roam/")
+(use-package org-roam-server
+  :after (org-roam server)
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8078
+        org-roam-server-export-inline-images t
+        org-roam-server-authenticate nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
+  (defun org-roam-server-open ()
+    "Ensure the server is active, then open the roam graph."
+    (interactive)
+    (org-roam-server-mode 1)
+    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
+
+(use-package! org-ol-tree
+  :commands org-ol-tree)
+(map! :map org-mode-map
+      :after org
+      :localleader
+      :desc "Outline" "O" #'org-ol-tree)
+
+(use-package! engrave-faces-latex
+  :after ox-latex)
+
+(use-package! ox-gfm
+  :after org)
+
+(use-package! org-pandoc-import
+  :after org)
+
+(use-package! org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autolinks nil)
+  ;; for proper first-time setup, `org-appear--set-elements'
+  ;; needs to be run after other hooks have acted.
+  (run-at-time nil nil #'org-appear--set-elements))
+
+(org-link-set-parameters "yt" :export #'+org-export-yt)
+(defun +org-export-yt (path desc backend _com)
+  (cond ((org-export-derived-backend-p backend 'html)
+         (format "<iframe width='440' \
+height='335' \
+src='https://www.youtube.com/embed/%s' \
+frameborder='0' \
+allowfullscreen>%s</iframe>" path (or "" desc)))
+        ((org-export-derived-backend-p backend 'latex)
+         (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
+        (t (format "https://youtu.be/%s" path))))
 
 (use-package! parrot
   :config

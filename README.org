@@ -187,13 +187,13 @@ Uses `current-date-time-format' for the formatting the date/time."
        nav-flash         ; blink cursor line after big motions
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
-       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       (popup +all +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       ;;treemacs          ; a project drawer, like neotree but cooler
+       treemacs          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       window-select     ; visually switch windows
+       (window-select +numbers)     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-free coding or writing
 
@@ -212,10 +212,10 @@ Uses `current-date-time-format' for the formatting the date/time."
        word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       dired             ; making dired pretty [functional]
+       (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        (ibuffer +icons)         ; interactive buffer management
-       undo              ; persistent, smarter undo for your inevitable mistakes
+       (undo +tree)              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
@@ -226,8 +226,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       ;;(spell +flyspell) ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
+       ;; (:if (executable-find "aspell") spell +flyspell) ; tasing you for misspelling mispelling
+       grammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
@@ -243,9 +243,9 @@ Uses `current-date-time-format' for the formatting the date/time."
         +docsets)
        (lsp +peek)
        (magit +forge)             ; a git porcelain for Emacs
-       ;;make              ; run make tasks from Emacs
+       make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       ;;pdf               ; pdf enhancements
+       pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
@@ -284,7 +284,7 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        (latex             ; writing papers in Emacs has never been so fun
@@ -293,7 +293,7 @@ Uses `current-date-time-format' for the formatting the date/time."
         +fold)
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
@@ -316,7 +316,7 @@ Uses `current-date-time-format' for the formatting the date/time."
        php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp)            ; beautiful is better than ugly
+       (python +lsp +pyright)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -344,8 +344,8 @@ Uses `current-date-time-format' for the formatting the date/time."
        calendar
        ;;emms
        everywhere        ; *leave* Emacs!? You must be joking
-       ;;irc               ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an RSS reader
+       irc               ; how neckbeards socialize
+       (rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
@@ -363,6 +363,13 @@ Uses `current-date-time-format' for the formatting the date/time."
 #+end_src
 
 ** 键值绑定
+*** 全局按键
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-g f") 'avy-goto-line)
+(global-set-key (kbd "M-g w") 'avy-goto-word-1)
+(global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
+#+end_src
 *** 解绑
 #+begin_src emacs-lisp
 (map! :niv      "C-s" nil
@@ -371,10 +378,17 @@ Uses `current-date-time-format' for the formatting the date/time."
       :niv      "M-," nil
       :niv      "M-." nil
 
+      "C-'" nil
+
       :leader
       "A" nil
       "X" nil
-      "/" nil)
+      "/" nil
+
+      ;; remap
+      [remap evil-undo] #'undo-tree-undo)
+
+
 #+end_src
 *** F1~F12
 #+begin_src emacs-lisp
@@ -420,7 +434,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 #+begin_src emacs-lisp
 (map!
- "C-'"     #'imenu-list-smart-toggle
+ "C-:"     #'avy-goto-char
+ "C-;"     #'avy-goto-char-2
  "C-s"     #'+default/search-buffer
 
  ;; smartparen
@@ -443,6 +458,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c l a"      #'link-hint-open-link-at-point
  "C-c l C"      #'link-hint-copy-link-at-point
 
+ "C-a"          #'crux-move-beginning-of-line
  :niv      "C-e"     #'evil-end-of-line
  :niv      "C-="     #'er/expand-region
  )
@@ -533,6 +549,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   (load custom-file))
 
 ;; 开启模式
+(global-undo-tree-mode 1)
 #+end_src
 
 ** 主题配置
@@ -560,6 +577,20 @@ Uses `current-date-time-format' for the formatting the date/time."
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 #+end_src
 ** packages 配置
+*** avy
+#+begin_src emacs-lisp
+(after! avy
+  ;; home row priorities: 8 6 4 5 - - 1 2 3 7
+  (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
+#+end_src
+*** compay
+#+begin_src emacs-lisp
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-numbers t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
+#+end_src
 *** evil 配置
 
 #+begin_src emacs-lisp
@@ -716,7 +747,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 [[https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html][在Mac版的Emacs中使用RIME输入法]]
 
 [[https://github.com/tumashu/pyim-greatdict][tumashu/pyim-greatdict: A chinese-pyim dict, which include three million words!]]
-*** TODO js-doc
+*** js-doc
 
 #+begin_src emacs-lisp
 (use-package! js-doc
@@ -794,7 +825,80 @@ org-roam
 
 #+begin_src emacs-lisp
 (setq org-roam-directory "~/.doom.d/.local/roam/")
+(use-package org-roam-server
+  :after (org-roam server)
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8078
+        org-roam-server-export-inline-images t
+        org-roam-server-authenticate nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
+  (defun org-roam-server-open ()
+    "Ensure the server is active, then open the roam graph."
+    (interactive)
+    (org-roam-server-mode 1)
+    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
 #+end_src
+
+org-ol-tree 目录树
+#+begin_src emacs-lisp
+(use-package! org-ol-tree
+  :commands org-ol-tree)
+(map! :map org-mode-map
+      :after org
+      :localleader
+      :desc "Outline" "O" #'org-ol-tree)
+#+end_src
+
+让 latex 导出结果高亮显示
+#+begin_src emacs-lisp
+(use-package! engrave-faces-latex
+  :after ox-latex)
+#+end_src
+
+github markdown in org-mode
+
+#+begin_src emacs-lisp
+(use-package! ox-gfm
+  :after org)
+#+end_src
+
+其他格式转成 org
+#+begin_src emacs-lisp
+(use-package! org-pandoc-import
+  :after org)
+#+end_src
+
+隐藏 ~=#*_ 等格式化字符
+#+begin_src emacs-lisp
+(use-package! org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autolinks nil)
+  ;; for proper first-time setup, `org-appear--set-elements'
+  ;; needs to be run after other hooks have acted.
+  (run-at-time nil nil #'org-appear--set-elements))
+#+end_src
+
+~[[yt:...]]~ 嵌入 youtube 视频
+#+begin_src emacs-lisp
+(org-link-set-parameters "yt" :export #'+org-export-yt)
+(defun +org-export-yt (path desc backend _com)
+  (cond ((org-export-derived-backend-p backend 'html)
+         (format "<iframe width='440' \
+height='335' \
+src='https://www.youtube.com/embed/%s' \
+frameborder='0' \
+allowfullscreen>%s</iframe>" path (or "" desc)))
+        ((org-export-derived-backend-p backend 'latex)
+         (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
+        (t (format "https://youtu.be/%s" path))))
+#+end_src
+
 *** parrot, 多单词切换
 
 开启全局模式：
@@ -1010,11 +1114,33 @@ This file shouldn't be byte compiled.
 (package! valign)
 #+end_src
 
+funny:
+#+begin_src emacs-lisp
+;; type sound
+(package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
+#+end_src
+
 org packages:
 #+begin_src emacs-lisp
 (package! org-fancy-priorities)
 (package! org-pretty-tags)
-(package! org-roam :disable t)
+(package! org-pretty-table
+  :recipe (:host github :repo "Fuco1/org-pretty-table")
+  :pin "87772a9469d91770f87bfa788580fca69b9e697a")
+;; ~=/* 符号显示优化
+(package! org-appear :recipe (:host github :repo "awth13/org-appear")
+  :pin "6ee49875f8bdefafbde849f5628d673e9740cf8c")
+;; 算术符号显示，如 x 的平方 $a^2$ -> 对应数学表示型式
+(package! org-fragtog :pin "0151cabc7aa9f244f82e682b87713b344d780c23")
+;; 目录树
+(package! org-ol-tree :recipe (:host github :repo "Townk/org-ol-tree")
+  :pin "207c748aa5fea8626be619e8c55bdb1c16118c25")
+(package! engrave-faces :recipe (:host github :repo "tecosaur/engrave-faces"))
+(package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
+(package! org-pandoc-import :recipe
+  (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "filters" "preprocessors")))
+(package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5")
+(package! org-roam)
 #+end_src
 
 pyim packages:
@@ -1041,8 +1167,8 @@ dev packages:
 (package! web-beautify)
 (package! prettier-js)
 ;; (package! import-js :disable t)
-;; (package! tide :disable t)
-;; (package! eldoc :disable t)
+(package! tide :disable t)
+(package! eldoc :disable t)
 #+end_src
 
 * rime
