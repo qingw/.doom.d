@@ -56,6 +56,18 @@
 
 #+begin_src emacs-lisp :comments no
 ;;;###autoload
+(defun gcl/use-eslint-from-node-modules ()
+    "Set local eslint if available."
+    (let* ((root (locate-dominating-file
+                  (or (buffer-file-name) default-directory)
+                  "node_modules"))
+           (eslint (and root
+                        (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                          root))))
+      (when (and eslint (file-executable-p eslint))
+        (setq-local flycheck-javascript-eslint-executable eslint))))
+
+;;;###autoload
 (defun gcl/goto-match-paren (arg)
   "Go to the matching if on (){}[], similar to vi style of % ."
   (interactive "p")
@@ -190,16 +202,16 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
        multiple-cursors  ; editing in many places at once
-       objed             ; text object editing for the innocent
+       ;; objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
-       ;;rotate-text       ; cycle region at point between text candidates
+       rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
-       ;;word-wrap         ; soft wrapping with language-aware indent
+       word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ;;ibuffer         ; interactive buffer management
+       (ibuffer +icons)         ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
@@ -207,7 +219,7 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-       ;;vterm             ; the best terminal emulation in Emacs
+       vterm             ; the best terminal emulation in Emacs
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
@@ -219,37 +231,39 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
        ;;docker
-       ;;editorconfig      ; let someone else argue about tabs vs spaces
+       editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
-       lookup              ; navigate your code and its documentation
-       ;;lsp
-       magit             ; a git porcelain for Emacs
+       (lookup              ; navigate your code and its documentation
+        +dictionary
+        +docsets)
+       (lsp +peek)
+       (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        ;;pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
-       ;;rgb               ; creating color strings
+       rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
-       ;;upload            ; map local to remote projects via ssh/ftp
+       upload            ; map local to remote projects via ssh/ftp
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
-       ;;cc                ; C > C++ == 1
+       (cc +lsp)                ; C > C++ == 1
        ;;clojure           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
-       ;;data              ; config/data formats
+       data              ; config/data formats
        ;;(dart +flutter)   ; paint ui and not much else
        ;;elixir            ; erlang done right
        ;;elm               ; care for a cup of TEA?
@@ -261,16 +275,19 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;fsharp            ; ML stands for Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        ;;gdscript          ; the language you waited for
-       ;;(go +lsp)         ; the hipster dialect
+       (go +lsp)         ; the hipster dialect
        ;;(haskell +dante)  ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
-       ;;json              ; At least it ain't XML
+       json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
+       (latex             ; writing papers in Emacs has never been so fun
+        +latexmk
+        +cdlatex
+        +fold)
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
        ;;lua               ; one-based indices? one-based indices
@@ -278,27 +295,41 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       org               ; organize your plain life in plain text
-       ;;php               ; perl's insecure younger brother
-       ;;plantuml          ; diagrams for confusing people more
+       (org               ; organize your plain life in plain text
+        +attach
+        +babel
+        +capture
+        +dragndrop
+        +hugo
+        +jupyter
+        +export
+        +pandoc
+        +gnuplot
+        +pretty
+        +present
+        +protocol
+        +pomodoro
+        +roam)
+       php               ; perl's insecure younger brother
+       plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       ;;python            ; beautiful is better than ugly
+       (python +lsp)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
-       ;;rest              ; Emacs as a REST client
+       rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
-       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       (ruby +rails +lsp)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       (rust +lsp)              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       ;;(scheme +guile)   ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       (scheme +guile)   ; a fully conniving family of lisps
+       (sh +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       ;;web               ; the tubes
-       ;;yaml              ; JSON, but readable
+       web               ; the tubes
+       yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
 
        :email
@@ -307,9 +338,9 @@ Uses `current-date-time-format' for the formatting the date/time."
        ;;(wanderlust +gmail)
 
        :app
-       ;;calendar
+       calendar
        ;;emms
-       ;;everywhere        ; *leave* Emacs!? You must be joking
+       everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
@@ -328,6 +359,131 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;;; config.el -*- lexical-binding: t; -*-
 #+end_src
 
+** 键值绑定
+*** 解绑
+#+begin_src emacs-lisp
+(map! :niv      "C-s" nil
+      :niv      "C-d" nil
+      :niv      "C-i" nil
+      :niv      "M-," nil
+      :niv      "M-." nil
+
+      :leader
+      "A" nil
+      "X" nil
+      "/" nil)
+#+end_src
+*** F1~F12
+#+begin_src emacs-lisp
+(global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
+(global-set-key (kbd "<f5>") 'deadgrep)
+(global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
+(global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
+(global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
+#+end_src
+*** SPC
+
+#+begin_src emacs-lisp
+(map! :leader
+      :n        "SPC"   #'execute-extended-command
+      :n        "bf"   #'osx-lib-reveal-in-finder
+      :n        "fo"   #'crux-open-with
+      :n        "fj"   #'dired-jump
+      :n        "/r"   #'deadgrep
+
+      (:prefix ("l" . "load")
+       :n       "i"     #'imenu-list
+       :n       "o"     #'lsp-ui-imenu
+       :n       "d"     #'deft
+       :n       "l"     #'+workspace/switch-to)
+
+      (:prefix ( "v" . "view" )
+       :n       "o"     #'ivy-pop-view
+       :n       "p"     #'ivy-push-view)
+
+      :n        "w -"   #'split-window-below
+      )
+#+end_src
+*** s-(Command)
+#+begin_src emacs-lisp
+(map! "s-<"     #'move-text-up
+      "s->"     #'move-text-down
+      "s-i"     #'gcl/string-inflection-cycle-auto
+      "s-("     #'sp-backward-barf-sexp
+      "s-)"     #'sp-forward-barf-sexp)
+#+end_src
+
+*** C-(Control)
+
+#+begin_src emacs-lisp
+(map!
+ "C-'"     #'imenu-list-smart-toggle
+ "C-s"     #'+default/search-buffer
+
+ ;; smartparen
+ "C-("     #'sp-backward-slurp-sexp
+ "C-)"     #'sp-forward-slurp-sexp
+
+ ;; C-c
+ "C-c a c"     #'org-mac-chrome-insert-frontmost-url
+ "C-c d"       #'insert-current-date-time
+ "C-c t"       #'insert-current-time
+ "C-c o"       #'crux-open-with
+ "C-c r"       #'vr/replace
+ "C-c q"       #'vr/query-replace
+ "C-c u"       #'crux-view-url
+ "C-c y"       #'youdao-dictionary-search-at-point-posframe
+
+ ;; C-c l
+ "C-c l o"      #'link-hint-open-link
+ "C-c l c"      #'link-hint-copy-link
+ "C-c l a"      #'link-hint-open-link-at-point
+ "C-c l C"      #'link-hint-copy-link-at-point
+
+ :niv      "C-e"     #'evil-end-of-line
+ :niv      "C-="     #'er/expand-region
+ )
+#+end_src
+*** M-(Alt/Option)
+
+#+begin_src emacs-lisp
+(map! "M--"     #'gcl/goto-match-paren
+      "M-i"     #'parrot-rotate-next-word-at-point
+      "M-f"     #'scroll-up-command)
+
+(global-set-key (kbd "M-f") 'pyim-forward-word)
+(global-set-key (kbd "M-b") 'pyim-backward-word)
+#+end_src
+*** evil
+
+#+begin_src emacs-lisp
+(map!
+ :desc "Go function header"     :n "g[" #'beginning-of-defun
+ :desc "Go function end"        :n "g]" #'end-of-defun
+ :desc "Find definition"        :n "gd" #'xref-find-definitions
+ :desc "Find reference"         :n "gD" #'xref-find-references
+ :desc "Go back find piont"     :n "gb" #'xref-pop-marker-stack
+ :desc "Delete parens"          :n "z-" #'sp-splice-sexp
+ :desc "Wrap with markup"       :nv "z." #'emmet-wrap-with-markup
+ :desc "Increase number"        :n "+"  #'evil-numbers/inc-at-pt
+ :desc "Decrease number"        :n "-"  #'evil-numbers/dec-at-pt)
+#+end_src
+
+*** 指定模式按键
+
+#+begin_src emacs-lisp
+ (map! :map web-mode-map
+       "<f2>"    #'hydra-web-mode/body
+
+       :map org-mode-map
+       :n       "tt" #'org-todo
+       :n       "tc" #'org-toggle-checkbox
+       :n       "tpp" #'org-priority
+       :n       "tpu" #'org-priority-up
+       :n       "tpd" #'org-priority-down
+       )
+#+end_src
+
 ** 保存自动同步配置
 
 ~gcl/async-shell-command-silently~ 静默异步执行命令，命令会在 ~*mini buffer*~ 中
@@ -344,6 +500,38 @@ Uses `current-date-time-format' for the formatting the date/time."
 && /bin/bash ~/.gclrc/shl/cp-config-org.sh"
              +literate-config-file))))
 #+end_src
+** 基本配置(Basic)
+
+#+begin_src emacs-lisp
+;; 启动全屏
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+;; 个人信息配置
+(setq user-full-name "Zhicheng Lee"
+      user-mail-address "gccll.love@gmail.com"
+      user-blog-url "https://www.cheng92.com")
+
+;; setq, set-default 统一配置的地方
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq org-directory "~/github/documents/org")
+(setq display-line-numbers-type t)
+
+(setq-default
+ fill-column 80
+ undo-limit 80000000
+ delete-by-moving-to-trash t
+ window-combination-resize t
+ delete-trailing-lines t
+ x-stretch-cursor t)
+
+(setq-default custom-file (expand-file-name ".custom.el" doom-private-dir))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; 开启模式
+#+end_src
+
 ** 主题配置
 
 #+begin_src emacs-lisp
@@ -352,9 +540,224 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
 (setq doom-font (font-spec :family "Fira Code" :size 16))
 #+end_src
-** TODO objed
 
-[[https://github.com/clemera/objed][clemera/objed: Navigate and edit text objects with Emacs. Development on pause.]]
+设置标题：
+#+begin_src emacs-lisp
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+#+end_src
+** packages 配置
+*** link-hint
+
+链接管理。
+
+#+begin_src emacs-lisp
+(use-package! link-hint
+  :config
+  (setq browse-url-browser-function 'browse-url-chromium
+        browse-url-generic-args '("--target" "tab")))
+#+end_src
+*** search & replace
+
+#+begin_src emacs-lisp
+(use-package! visual-regexp
+  :commands (vr/select-replace vr/select-query-replace))
+
+(use-package! visual-regexp-steriods
+  :commands (vr/select-replace vr/select-query-replace))
+#+end_src
+*** pyim
+
+配置来源：[[https://github.com/eggcaker/.doom.d/blob/main/modules/private/my-chinese/config.el][.doom.d/config.el at main · eggcaker/.doom.d]]
+
+直截使用 Rime - Squirrel 就可以了，用外部其他的主要就是卡。
+
+#+begin_src emacs-lisp
+;; (defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
+;; (setq-default pyim-english-input-switch-functions
+;;               '(pyim-probe-dynamic-english
+;;                 pyim-probe-isearch-mode
+;;                 pyim-probe-program-mode
+;;                 pyim-probe-org-structure-template))
+;; (setq-default pyim-punctuation-half-width-functions
+;;               '(pyim-probe-punctuation-line-beginning
+;;                 pyim-probe-punctuation-after-punctuation))
+
+;; (use-package! pyim
+;;   :demand t
+;;   :defer 1
+;;   :diminish pyim-isearch-mode
+;;   :init
+;;   (setq default-input-method "pyim"
+;;         pyim-title "ㄓ"
+;;         pyim-default-scheme 'rime
+;;         pyim-page-length 7
+;;         pyim-page-tooltip 'posframe) ;;'popup) ;;proframe)
+
+;;   :config
+;;   (setq-default pyim-english-input-switch-functions
+;;                 '(pyim-probe-dynamic-english
+;;                   pyim-probe-evil-normal-mode
+;;                   pyim-probe-program-mode
+;;                   pyim-probe-org-structure-template))
+
+;;   (setq-default pyim-punctuation-half-width-functions
+;;                 '(pyim-probe-punctuation-line-beginning
+;;                   pyim-probe-punctuation-after-punctuation)))
+
+;; (defvar liberime-is-loaded nil)
+
+;; (use-package! liberime
+;;   :when (featurep! +rime)
+;;   :load-path (lambda()(expand-file-name "liberime" +my-ext-dir))
+;;   :defer 1
+;;   :unless liberime-is-loaded
+;;   :custom
+;;   (rime_share_data_dir "/Library/Input Methods/Squirrel.app/Contents/SharedSupport/")
+;;   (rime_user_data_dir (expand-file-name "rime" +my-ext-dir))
+;;   :init
+;;   (module-load (expand-file-name "liberime.so" +my-ext-dir))
+;;   :config
+;;   (setq liberime-is-loaded t)
+;;   (liberime-start rime_share_data_dir rime_user_data_dir)
+;;   (liberime-select-schema  "wubi_pinyin")) ;;"wubi_pinyin"))  luna_pinyin_simp"))
+
+;; ;; 中英文之间添加空格
+;; (use-package! pangu-spacing
+;;   :hook (text-mode . pangu-spacing-mode)
+;;   :config
+;;   ;; Always insert `real' space in org-mode .
+;;   (setq-hook! 'org-mode-hook pangu-spacing-real-insert-separtor t))
+
+;; (use-package! fcitx
+;;   :after evil
+;;   :config
+;;   (when (executable-find "fcitx-remote")
+;;     (fcitx-evil-turn-on)))
+
+;; (use-package! ace-pinyin
+;;   :after avy
+;;   :init (setq ace-pinyin-use-avy t)
+;;   :config (ace-pinyin-global-mode t))
+
+;;; Hacks
+
+(defun +chinese*org-html-paragraph (paragraph contents info)
+  "Join consecutive Chinese lines into a single long line without unwanted space
+when exporting org-mode to html."
+  (let* ((fix-regexp "[[:multibyte:]]")
+         (origin-contents contents)
+         (fixed-contents
+          (replace-regexp-in-string
+           (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)")
+           "\\1\\2"
+           origin-contents)))
+    (list paragraph fixed-contents info)))
+;; (advice-add #'org-html-paragraph :filter-args #'+chinese*org-html-paragraph)
+#+end_src
+
+[[https://gist.github.com/merrickluo/553f39c131d0eb717cd59f72c9d4b60d][Use pyim + liberime in doom-emacs]]
+
+[[https://github.com/merrickluo/liberime][merrickluo/liberime: A emacs dynamic module provide librime bindings for emacs]]
+
+[[https://github.com/tumashu/pyim][tumashu/pyim: 一个 emacs 中文输入法，支持全拼，双拼，五笔，仓颉和Rime，pyim 是 GNU elpa 包。]]
+
+[[https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org][emacs-rime/INSTALLATION.org at master · DogLooksGood/emacs-rime]]
+
+[[https://rime.im/download/][下載及安裝 | RIME | 中州韻輸入法引擎]]
+
+[[https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html][在Mac版的Emacs中使用RIME输入法]]
+
+[[https://github.com/tumashu/pyim-greatdict][tumashu/pyim-greatdict: A chinese-pyim dict, which include three million words!]]
+*** TODO js-doc
+
+#+begin_src emacs-lisp
+(use-package! js-doc
+  :bind (:map js2-mode-map
+         ("C-c i" . js-doc-insert-function-doc)
+         ("@" . js-doc-insert-tag))
+  :config
+  (setq js-doc-mail-address user-mail-address
+       js-doc-author (format "%s<%s>" user-full-name js-doc-mail-address)
+       js-doc-url user-blog-url
+       js-doc-license "MIT"))
+
+#+end_src
+*** flycheck
+
+使用项目本身的 eslint, ~node_modules/.bin/eslint~
+
+#+begin_src emacs-lisp
+(use-package! flycheck
+    :config
+    (add-hook 'after-init-hook 'global-flycheck-mode)
+    (add-hook 'flycheck-mode-hook 'gcl/use-eslint-from-node-modules))
+#+end_src
+*** (ma)git
+
+#+begin_src emacs-lisp
+(use-package! git-gutter
+  :config
+  (global-git-gutter-mode 't))
+#+end_src
+*** snippets
+
+#+begin_src emacs-lisp
+(setq yas-triggers-in-field t)
+
+(use-package! doom-snippets             ; hlissner
+  :after yasnippet)
+
+(use-package! yasnippet-snippets        ; AndreaCrotti
+  :after yasnippet)
+#+end_src
+*** smartparen
+
+#+begin_src emacs-lisp
+(sp-local-pair
+ '(org-mode)
+ "<<" ">>"
+ :actions '(insert))
+#+end_src
+
+*** web dev
+
+#+begin_src emacs-lisp
+(setq css-indent-offset 2
+      js2-basic-offset 2
+      js-switch-indent-offset 2
+      js-indent-level 2
+      js2-mode-show-parse-errors nil
+      js2-mode-show-strict-warnings nil
+      web-mode-attr-indent-offset 2
+      web-mode-code-indent-offset 2
+      web-mode-css-indent-offset 2
+      web-mode-markup-indent-offset 2
+      web-mode-enable-current-element-highlight t
+      web-mode-enable-current-column-highlight t)
+(setq-default typescript-indent-level 2)
+
+;; (use-package! rjsx-mode)
+
+(defun maybe-use-prettier ()
+  "Enable prettier-js-mode if an rc file is located."
+  (if (locate-dominating-file default-directory ".prettierrc")
+      (prettier-js-mode +1)))
+(add-hook 'typescript-mode-hook 'maybe-use-prettier)
+(add-hook 'js2-mode-hook 'maybe-use-prettier)
+(add-hook 'web-mode-hook 'maybe-use-prettier)
+(add-hook 'rjsx-mode-hook 'maybe-use-prettier)
+#+end_src
 
 * 包管理(packages.el)
 :PROPERTIES:
@@ -364,6 +767,63 @@ Uses `current-date-time-format' for the formatting the date/time."
 This file shouldn't be byte compiled.
 #+begin_src emacs-lisp :tangle "packages.el" :comments no
 ;; -*- no-byte-compile: t; -*-
+#+end_src
+
+#+begin_src emacs-lisp
+(package! move-text)
+(package! parrot)
+;; fast, friendly searching with ripgrep and Emacs
+(package! deadgrep)
+(package! ranger)
+(package! youdao-dictionary)
+;; http://www.baidu.com
+(package! link-hint)
+(package! deft)
+(package! anzu)
+(package! pangu-spacing)
+(package! visual-regexp)
+(package! visual-regexp-steriods
+  :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
+(package! osx-lib)
+(package! crux)
+(package! string-inflection)
+(package! cnfonts)
+(package! valign)
+#+end_src
+
+org packages:
+#+begin_src emacs-lisp
+(package! org-fancy-priorities)
+(package! org-pretty-tags)
+(package! org-roam :disable t)
+#+end_src
+
+pyim packages:
+#+begin_src emacs-lisp
+;; (package! rime)
+;; (package! liberime)
+;; (package! pyim)
+;; (package! fcitx)
+;; (package! ace-pinyin)
+;; (package! posframe :recipe (:host github :repo "tumashu/posframe"))
+#+end_src
+
+dev packages:
+#+begin_src emacs-lisp
+(package! leetcode)
+(package! instant-rename-tag
+  :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
+(package! js-doc)
+(package! imenu-list)
+(package! yasnippet-snippets)
+(package! git-gutter)
+
+;; web
+(package! web-beautify)
+(package! prettier-js)
+;; (package! import-js :disable t)
+;; (package! tide :disable t)
+;; (package! eldoc :disable t)
 #+end_src
 
 * rime
