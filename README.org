@@ -1051,3 +1051,15 @@ dev packages:
 * emacs install
 
 [[https://emacs-china.org/t/nix-mac-emacs-nativecomp/14509/20][Nix + Mac 用户现在可以直接下载编译好的 emacs-nativecomp 可执行文件了 - Emacs-general - Emacs China]]
+* issues
+
+1. Device 1 is not a termcap terminal device.
+
+   [[https://github.com/syl20bnr/spacemacs/issues/13391][Xserver Error in Wsl: Device 1 is not a termcap terminal device. · Issue #13391 · syl20bnr/spacemacs]]
+
+   [[https://github.com/microsoft/WSL/issues/5065][[WSL2] [Interop] Keep a single shared /run/WSL/* socket · Issue #5065 · microsoft/WSL]]
+
+   #+begin_src bash
+   # add to .zshrc
+   export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+   #+end_src
