@@ -780,6 +780,35 @@ Uses `current-date-time-format' for the formatting the date/time."
         leetcode-save-solutions t
         leetcode-directory "~/github/make-leetcode"))
 #+end_src
+*** lsp
+#+begin_src emacs-lisp
+(use-package! lsp-mode
+  :hook ((web-mode . lsp)
+         (rjsx-mode . lsp)
+         (typescript-mode . lsp)
+         (python-mode . lsp)
+         (go-mode . lsp)
+         (css-mode . lsp)
+         (js2-mode . lsp))
+  :commands lsp
+  :config
+  (setq lsp-idle-delay 0.2
+        lsp-enable-file-watchers nil))
+
+(use-package! lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-headerline-breadcrumb-enable t ; 左上角显示文件路径
+        lsp-lens-enable t                  ; 显示被引用次数
+        ))
+
+;; 关闭自动格式化，全局关闭
+;; (setq +form-with-lsp nil)
+;; 指定模式
+;; (setq-hook! 'typescript-mode-hook +format-with-lsp nil)
+;; (setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
+
+#+end_src
 *** (ma)git
 
 #+begin_src emacs-lisp
