@@ -10,6 +10,7 @@
 (package! parrot)
 ;; fast, friendly searching with ripgrep and Emacs
 (package! deadgrep)
+(package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
 (package! ranger)
 (package! youdao-dictionary)
 ;; http://www.baidu.com
@@ -26,6 +27,8 @@
 (package! cnfonts)
 (package! valign)
 (package! dotenv-mode)
+(package! good-scroll :recipe (:host github
+                               :repo "io12/good-scroll.el"))
 
 ;; window
 (package! golden-ratio)

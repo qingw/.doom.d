@@ -41,6 +41,7 @@
 | [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]                                         | -           |
 | [[https://github.com/KaratasFurkan/.emacs.d][GitHub - KaratasFurkan/.emacs.d: My literate Emacs configuration]] | -           |
 | [[https://github.com/eggcaker/.doom.d][eggcaker/.doom.d: My private doom-emacs configurations]]           | rime + pyim |
+| [[https://www.gtrun.org/custom/config.html#org57b461c]]              |             |
 
 
 * 更新日志
@@ -583,6 +584,17 @@ Uses `current-date-time-format' for the formatting the date/time."
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
 #+end_src
+*** color-rg
+
+#+begin_src emacs-lisp
+(use-package! color-rg
+  :commands (color-rg-search-input
+             color-rg-search-symbol
+             color-rg-search-input-in-project)
+  :bind
+  (:map isearch-mode-map
+   ("M-s M-s" . isearch-toggle-color-rg)))
+#+end_src
 *** compay
 #+begin_src emacs-lisp
 (after! company
@@ -674,7 +686,13 @@ Uses `current-date-time-format' for the formatting the date/time."
   (remove-hook 'window-configuration-change-hook #'golden-ratio)
   (add-hook 'doom-switch-window-hook #'golden-ratio))
 #+end_src
+*** good-scroll
 
+#+begin_src emacs-lisp
+(use-package! good-scroll
+  :config
+  (good-scroll-mode 1))
+#+end_src
 *** link-hint
 
 链接管理。
@@ -1239,6 +1257,7 @@ This file shouldn't be byte compiled.
 (package! parrot)
 ;; fast, friendly searching with ripgrep and Emacs
 (package! deadgrep)
+(package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
 (package! ranger)
 (package! youdao-dictionary)
 ;; http://www.baidu.com
@@ -1255,6 +1274,8 @@ This file shouldn't be byte compiled.
 (package! cnfonts)
 (package! valign)
 (package! dotenv-mode)
+(package! good-scroll :recipe (:host github
+                               :repo "io12/good-scroll.el"))
 
 ;; window
 (package! golden-ratio)

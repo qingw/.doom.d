@@ -259,6 +259,14 @@ Uses `current-date-time-format' for the formatting the date/time."
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
 
+(use-package! color-rg
+  :commands (color-rg-search-input
+             color-rg-search-symbol
+             color-rg-search-input-in-project)
+  :bind
+  (:map isearch-mode-map
+   ("M-s M-s" . isearch-toggle-color-rg)))
+
 (after! company
   (setq company-idle-delay 0.5
         company-minimum-prefix-length 2)
@@ -316,6 +324,10 @@ Uses `current-date-time-format' for the formatting the date/time."
   ;; `doom-switch-window-hook'.
   (remove-hook 'window-configuration-change-hook #'golden-ratio)
   (add-hook 'doom-switch-window-hook #'golden-ratio))
+
+(use-package! good-scroll
+  :config
+  (good-scroll-mode 1))
 
 (use-package! link-hint
   :config
