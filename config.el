@@ -425,6 +425,11 @@ Uses `current-date-time-format' for the formatting the date/time."
 (add-hook 'org-mode-hook
           (lambda () (display-line-numbers-mode -1)))
 
+;; (org-agenda-files  `(,(expand-file-name "agenda.org" org-directory)))
+;; 自动隐藏 */~= 符号
+(org-hide-emphasis-markers t)
+(org-module  '(org-habit org-checklist))
+
 (use-package! org-fancy-priorities
   :diminish
   :hook (org-mode . org-fancy-priorities-mode)
@@ -582,6 +587,13 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
        "C-}" #'sp-backward-barf-sexp
        ))
 
+(add-transient-hook! 'prog-mode-hook
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode))
+
+(add-hook! 'tree-sitter-after-on-hook
+           #'tree-sitter-hl-mode)
+
 (setq css-indent-offset 2
       js2-basic-offset 2
       js-switch-indent-offset 2
@@ -666,3 +678,10 @@ _p_ : Previous
   ("h" backward-char :exit nil :color "blue")
   ("l" forward-char :exit nil :color "blue")
   )
+
+(after! which-key
+  (setq! which-key-idle-delay 0.1
+         which-key-idle-secondary-delay 0.2))
+
+(use-package! dotenv-mode
+  :mode ("\\.env\\.?.*\\'" . dotenv-mode))

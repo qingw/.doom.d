@@ -19,6 +19,7 @@
 (package! string-inflection)
 (package! cnfonts)
 (package! valign)
+(package! dotenv-mode)
 
 ;; type sound
 (package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
@@ -64,6 +65,9 @@
 (package! ob-typescript)
 (package! phpactor)
 
+;; ast
+(package! tree-sitter :disable t)
+(package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)

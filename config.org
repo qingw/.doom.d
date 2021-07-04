@@ -189,7 +189,7 @@ Uses `current-date-time-format' for the formatting the date/time."
        ophints           ; highlight the region an operation acts on
        (popup +all +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
+       (treemacs +lsp)          ; a project drawer, like neotree but cooler
        unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -823,6 +823,11 @@ Uses `current-date-time-format' for the formatting the date/time."
 (add-hook 'org-mode-hook
           (lambda () (display-line-numbers-mode -1)))
 
+;; (org-agenda-files  `(,(expand-file-name "agenda.org" org-directory)))
+;; 自动隐藏 */~= 符号
+(org-hide-emphasis-markers t)
+(org-module  '(org-habit org-checklist))
+
 (use-package! org-fancy-priorities
   :diminish
   :hook (org-mode . org-fancy-priorities-mode)
@@ -1028,6 +1033,22 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
        "C-}" #'sp-backward-barf-sexp
        ))
 #+end_src
+*** tree-sitter
+
+#+begin_example
+Tree-sitter is a general programming language parser that efficiently builds and updates Abstract Syntax Trees (AST) for your code. Basically, it can read programming languages and understand the structure and meaning of code without having to execute it. Among many amazing things, one of its best and simplest features to take advantage of is richer syntax highlighting, which is what I use it for in Emacs.
+
+— https://hungyi.net/posts/use-emacs-tree-sitter-doom-emacs/
+#+end_example
+
+#+begin_src emacs-lisp
+(add-transient-hook! 'prog-mode-hook
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode))
+
+(add-hook! 'tree-sitter-after-on-hook
+           #'tree-sitter-hl-mode)
+#+end_src
 
 *** web dev
 
@@ -1120,7 +1141,21 @@ _p_ : Previous
   ("l" forward-char :exit nil :color "blue")
   )
 #+end_src
+*** which-key
 
+Doom Emacs default configuration is too slow, let’s speed it up.
+
+#+begin_src emacs-lisp
+(after! which-key
+  (setq! which-key-idle-delay 0.1
+         which-key-idle-secondary-delay 0.2))
+#+end_src
+*** misc packages
+
+#+begin_src emacs-lisp
+(use-package! dotenv-mode
+  :mode ("\\.env\\.?.*\\'" . dotenv-mode))
+#+end_src
 * 包管理(packages.el)
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -1151,6 +1186,7 @@ This file shouldn't be byte compiled.
 (package! string-inflection)
 (package! cnfonts)
 (package! valign)
+(package! dotenv-mode)
 #+end_src
 
 funny:
@@ -1208,6 +1244,9 @@ dev packages:
 (package! ob-typescript)
 (package! phpactor)
 
+;; ast
+(package! tree-sitter :disable t)
+(package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
