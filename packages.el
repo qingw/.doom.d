@@ -28,8 +28,8 @@
 (package! dotenv-mode)
 
 ;; window
-;; (package! golden-ratio)
-(package! zoom)
+(package! golden-ratio)
+;; (package! zoom)
 
 ;; type sound
 (package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")

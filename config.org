@@ -650,28 +650,29 @@ Uses `current-date-time-format' for the formatting the date/time."
 *** golden-ratio
 
 #+begin_src emacs-lisp
-;; (use-package! golden-ratio
-;;   :after-call pre-command-hook
-;;   :config
-;;   (golden-ratio-mode +1)
-;;   (setq golden-ratio-exclude-modes
-;;       '("calendar-mode"
-;;         "org-agenda-mode"
-;;         "help-mode"
-;;         "dired-mode"
-;;         "ranger-mode"
-;;         "helpful-mode"
-;;         "rxt-help-mode"
-;;         "treemacs-mode" ))
-;;   (setq golden-ratio-exclude-buffer-names
-;;       '("*Org tags*"
-;;         "*Org todo*"
-;;         "*info*"
-;;         "*Messages*"))
-;;   ;; Using this hook for resizing windows is less precise than
-;;   ;; `doom-switch-window-hook'.
-;;   (remove-hook 'window-configuration-change-hook #'golden-ratio)
-;;   (add-hook 'doom-switch-window-hook #'golden-ratio))
+(setq golden-ratio-exclude-modes
+      '("calendar-mode"
+        "org-agenda-mode"
+        "help-mode"
+        "dired-mode"
+        "ranger-mode"
+        "helpful-mode"
+        "rxt-help-mode"
+        "treemacs-mode" ))
+  (setq golden-ratio-exclude-buffer-names
+      '("*Org tags*"
+        "*Org todo*"
+        "*info*"
+        "*Messages*"))
+
+(use-package! golden-ratio
+  :after-call pre-command-hook
+  :config
+  (golden-ratio-mode +1)
+  ;; Using this hook for resizing windows is less precise than
+  ;; `doom-switch-window-hook'.
+  (remove-hook 'window-configuration-change-hook #'golden-ratio)
+  (add-hook 'doom-switch-window-hook #'golden-ratio))
 #+end_src
 
 *** link-hint
@@ -1208,14 +1209,14 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 *** zoom
 
 #+begin_src emacs-lisp
-(use-package zoom
-  :hook (doom-first-input . zoom-mode)
-  :config
-  (setq zoom-size '(0.8 . 0.8)
-        zoom-ignored-major-modes '(dired-mode vterm-mode help-mode helpful-mode rxt-help-mode help-mode-menu org-mode)
-        zoom-ignored-buffer-names '("*doom:scratch*" "*info*" "*helpful variable: argv*")
-        zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
-        zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
+;; (use-package! zoom
+;;   :hook ((doom-first-input . zoom-mode))
+;;   :config
+;;   (setq zoom-size '(0.8 . 0.8)
+;;         zoom-ignored-major-modes '(dired-mode vterm-mode help-mode helpful-mode rxt-help-mode help-mode-menu org-mode)
+;;         zoom-ignored-buffer-names '("*doom:scratch*" "*info*" "*helpful variable: argv*")
+;;         zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
+;;         zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
 #+end_src
 * 包管理(packages.el)
 :PROPERTIES:
@@ -1256,8 +1257,8 @@ This file shouldn't be byte compiled.
 (package! dotenv-mode)
 
 ;; window
-;; (package! golden-ratio)
-(package! zoom)
+(package! golden-ratio)
+;; (package! zoom)
 #+end_src
 
 funny:
