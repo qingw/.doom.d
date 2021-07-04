@@ -61,6 +61,7 @@
 ;; web
 (package! web-beautify)
 (package! prettier-js)
+(package! ob-typescript)
 ;; (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
