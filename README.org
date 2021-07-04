@@ -1208,7 +1208,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 *** zoom
 
 #+begin_src emacs-lisp
-(use-package! zoom
+(use-package zoom
   :hook (doom-first-input . zoom-mode)
   :config
   (setq zoom-size '(0.8 . 0.8)

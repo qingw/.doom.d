@@ -725,11 +725,11 @@ _p_ : Previous
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 
-(use-package! zoom
+(use-package zoom
   :hook (doom-first-input . zoom-mode)
   :config
   (setq zoom-size '(0.8 . 0.8)
         zoom-ignored-major-modes '(dired-mode vterm-mode help-mode helpful-mode rxt-help-mode help-mode-menu org-mode)
         zoom-ignored-buffer-names '("*doom:scratch*" "*info*" "*helpful variable: argv*")
         zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
-        zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20))))
+        zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
