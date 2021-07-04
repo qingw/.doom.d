@@ -395,6 +395,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   :hook ((web-mode . lsp)
          (rjsx-mode . lsp)
          (typescript-mode . lsp)
+         ;; (vue-mode . lsp)
          (python-mode . lsp)
          (go-mode . lsp)
          (css-mode . lsp)

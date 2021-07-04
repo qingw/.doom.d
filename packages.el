@@ -40,8 +40,8 @@
 (package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
 (package! org-pandoc-import :recipe
   (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "filters" "preprocessors")))
-(package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5")
-(package! org-roam)
+(package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5" :disable t)
+(package! org-roam :disable t)
 
 ;; (package! rime)
 ;; (package! liberime)
@@ -65,3 +65,4 @@
 ;; (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
+(package! vue-mode :disable t)
