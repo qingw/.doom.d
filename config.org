@@ -425,9 +425,9 @@ Uses `current-date-time-format' for the formatting the date/time."
 #+begin_src emacs-lisp
 (map! "s-<"     #'move-text-up
       "s->"     #'move-text-down
-      "s-i"     #'gcl/string-inflection-cycle-auto
-      "s-("     #'sp-backward-barf-sexp
-      "s-)"     #'sp-forward-barf-sexp)
+      "s-i"     #'gcl/string-inflection-cycle-auto)
+      ;; "s-("     #'sp-backward-barf-sexp
+      ;; "s-)"     #'sp-forward-barf-sexp)
 #+end_src
 
 *** C-(Control)
@@ -439,8 +439,8 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-s"     #'+default/search-buffer
 
  ;; smartparen
- "C-("     #'sp-backward-slurp-sexp
- "C-)"     #'sp-forward-slurp-sexp
+ ;; "C-("     #'sp-backward-slurp-sexp
+ ;; "C-)"     #'sp-forward-slurp-sexp
 
  ;; C-c
  "C-c a c"     #'org-mac-chrome-insert-frontmost-url
@@ -1018,6 +1018,15 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
  '(org-mode)
  "<<" ">>"
  :actions '(insert))
+
+(use-package! smartparens
+  :init
+  (map! :map smartparens-mode-map
+       "C-)" #'sp-forward-slurp-sexp
+       "C-(" #'sp-forward-barf-sexp
+       "C-{" #'sp-backward-slurp-sexp
+       "C-}" #'sp-backward-barf-sexp
+       ))
 #+end_src
 
 *** web dev
