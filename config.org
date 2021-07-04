@@ -854,22 +854,22 @@ tables.]]
 org-roam
 
 #+begin_src emacs-lisp
-(setq org-roam-directory "~/.doom.d/.local/roam/")
-(use-package org-roam-server
-  :after (org-roam server)
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8078
-        org-roam-server-export-inline-images t
-        org-roam-server-authenticate nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20)
-  (defun org-roam-server-open ()
-    "Ensure the server is active, then open the roam graph."
-    (interactive)
-    (org-roam-server-mode 1)
-    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
+ ;; (setq org-roam-directory "~/.doom.d/.local/roam/")
+ ;; (use-package org-roam-server
+ ;;   :after (org-roam server)
+ ;;   :config
+ ;;   (setq org-roam-server-host "127.0.0.1"
+ ;;         org-roam-server-port 8078
+ ;;         org-roam-server-export-inline-images t
+ ;;         org-roam-server-authenticate nil
+ ;;         org-roam-server-network-label-truncate t
+ ;;         org-roam-server-network-label-truncate-length 60
+ ;;         org-roam-server-network-label-wrap-length 20)
+ ;;   (defun org-roam-server-open ()
+ ;;     "Ensure the server is active, then open the roam graph."
+ ;;     (interactive)
+ ;;     (org-roam-server-mode 1)
+ ;;     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
 #+end_src
 
 org-ol-tree 目录树
@@ -1197,7 +1197,9 @@ dev packages:
 (package! web-beautify)
 (package! prettier-js)
 (package! ob-typescript)
-;; (package! import-js :disable t)
+(package! phpactor)
+
+(package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
 (package! vue-mode :disable t)
