@@ -1,5 +1,11 @@
 ;; -*- no-byte-compile: t; -*-
 
+;; (when IS-LINUX
+;;   (package! eaf :recipe (:host github
+;;                             :repo "manateelazycat/emacs-application-framework"
+;;                             :files ("*")
+;;                             :no-byte-compile t))
+
 (package! move-text)
 (package! parrot)
 ;; fast, friendly searching with ripgrep and Emacs
@@ -20,6 +26,10 @@
 (package! cnfonts)
 (package! valign)
 (package! dotenv-mode)
+
+;; window
+;; (package! golden-ratio)
+(package! zoom)
 
 ;; type sound
 (package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")

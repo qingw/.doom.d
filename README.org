@@ -591,6 +591,28 @@ Uses `current-date-time-format' for the formatting the date/time."
   (setq company-show-numbers t)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
 #+end_src
+*** TODO EAF
+
+[[https://www.gtrun.org/custom/config.html][GuangTao’s Doom Emacs config]]
+
+#+begin_src emacs-lisp
+;; (when (display-graphic-p)
+;;   (use-package! eaf
+;;     :if (eq system-type 'gnu/linux)
+;;     :custom
+;;     (eaf-find-alternate-file-in-dired t)
+;;     :config
+;;     (add-hook! 'eaf-mode-hook 'xah-fly-keys-off)
+
+;;     (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;;     (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+
+;;     (defun eaf-open-google ()
+;;       "Open Google using EAF."
+;;       (interactive)
+;;       (eaf-open-browser "https://www.google.com")))
+#+end_src
+
 *** evil 配置
 
 #+begin_src emacs-lisp
@@ -625,6 +647,33 @@ Uses `current-date-time-format' for the formatting the date/time."
 | ~g~       | 重新搜索                    |
 | ~TAB~     | 展开/闭合结果               |
 | ~C-c C-k~ | 停止正在执行的搜索          |
+*** golden-ratio
+
+#+begin_src emacs-lisp
+;; (use-package! golden-ratio
+;;   :after-call pre-command-hook
+;;   :config
+;;   (golden-ratio-mode +1)
+;;   (setq golden-ratio-exclude-modes
+;;       '("calendar-mode"
+;;         "org-agenda-mode"
+;;         "help-mode"
+;;         "dired-mode"
+;;         "ranger-mode"
+;;         "helpful-mode"
+;;         "rxt-help-mode"
+;;         "treemacs-mode" ))
+;;   (setq golden-ratio-exclude-buffer-names
+;;       '("*Org tags*"
+;;         "*Org todo*"
+;;         "*info*"
+;;         "*Messages*"))
+;;   ;; Using this hook for resizing windows is less precise than
+;;   ;; `doom-switch-window-hook'.
+;;   (remove-hook 'window-configuration-change-hook #'golden-ratio)
+;;   (add-hook 'doom-switch-window-hook #'golden-ratio))
+#+end_src
+
 *** link-hint
 
 链接管理。
@@ -825,8 +874,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 ;; (org-agenda-files  `(,(expand-file-name "agenda.org" org-directory)))
 ;; 自动隐藏 */~= 符号
-(org-hide-emphasis-markers t)
-(org-module  '(org-habit org-checklist))
+;; (org-hide-emphasis-markers t)
+;; (org-module  '(org-habit org-checklist))
 
 (use-package! org-fancy-priorities
   :diminish
@@ -1042,12 +1091,12 @@ Tree-sitter is a general programming language parser that efficiently builds and
 #+end_example
 
 #+begin_src emacs-lisp
-(add-transient-hook! 'prog-mode-hook
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode))
+;; (add-transient-hook! 'prog-mode-hook
+;;  (require 'tree-sitter-langs)
+;;  (global-tree-sitter-mode))
 
-(add-hook! 'tree-sitter-after-on-hook
-           #'tree-sitter-hl-mode)
+;; (add-hook! 'tree-sitter-after-on-hook
+;;          #'tree-sitter-hl-mode)
 #+end_src
 
 *** web dev
@@ -1156,6 +1205,18 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 #+end_src
+*** zoom
+
+#+begin_src emacs-lisp
+(use-package! zoom
+  :hook (doom-first-input . zoom-mode)
+  :config
+  (setq zoom-size '(0.8 . 0.8)
+        zoom-ignored-major-modes '(dired-mode vterm-mode help-mode helpful-mode rxt-help-mode help-mode-menu org-mode)
+        zoom-ignored-buffer-names '("*doom:scratch*" "*info*" "*helpful variable: argv*")
+        zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
+        zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20))))
+#+end_src
 * 包管理(packages.el)
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -1167,6 +1228,12 @@ This file shouldn't be byte compiled.
 #+end_src
 
 #+begin_src emacs-lisp
+;; (when IS-LINUX
+;;   (package! eaf :recipe (:host github
+;;                             :repo "manateelazycat/emacs-application-framework"
+;;                             :files ("*")
+;;                             :no-byte-compile t))
+
 (package! move-text)
 (package! parrot)
 ;; fast, friendly searching with ripgrep and Emacs
@@ -1187,6 +1254,10 @@ This file shouldn't be byte compiled.
 (package! cnfonts)
 (package! valign)
 (package! dotenv-mode)
+
+;; window
+;; (package! golden-ratio)
+(package! zoom)
 #+end_src
 
 funny:
@@ -1245,9 +1316,8 @@ dev packages:
 (package! phpactor)
 
 ;; ast
-(package! tree-sitter)
-(package! tree-sitter-langs)
-
+(package! tree-sitter :disable t)
+(package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
