@@ -29,6 +29,8 @@
 (package! dotenv-mode)
 (package! good-scroll :recipe (:host github
                                :repo "io12/good-scroll.el"))
+(package! maple-iedit :recipe (:host github
+                               :repo "honmaple/emacs-maple-iedit"))
 
 ;; window
 (package! golden-ratio)

@@ -659,6 +659,27 @@ Uses `current-date-time-format' for the formatting the date/time."
 | ~g~       | 重新搜索                    |
 | ~TAB~     | 展开/闭合结果               |
 | ~C-c C-k~ | 停止正在执行的搜索          |
+*** iedit
+
+#+begin_src emacs-lisp 
+ (use-package! maple-iedit
+    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+    :config
+    (delete-selection-mode t)
+    (setq maple-iedit-ignore-case t)
+    (defhydra maple/iedit ()
+      ("n" maple-iedit-match-next "next")
+      ("t" maple-iedit-skip-and-match-next "skip and next")
+      ("T" maple-iedit-skip-and-match-previous "skip and previous")
+      ("p" maple-iedit-match-previous "prev"))
+    :bind (:map evil-visual-state-map
+           ("n" . maple/iedit/body)
+           ("C-n" . maple-iedit-match-next)
+           ("C-p" . maple-iedit-match-previous)
+           ("C-t" . map-iedit-skip-and-match-next)
+           ("C-T" . map-iedit-skip-and-match-previous)))
+#+end_src
+
 *** golden-ratio
 
 #+begin_src emacs-lisp
@@ -692,6 +713,10 @@ Uses `current-date-time-format' for the formatting the date/time."
 (use-package! good-scroll
   :config
   (good-scroll-mode 1))
+(global-set-key [remap evil-scroll-up] #'good-scroll-up)
+(global-set-key [remap evil-scroll-down] #'good-scroll-down)
+(global-set-key [remap evil-scroll-page-up] #'good-scroll-up-full-screen)
+(global-set-key [remap evil-scroll-page-down] #'good-scroll-down-full-screen)
 #+end_src
 *** link-hint
 
@@ -1276,6 +1301,8 @@ This file shouldn't be byte compiled.
 (package! dotenv-mode)
 (package! good-scroll :recipe (:host github
                                :repo "io12/good-scroll.el"))
+(package! maple-iedit :recipe (:host github
+                               :repo "honmaple/emacs-maple-iedit"))
 
 ;; window
 (package! golden-ratio)

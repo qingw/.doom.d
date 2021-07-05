@@ -301,6 +301,23 @@ Uses `current-date-time-format' for the formatting the date/time."
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
 
+(use-package! maple-iedit
+   :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+   :config
+   (delete-selection-mode t)
+   (setq maple-iedit-ignore-case t)
+   (defhydra maple/iedit ()
+     ("n" maple-iedit-match-next "next")
+     ("t" maple-iedit-skip-and-match-next "skip and next")
+     ("T" maple-iedit-skip-and-match-previous "skip and previous")
+     ("p" maple-iedit-match-previous "prev"))
+   :bind (:map evil-visual-state-map
+          ("n" . maple/iedit/body)
+          ("C-n" . maple-iedit-match-next)
+          ("C-p" . maple-iedit-match-previous)
+          ("C-t" . map-iedit-skip-and-match-next)
+          ("C-T" . map-iedit-skip-and-match-previous)))
+
 (setq golden-ratio-exclude-modes
       '("calendar-mode"
         "org-agenda-mode"
@@ -328,6 +345,10 @@ Uses `current-date-time-format' for the formatting the date/time."
 (use-package! good-scroll
   :config
   (good-scroll-mode 1))
+(global-set-key [remap evil-scroll-up] #'good-scroll-up)
+(global-set-key [remap evil-scroll-down] #'good-scroll-down)
+(global-set-key [remap evil-scroll-page-up] #'good-scroll-up-full-screen)
+(global-set-key [remap evil-scroll-page-down] #'good-scroll-down-full-screen)
 
 (use-package! link-hint
   :config
