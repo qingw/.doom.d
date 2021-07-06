@@ -259,6 +259,52 @@ Uses `current-date-time-format' for the formatting the date/time."
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
 
+(map!
+ "C-c b d"      #'bm-remove-all-current-buffer
+ "C-c b D"      #'bm-remove-all-all-buffers
+ "C-c b n"      #'bm-next
+ "C-c b p"      #'bm-previous
+ "C-c b t"      #'bm-toggle
+ "C-c b l"      #'bm-show-all)
+
+(use-package! bm
+   :demand t
+   :init
+   (setq bm-restore-repository-on-load t)
+   :config
+
+   (bind-keys
+    :map bm-show-mode-map
+    ("j" . next-line)
+    ("k" . previous-line))
+
+   (setq bm-cycle-all-buffers t
+         bm-highlight-style 'bm-highlight-only-fringe
+         bm-repository-size 1000)
+   (setq-default bm-buffer-persistence t)
+
+   (defun adq/bm-save ()
+     "Save bookmarks to persistent repository."
+     (interactive)
+     (bm-buffer-save-all)
+     (bm-repository-save))
+
+   (advice-add 'bm-bookmark-add
+               :after (lambda (&rest args)
+                        (adq/bm-save)))
+   (advice-add 'bm-bookmark-remove
+               :after (lambda (&rest args)
+                        (adq/bm-save)))
+   (add-hook 'after-init-hook #'bm-repository-load)
+   (add-hook 'find-file-hooks #'bm-buffer-restore)
+   (add-hook 'after-rever-hook #'bm-buffer-restore)
+   (add-hook 'kill-buffer-hook #'bm-buffer-save)
+   (add-hook 'after-save-hook #'bm-buffer-save)
+   (add-hook 'kill-emacs-hook
+             (lambda ()
+               (bm-buffer-save-all)
+               (bm-repository-save))))
+
 (use-package! color-rg
   :commands (color-rg-search-input
              color-rg-search-symbol
@@ -300,6 +346,17 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;; window 操作
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
+
+(use-package! highlight-indent-guides
+  :config
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-auto-enabled nil)
+  (set-face-background 'highlight-indent-guides-even-face "dimgray")
+  (set-face-foreground 'highlight-indent-guides-character-face "dimgray"))
+
+(use-package! hungry-delete
+  :config
+  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
 
 (use-package! maple-iedit
    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
@@ -347,8 +404,8 @@ Uses `current-date-time-format' for the formatting the date/time."
   (good-scroll-mode 1))
 (global-set-key [remap evil-scroll-up] #'good-scroll-up)
 (global-set-key [remap evil-scroll-down] #'good-scroll-down)
-(global-set-key [remap evil-scroll-page-up] #'good-scroll-up-full-screen)
-(global-set-key [remap evil-scroll-page-down] #'good-scroll-down-full-screen)
+(global-set-key [remap evil-scroll-page-up] #'good-scroll-down-full-screen)
+(global-set-key [remap evil-scroll-page-down] #'good-scroll-up-full-screen)
 
 (use-package! link-hint
   :config

@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages '(devdocs))
  '(warning-suppress-log-types '((before-save-hook) (after-change-major-mode-hook)))
- '(warning-suppress-types '((after-change-major-mode-hook))))
+ '(warning-suppress-types '((initialization) (after-change-major-mode-hook))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

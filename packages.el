@@ -32,6 +32,10 @@
 (package! maple-iedit :recipe (:host github
                                :repo "honmaple/emacs-maple-iedit"))
 
+(package! hungry-delete)
+(package! bm)
+(package! highlight-indent-guides)
+
 ;; window
 (package! golden-ratio)
 ;; (package! zoom)
@@ -81,6 +85,8 @@
 (package! phpactor)
 
 ;; ast
+
+(package! bookmark :disable t)
 (package! tree-sitter :disable t)
 (package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
