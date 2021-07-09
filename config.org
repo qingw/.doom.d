@@ -807,6 +807,26 @@ bm package
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
 #+end_src
+*** ein, emacs-ipython-notebook
+
+#+begin_src emacs-lisp
+(use-package! ein
+  :config
+  (setq ob-ein-languages
+   (quote
+    (("ein-python" . python)
+     ("ein-R" . R)
+     ("ein-r" . R)
+     ("ein-rust" . rust)
+     ("ein-haskell" . haskell)
+     ("ein-julia" . julia))))
+  )
+
+(after! ein:ipynb-mode                  ;
+  (poly-ein-mode 1)
+  (hungry-delete-mode -1)
+  )
+#+end_src
 *** pyim
 
 配置来源：[[https://github.com/eggcaker/.doom.d/blob/main/modules/private/my-chinese/config.el][.doom.d/config.el at main · eggcaker/.doom.d]]
@@ -1196,6 +1216,24 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
        "C-}" #'sp-backward-barf-sexp
        ))
 #+end_src
+*** tramp
+
+#+begin_src emacs-lisp
+
+(use-package! counsel-tramp
+  :config
+  (setq tramp-default-method "sshx")
+  (setq make-backup-files nil)
+  (setq create-lockfiles nil)
+  ;; (setq counsel-tramp-custom-connections
+  ;;       '(/ssh:dev|sudo:root@192.168.88.158:/var/www/html/lzc))
+  (setq counsel-tramp-localhost-directory "/var/www/html")
+  (add-hook 'counsel-tramp-pre-command-hook '(lambda () (projectile-mode 0)
+                                               (editorconfig-mode 0)))
+  (add-hook 'counsel-tramp-quit-hook '(lambda () (projectile-mode 1)
+                                        (editorconfig-mode 1))))
+(define-key global-map (kbd "C-c s") 'counsel-tramp)
+#+end_src
 *** tree-sitter
 
 #+begin_example
@@ -1381,6 +1419,8 @@ This file shouldn't be byte compiled.
 ;; window
 (package! golden-ratio)
 ;; (package! zoom)
+
+(package! counsel-tramp)
 #+end_src
 
 funny:
@@ -1437,6 +1477,11 @@ dev packages:
 (package! prettier-js)
 (package! ob-typescript)
 (package! phpactor)
+
+(package! ein :recipe (:host github
+                       :repo "millejoh/emacs-ipython-notebook"
+                       :files ("lisp/*.el")
+                       :build (:not compile)))
 
 ;; ast
 

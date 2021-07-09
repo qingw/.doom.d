@@ -418,6 +418,23 @@ Uses `current-date-time-format' for the formatting the date/time."
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
 
+(use-package! ein
+  :config
+  (setq ob-ein-languages
+   (quote
+    (("ein-python" . python)
+     ("ein-R" . R)
+     ("ein-r" . R)
+     ("ein-rust" . rust)
+     ("ein-haskell" . haskell)
+     ("ein-julia" . julia))))
+  )
+
+(after! ein:ipynb-mode                  ;
+  (poly-ein-mode 1)
+  (hungry-delete-mode -1)
+  )
+
 ;; (defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
 ;; (setq-default pyim-english-input-switch-functions
 ;;               '(pyim-probe-dynamic-english
@@ -716,6 +733,20 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
        "C-{" #'sp-backward-slurp-sexp
        "C-}" #'sp-backward-barf-sexp
        ))
+
+(use-package! counsel-tramp
+  :config
+  (setq tramp-default-method "sshx")
+  (setq make-backup-files nil)
+  (setq create-lockfiles nil)
+  ;; (setq counsel-tramp-custom-connections
+  ;;       '(/ssh:dev|sudo:root@192.168.88.158:/var/www/html/lzc))
+  (setq counsel-tramp-localhost-directory "/var/www/html")
+  (add-hook 'counsel-tramp-pre-command-hook '(lambda () (projectile-mode 0)
+                                               (editorconfig-mode 0)))
+  (add-hook 'counsel-tramp-quit-hook '(lambda () (projectile-mode 1)
+                                        (editorconfig-mode 1))))
+(define-key global-map (kbd "C-c s") 'counsel-tramp)
 
 ;; (add-transient-hook! 'prog-mode-hook
 ;;  (require 'tree-sitter-langs)

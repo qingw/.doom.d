@@ -40,6 +40,8 @@
 (package! golden-ratio)
 ;; (package! zoom)
 
+(package! counsel-tramp)
+
 ;; type sound
 (package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
 
@@ -83,6 +85,11 @@
 (package! prettier-js)
 (package! ob-typescript)
 (package! phpactor)
+
+(package! ein :recipe (:host github
+                       :repo "millejoh/emacs-ipython-notebook"
+                       :files ("lisp/*.el")
+                       :build (:not compile)))
 
 ;; ast
 
