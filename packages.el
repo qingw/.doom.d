@@ -15,6 +15,8 @@
 (package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
 (package! ranger)
 (package! youdao-dictionary)
+;; (package! lexic :recipe (:local-repo "lisp/lexic"))
+
 ;; http://www.baidu.com
 (package! link-hint)
 (package! deft)

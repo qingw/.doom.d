@@ -20,7 +20,7 @@
    text-decoration: none; position: relative; top: clamp(-26px, calc(1280px - 100vw), 0px); opacity: 0.7;">
   <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
        class="invertible" alt="GitHub Octicon"
-       style="height: 1em; position: relative; top: 0.1em;">
+       style="height: 1em; position: relative; top: -0.1em;">
   View on GitHub</a>
 #+end_export
 #+begin_export latex
@@ -1310,7 +1310,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 ;;         zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
 ;;         zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
 #+end_src
-* Elfeed
+* Elfeed^{Failed}
 #+begin_src emacs-lisp
 (setq rmh-elfeed-org-files '("~/.gclrc/org/elfeed.org"))
 (use-package! visual-fill-column
@@ -2131,6 +2131,8 @@ for Elfeed
 (package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
 (package! ranger)
 (package! youdao-dictionary)
+;; (package! lexic :recipe (:local-repo "lisp/lexic"))
+
 ;; http://www.baidu.com
 (package! link-hint)
 (package! deft)

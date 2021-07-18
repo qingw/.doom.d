@@ -803,11 +803,11 @@ _p_ : Previous
 ;;         zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
 ;;         zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
 
-;; [[file:config.org::*Elfeed][Elfeed:1]]
+;; [[file:config.org::*Elfeed^{Failed}][Elfeed^{Failed}:1]]
 (setq rmh-elfeed-org-files '("~/.gclrc/org/elfeed.org"))
 (use-package! visual-fill-column
   :after org)
-;; Elfeed:1 ends here
+;; Elfeed^{Failed}:1 ends here
 
 ;; [[file:config.org::*Keybindings][Keybindings:1]]
 (map! :map elfeed-search-mode-map
