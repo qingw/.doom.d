@@ -1,5 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 
+(package! visual-fill-column)
+
 ;; (when IS-LINUX
 ;;   (package! eaf :recipe (:host github
 ;;                             :repo "manateelazycat/emacs-application-framework"
@@ -55,11 +57,16 @@
 (package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
 (package! org-pandoc-import :recipe
   (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "filters" "preprocessors")))
-(package! org-pretty-tags)
-(package! org-super-agenda)
-(package! doct)
+(package! org-pretty-tags :pin "5c7521651b35ae9a7d3add4a66ae8cc176ae1c76")
+(package! org-super-agenda :pin "f5e80e4d0da6b2eeda9ba21e021838fa6a495376")
+(package! doct
+  :recipe (:host github :repo "progfolio/doct")
+  :pin "67fc46c8a68989b932bce879fbaa62c6a2456a1f")
+(package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
+(package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
 
-;; disabled
+
+;; disab    led
 (package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5" :disable t)
 (package! org-roam :disable t)
 
@@ -77,6 +84,7 @@
 (package! imenu-list)
 (package! yasnippet-snippets)
 (package! git-gutter)
+(package! systemd :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
 
 ;; web
 (package! web-beautify)
