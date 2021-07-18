@@ -105,7 +105,8 @@ Uses `current-date-time-format' for the formatting the date/time."
       "/" nil
 
       ;; remap
-      [remap evil-undo] #'undo-tree-undo)
+      ;; [remap evil-undo] #'undo-tree-undo
+      )
 
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
@@ -243,7 +244,7 @@ Uses `current-date-time-format' for the formatting the date/time."
   (load custom-file))
 
 ;; 开启模式
-(global-undo-tree-mode 1)
+;; (global-undo-tree-mode 1)
 
 ;;; config.el -*- lexical-binding: t; -*-
 
@@ -309,7 +310,7 @@ Uses `current-date-time-format' for the formatting the date/time."
                :after (lambda (&rest args)
                         (adq/bm-save)))
    (add-hook 'after-init-hook #'bm-repository-load)
-   (add-hook 'find-file-hooks #'bm-buffer-restore)
+   (add-hook 'find-file-hook #'bm-buffer-restore)
    (add-hook 'after-rever-hook #'bm-buffer-restore)
    (add-hook 'kill-buffer-hook #'bm-buffer-save)
    (add-hook 'after-save-hook #'bm-buffer-save)
@@ -332,7 +333,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 (after! company
   (setq company-idle-delay 0.5
         company-minimum-prefix-length 2)
-  (setq company-show-numbers t)
+  ;; (setq company-show-numbers t)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
 
 ;; (when (display-graphic-p)
@@ -350,6 +351,24 @@ Uses `current-date-time-format' for the formatting the date/time."
 ;;       "Open Google using EAF."
 ;;       (interactive)
 ;;       (eaf-open-browser "https://www.google.com")))
+
+(use-package! emacs-everywhere
+  :if (daemonp)
+  :config
+  (require 'spell-fu)
+  (setq emacs-everywhere-major-mode-function #'org-mode
+        emacs-everywhere-frame-name-format "Edit ∷ %s — %s")
+  (defadvice! emacs-everywhere-raise-frame ()
+    :after #'emacs-everywhere-set-frame-name
+    (setq emacs-everywhere-frame-name (format emacs-everywhere-frame-name-format
+                                (emacs-everywhere-app-class emacs-everywhere-current-app)
+                                (truncate-string-to-width
+                                 (emacs-everywhere-app-title emacs-everywhere-current-app)
+                                 45 nil nil "…")))
+    ;; need to wait till frame refresh happen before really set
+    (run-with-timer 0.1 nil #'emacs-everywhere-raise-frame-1))
+  (defun emacs-everywhere-raise-frame-1 ()
+    (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
 
 (defalias 'ex! 'evil-ex-define-cmd)
 
@@ -680,10 +699,11 @@ Uses `current-date-time-format' for the formatting the date/time."
   ;; (setq counsel-tramp-custom-connections
   ;;       '(/ssh:dev|sudo:root@192.168.88.158:/var/www/html/lzc))
   (setq counsel-tramp-localhost-directory "/var/www/html")
-  (add-hook 'counsel-tramp-pre-command-hook '(lambda () (projectile-mode 0)
-                                               (editorconfig-mode 0)))
-  (add-hook 'counsel-tramp-quit-hook '(lambda () (projectile-mode 1)
-                                        (editorconfig-mode 1))))
+  ;; (add-hook 'counsel-tramp-pre-command-hook '(lambda () (projectile-mode 0)
+  ;;                                              (editorconfig-mode 0)))
+  ;; (add-hook 'counsel-tramp-quit-hook '(lambda () (projectile-mode 1)
+  ;;                                       (editorconfig-mode 1)))
+  )
 (define-key global-map (kbd "C-c s") 'counsel-tramp)
 
 ;; (add-transient-hook! 'prog-mode-hook
@@ -1051,6 +1071,7 @@ _p_ : Previous
 (dolist (lang org-babel-lang-list)
 (eval `(lsp-org-babel-enable ,lang)))
 
+(add-hook 'org-mode-hook #'+org-pretty-mode)
 (setq org-directory "~/.gclrc/org/"
     org-log-done 'time                        ; having the time a item is done sounds convenient
     org-list-allow-alphabetical t             ; have a. A. a) A) list bullets
