@@ -24,11 +24,9 @@
 (package! osx-lib)
 (package! crux)
 (package! string-inflection)
-(package! cnfonts)
 (package! valign)
 (package! dotenv-mode)
-(package! good-scroll :recipe (:host github
-                               :repo "io12/good-scroll.el"))
+
 (package! maple-iedit :recipe (:host github
                                :repo "honmaple/emacs-maple-iedit"))
 
@@ -36,17 +34,12 @@
 (package! bm)
 (package! highlight-indent-guides)
 
-;; window
-(package! golden-ratio)
-;; (package! zoom)
-
 (package! counsel-tramp)
 
 ;; type sound
 (package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
 
 (package! org-fancy-priorities)
-(package! org-pretty-tags)
 (package! org-pretty-table
   :recipe (:host github :repo "Fuco1/org-pretty-table")
   :pin "87772a9469d91770f87bfa788580fca69b9e697a")
@@ -62,6 +55,11 @@
 (package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
 (package! org-pandoc-import :recipe
   (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "filters" "preprocessors")))
+(package! org-pretty-tags)
+(package! org-super-agenda)
+(package! doct)
+
+;; disabled
 (package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5" :disable t)
 (package! org-roam :disable t)
 
@@ -86,11 +84,6 @@
 (package! ob-typescript)
 (package! phpactor)
 
-(package! ein :recipe (:host github
-                       :repo "millejoh/emacs-ipython-notebook"
-                       :files ("lisp/*.el")
-                       :build (:not compile)))
-
 ;; ast
 
 (package! bookmark :disable t)
@@ -98,5 +91,13 @@
 (package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
 (package! tide :disable t)
+(package! golden-ratio :disable t)
 (package! eldoc :disable t)
 (package! vue-mode :disable t)
+(package! good-scroll :disable t
+  :recipe (:host github :repo "io12/good-scroll.el"))
+(package! ein :disable t :recipe (:host github
+                       :repo "millejoh/emacs-ipython-notebook"
+                       :files ("lisp/*.el")
+                       :build (:not compile)))
+(package! cnfonts :disable t)
