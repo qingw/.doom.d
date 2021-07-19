@@ -1192,7 +1192,10 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
       org-agenda-include-deadlines t
       org-agenda-block-separator nil
       org-agenda-tags-column 100 ;; from testing this seems to be a good value
-      org-agenda-compact-blocks t)
+      org-agenda-compact-blocks t
+      org-agenda-breadcrumbs-separator " ❱ "
+      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
+      )
 
 (setq org-agenda-custom-commands
       '(("o" "Overview"

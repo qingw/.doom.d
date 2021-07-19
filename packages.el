@@ -66,10 +66,10 @@
   :pin "67fc46c8a68989b932bce879fbaa62c6a2456a1f")
 (package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
 (package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
+
+
+;; disabled
 (package! org-pretty-tags :disable t)
-
-
-;; disab    led
 (package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5" :disable t)
 (package! org-roam :disable t)
 
