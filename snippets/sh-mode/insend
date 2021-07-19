@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: install-file-end
+# key: insend
+# --
+color_info "> ------ $1 DONE ------\n"

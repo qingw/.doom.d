@@ -197,6 +197,14 @@ Uses `current-date-time-format' for the formatting the date/time."
       :n       "tpp" #'org-priority
       :n       "tpu" #'org-priority-up
       :n       "tpd" #'org-priority-down
+
+      "C-c e e"        #'all-the-icons-insert
+      "C-c e a"        #'all-the-icons-insert-faicon
+      "C-c e f"        #'all-the-icons-insert-fileicon
+      "C-c e w"        #'all-the-icons-insert-wicon
+      "C-c e o"        #'all-the-icons-insert-octicon
+      "C-c e m"        #'all-the-icons-insert-material
+      "C-c e i"        #'all-the-icons-insert-alltheicon
       )
 
 (defadvice! +literate-tangle-async-h ()
@@ -1119,6 +1127,28 @@ _p_ : Previous
 :hook
 (org-mode . valign-mode))
 
+(use-package! org-appear
+:hook (org-mode . org-appear-mode)
+:config
+(setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autolinks nil)
+;; for proper first-time setup, `org-appear--set-elements'
+;; needs to be run after other hooks have acted.
+(run-at-time nil nil #'org-appear--set-elements))
+
+(org-link-set-parameters "yt" :export #'+org-export-yt)
+(defun +org-export-yt (path desc backend _com)
+(cond ((org-export-derived-backend-p backend 'html)
+        (format "<iframe width='440' \
+height='335' \
+src='https://www.youtube.com/embed/%s' \
+frameborder='0' \
+allowfullscreen>%s</iframe>" path (or "" desc)))
+        ((org-export-derived-backend-p backend 'latex)
+        (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
+        (t (format "https://youtu.be/%s" path))))
+
 (setq org-roam-directory "~/.doom.d/.local/roam/")
 ;; (use-package org-roam-server
 ;;   :after (org-roam server)
@@ -1151,28 +1181,6 @@ _p_ : Previous
 
 (use-package! org-pandoc-import
 :after org)
-
-(use-package! org-appear
-:hook (org-mode . org-appear-mode)
-:config
-(setq org-appear-autoemphasis t
-        org-appear-autosubmarkers t
-        org-appear-autolinks nil)
-;; for proper first-time setup, `org-appear--set-elements'
-;; needs to be run after other hooks have acted.
-(run-at-time nil nil #'org-appear--set-elements))
-
-(org-link-set-parameters "yt" :export #'+org-export-yt)
-(defun +org-export-yt (path desc backend _com)
-(cond ((org-export-derived-backend-p backend 'html)
-        (format "<iframe width='440' \
-height='335' \
-src='https://www.youtube.com/embed/%s' \
-frameborder='0' \
-allowfullscreen>%s</iframe>" path (or "" desc)))
-        ((org-export-derived-backend-p backend 'latex)
-        (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
-        (t (format "https://youtu.be/%s" path))))
 
 (use-package! org-super-agenda
   :commands (org-super-agenda-mode))

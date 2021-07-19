@@ -501,7 +501,17 @@ Uses `current-date-time-format' for the formatting the date/time."
        :n       "tpp" #'org-priority
        :n       "tpu" #'org-priority-up
        :n       "tpd" #'org-priority-down
+
+       "C-c e e"        #'all-the-icons-insert
+       "C-c e a"        #'all-the-icons-insert-faicon
+       "C-c e f"        #'all-the-icons-insert-fileicon
+       "C-c e w"        #'all-the-icons-insert-wicon
+       "C-c e o"        #'all-the-icons-insert-octicon
+       "C-c e m"        #'all-the-icons-insert-material
+       "C-c e i"        #'all-the-icons-insert-alltheicon
        )
+
+
 #+end_src
 
 ** 保存自动同步配置
@@ -1557,8 +1567,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
-** org-mode
-*** 忽略某个 hook 执行异常
+** 忽略某个 hook 执行异常
 
   #+begin_src emacs-lisp
   (defadvice! shut-up-org-problematic-hooks (orig-fn &rest args)
@@ -1567,7 +1576,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
     (ignore-errors (apply orig-fn args)))
   #+end_src
 
-*** 在 org 代码块中开启 LSP :
+** 在 org 代码块中开启 LSP :
 
     #+begin_src emacs-lisp
     (cl-defmacro lsp-org-babel-enable (lang)
@@ -1600,7 +1609,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
     (eval `(lsp-org-babel-enable ,lang)))
     #+end_src
 
-*** 基础配置：
+** 基础配置：
 
     #+begin_src emacs-lisp
     (add-hook 'org-mode-hook #'+org-pretty-mode)
@@ -1645,7 +1654,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 
     (org-pretty-tags-global-mode))
     #+end_src
-*** 表格插件： valign
+** 表格插件： valign
 
     [[https://github.com/casouri/valign][GitHub - casouri/valign: Pixel-perfect visual alignment for Org and Markdown
   tables.]]
@@ -1658,59 +1667,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
     (org-mode . valign-mode))
     #+end_src
 
-*** org-roam
-
-    #+begin_src emacs-lisp
-    (setq org-roam-directory "~/.doom.d/.local/roam/")
-    ;; (use-package org-roam-server
-    ;;   :after (org-roam server)
-    ;;   :config
-    ;;   (setq org-roam-server-host "127.0.0.1"
-    ;;         org-roam-server-port 8078
-    ;;         org-roam-server-export-inline-images t
-    ;;         org-roam-server-authenticate nil
-    ;;         org-roam-server-network-label-truncate t
-    ;;         org-roam-server-network-label-truncate-length 60
-    ;;         org-roam-server-network-label-wrap-length 20)
-    ;;   (defun org-roam-server-open ()
-    ;;     "Ensure the server is active, then open the roam graph."
-    ;;     (interactive)
-    ;;     (org-roam-server-mode 1)
-    ;;     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
-    #+end_src
-
-*** org-ol-tree 目录树
-
-    #+begin_src emacs-lisp
-    (use-package! org-ol-tree
-    :commands org-ol-tree)
-    (map! :map org-mode-map
-        :after org
-        :localleader
-        :desc "Outline" "O" #'org-ol-tree)
-    #+end_src
-
-*** 让 latex 导出结果高亮显示
-
-    #+begin_src emacs-lisp
-    (use-package! engrave-faces-latex
-    :after ox-latex)
-    #+end_src
-
-*** github markdown in org-mode
-
-    #+begin_src emacs-lisp
-    (use-package! ox-gfm
-    :after org)
-    #+end_src
-
-    其他格式转成 org
-    #+begin_src emacs-lisp
-    (use-package! org-pandoc-import
-    :after org)
-    #+end_src
-
-*** 隐藏 ~=#*_ 等格式化字符
+** 隐藏 ~=#*_ 等格式化字符
 
     #+begin_src emacs-lisp
     (use-package! org-appear
@@ -1738,6 +1695,59 @@ Doom Emacs default configuration is too slow, let’s speed it up.
             (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
             (t (format "https://youtu.be/%s" path))))
     #+end_src
+
+** org-roam
+
+    #+begin_src emacs-lisp
+    (setq org-roam-directory "~/.doom.d/.local/roam/")
+    ;; (use-package org-roam-server
+    ;;   :after (org-roam server)
+    ;;   :config
+    ;;   (setq org-roam-server-host "127.0.0.1"
+    ;;         org-roam-server-port 8078
+    ;;         org-roam-server-export-inline-images t
+    ;;         org-roam-server-authenticate nil
+    ;;         org-roam-server-network-label-truncate t
+    ;;         org-roam-server-network-label-truncate-length 60
+    ;;         org-roam-server-network-label-wrap-length 20)
+    ;;   (defun org-roam-server-open ()
+    ;;     "Ensure the server is active, then open the roam graph."
+    ;;     (interactive)
+    ;;     (org-roam-server-mode 1)
+    ;;     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
+    #+end_src
+
+** org-ol-tree 目录树
+
+    #+begin_src emacs-lisp
+    (use-package! org-ol-tree
+    :commands org-ol-tree)
+    (map! :map org-mode-map
+        :after org
+        :localleader
+        :desc "Outline" "O" #'org-ol-tree)
+    #+end_src
+
+** 让 latex 导出结果高亮显示
+
+    #+begin_src emacs-lisp
+    (use-package! engrave-faces-latex
+    :after ox-latex)
+    #+end_src
+
+** markdown
+
+    #+begin_src emacs-lisp
+    (use-package! ox-gfm
+    :after org)
+    #+end_src
+
+    其他格式转成 org
+    #+begin_src emacs-lisp
+    (use-package! org-pandoc-import
+    :after org)
+    #+end_src
+
 ** org-super-agenda
 
 #+begin_src emacs-lisp
@@ -1813,7 +1823,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
                            :order 90)
                           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 #+end_src
-** org-prietty-capture
+** org-pretty-capture
 
 #+begin_src emacs-lisp
 (defun org-capture-select-template-prettier (&optional keys)
@@ -1926,6 +1936,8 @@ is selected, only the bare key is returned."
 (advice-add 'org-mks :override #'org-mks-pretty)
 #+end_src
 ** org-capture
+
+[[https://www.zmonster.me/2018/02/28/org-mode-capture.html#org1a3d856][强大的 Org mode(4): 使用 capture 功能快速记录]]
 
 #+begin_src emacs-lisp
 (use-package! doct
@@ -2111,6 +2123,7 @@ is selected, only the bare key is returned."
         (set-window-parameter nil 'mode-line-format 'none)
         (org-capture)))
 #+end_src
+
 ** org-pretty-table
 
 #+begin_src emacs-lisp
@@ -2210,7 +2223,7 @@ org packages:
   :pin "67fc46c8a68989b932bce879fbaa62c6a2456a1f")
 (package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
 (package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
-(package! org-pretty-tags)
+(package! org-pretty-tags :disable t)
 
 
 ;; disab    led
