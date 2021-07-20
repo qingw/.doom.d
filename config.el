@@ -205,6 +205,14 @@ Uses `current-date-time-format' for the formatting the date/time."
       "C-c e o"        #'all-the-icons-insert-octicon
       "C-c e m"        #'all-the-icons-insert-material
       "C-c e i"        #'all-the-icons-insert-alltheicon
+
+      ;; org clock
+      "C-c c i"        #'org-clock-in
+      "C-c c o"        #'org-clock-out
+      "C-c c h"        #'counsel-org-clock-history
+      "C-c c g"        #'counsel-org-clock-goto
+      "C-c c c"        #'counsel-org-clock-context
+      "C-c c r"        #'counsel-org-clock-rebuild-history
       )
 
 (defadvice! +literate-tangle-async-h ()
@@ -275,6 +283,22 @@ Uses `current-date-time-format' for the formatting the date/time."
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 
 ;;; config.el -*- lexical-binding: t; -*-
+
+;; (after! all-the-icons-ivy
+;;   (dolist (cmd '( counsel-dired-jump
+;;                   counsel-projectile-find-dir
+;;                   counsel-projectile-switch-project
+;;                   ;; aj/choose-file-from
+;;                   ))
+;;     (ivy-set-display-transformer cmd #'all-the-icons-ivy-file-transformer)))
+
+;; (use-package! all-the-icons-ivy-rich
+;;   :disabled
+;;   :after ivy-rich
+;;   :init (all-the-icons-ivy-rich-mode 1)
+;;   :config
+;;   (setf (car (cdr (car (cdr (nth 1 (plist-get (cadr all-the-icons-ivy-rich-display-transformers-list) :columns)))))) 60)
+;;   )
 
 (after! avy
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
@@ -1137,18 +1161,6 @@ _p_ : Previous
 ;; needs to be run after other hooks have acted.
 (run-at-time nil nil #'org-appear--set-elements))
 
-(org-link-set-parameters "yt" :export #'+org-export-yt)
-(defun +org-export-yt (path desc backend _com)
-(cond ((org-export-derived-backend-p backend 'html)
-        (format "<iframe width='440' \
-height='335' \
-src='https://www.youtube.com/embed/%s' \
-frameborder='0' \
-allowfullscreen>%s</iframe>" path (or "" desc)))
-        ((org-export-derived-backend-p backend 'latex)
-        (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
-        (t (format "https://youtu.be/%s" path))))
-
 (setq org-roam-directory "~/.doom.d/.local/roam/")
 ;; (use-package org-roam-server
 ;;   :after (org-roam server)
@@ -1550,3 +1562,24 @@ is selected, only the bare key is returned."
 
 (use-package! org-chef
   :commands (org-chef-insert-recipe org-chef-get-recipe-from-url))
+
+;; (after! org
+;;   (add-hook! :append org-load
+;;              (setq org-todo-keywords
+;;                    '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+;;                      (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+;;                      (sequence "|" "OKAY(o)" "YES(y)" "NO(N)")))
+;;              (setq org-todo-keywords-1
+;;                    '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+;;                      (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+;;                      (sequence "|" "OKAY(o)" "YES(y)" "NO(N)")))
+;;              ))
+
+(use-package! counsel-org-clock
+  :commands (counsel-org-clock-context
+             counsel-org-clock-history
+             counsel-org-clock-goto
+             )
+  :config
+  (setq counsel-org-clock-history-limit 20)
+  )

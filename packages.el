@@ -10,13 +10,14 @@
 
 (package! move-text)
 (package! parrot)
-;; fast, friendly searching with ripgrep and Emacs
-(package! deadgrep)
-(package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
-(package! ranger)
-(package! youdao-dictionary)
 ;; (package! lexic :recipe (:local-repo "lisp/lexic"))
 
+(package! deadgrep)
+(package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
+(package! youdao-dictionary)
+
+;; fast, friendly searching with ripgrep and Emacs
+(package! ranger)
 ;; http://www.baidu.com
 (package! link-hint)
 (package! deft)
@@ -67,6 +68,7 @@
 (package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
 (package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
 
+(package! counsel-org-clock)
 
 ;; disabled
 (package! org-pretty-tags :disable t)
@@ -96,6 +98,8 @@
 (package! phpactor)
 
 ;; ast
+
+;; (package! all-the-icons-ivy-rich)
 
 (package! bookmark :disable t)
 (package! tree-sitter :disable t)

@@ -509,6 +509,14 @@ Uses `current-date-time-format' for the formatting the date/time."
        "C-c e o"        #'all-the-icons-insert-octicon
        "C-c e m"        #'all-the-icons-insert-material
        "C-c e i"        #'all-the-icons-insert-alltheicon
+
+       ;; org clock
+       "C-c c i"        #'org-clock-in
+       "C-c c o"        #'org-clock-out
+       "C-c c h"        #'counsel-org-clock-history
+       "C-c c g"        #'counsel-org-clock-goto
+       "C-c c c"        #'counsel-org-clock-context
+       "C-c c r"        #'counsel-org-clock-rebuild-history
        )
 
 
@@ -618,6 +626,26 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 #+begin_src emacs-lisp :comments no
 ;;; config.el -*- lexical-binding: t; -*-
+#+end_src
+
+** all-the-icons-ivy-rich
+
+#+begin_src emacs-lisp
+;; (after! all-the-icons-ivy
+;;   (dolist (cmd '( counsel-dired-jump
+;;                   counsel-projectile-find-dir
+;;                   counsel-projectile-switch-project
+;;                   ;; aj/choose-file-from
+;;                   ))
+;;     (ivy-set-display-transformer cmd #'all-the-icons-ivy-file-transformer)))
+
+;; (use-package! all-the-icons-ivy-rich
+;;   :disabled
+;;   :after ivy-rich
+;;   :init (all-the-icons-ivy-rich-mode 1)
+;;   :config
+;;   (setf (car (cdr (car (cdr (nth 1 (plist-get (cadr all-the-icons-ivy-rich-display-transformers-list) :columns)))))) 60)
+;;   )
 #+end_src
 
 ** avy
@@ -1681,21 +1709,6 @@ Doom Emacs default configuration is too slow, let’s speed it up.
     (run-at-time nil nil #'org-appear--set-elements))
     #+end_src
 
-    ~[[yt:...]]~ 嵌入 youtube 视频
-    #+begin_src emacs-lisp
-    (org-link-set-parameters "yt" :export #'+org-export-yt)
-    (defun +org-export-yt (path desc backend _com)
-    (cond ((org-export-derived-backend-p backend 'html)
-            (format "<iframe width='440' \
-    height='335' \
-    src='https://www.youtube.com/embed/%s' \
-    frameborder='0' \
-    allowfullscreen>%s</iframe>" path (or "" desc)))
-            ((org-export-derived-backend-p backend 'latex)
-            (format "\\href{https://youtu.be/%s}{%s}" path (or desc "youtube")))
-            (t (format "https://youtu.be/%s" path))))
-    #+end_src
-
 ** org-roam
 
     #+begin_src emacs-lisp
@@ -2139,7 +2152,33 @@ is selected, only the bare key is returned."
 (use-package! org-chef
   :commands (org-chef-insert-recipe org-chef-get-recipe-from-url))
 #+end_src
+** Bullets
 
+#+begin_src emacs-lisp
+;; (after! org
+;;   (add-hook! :append org-load
+;;              (setq org-todo-keywords
+;;                    '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+;;                      (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+;;                      (sequence "|" "OKAY(o)" "YES(y)" "NO(N)")))
+;;              (setq org-todo-keywords-1
+;;                    '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+;;                      (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+;;                      (sequence "|" "OKAY(o)" "YES(y)" "NO(N)")))
+;;              ))
+#+end_src
+** counsel-org-clock
+
+#+begin_src emacs-lisp
+(use-package! counsel-org-clock
+  :commands (counsel-org-clock-context
+             counsel-org-clock-history
+             counsel-org-clock-goto
+             )
+  :config
+  (setq counsel-org-clock-history-limit 20)
+  )
+#+end_src
 * 包管理(packages.el)
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -2150,11 +2189,14 @@ This file shouldn't be byte compiled.
 ;; -*- no-byte-compile: t; -*-
 #+end_src
 
-for Elfeed
+** for Elfeed
 #+begin_src emacs-lisp
 (package! visual-fill-column)
 
 #+end_src
+
+** tools
+
 #+begin_src emacs-lisp
 ;; (when IS-LINUX
 ;;   (package! eaf :recipe (:host github
@@ -2164,13 +2206,14 @@ for Elfeed
 
 (package! move-text)
 (package! parrot)
-;; fast, friendly searching with ripgrep and Emacs
-(package! deadgrep)
-(package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
-(package! ranger)
-(package! youdao-dictionary)
 ;; (package! lexic :recipe (:local-repo "lisp/lexic"))
 
+(package! deadgrep)
+(package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
+(package! youdao-dictionary)
+
+;; fast, friendly searching with ripgrep and Emacs
+(package! ranger)
 ;; http://www.baidu.com
 (package! link-hint)
 (package! deft)
@@ -2196,13 +2239,15 @@ for Elfeed
 (package! emacs-everywhere :recipe (:host github :repo "tecosaur/emacs-everywhere"))
 #+end_src
 
-funny:
+** funny
+
 #+begin_src emacs-lisp
 ;; type sound
 (package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
 #+end_src
 
-org packages:
+** org packages
+
 #+begin_src emacs-lisp
 (package! org-fancy-priorities)
 (package! org-pretty-table
@@ -2227,6 +2272,7 @@ org packages:
 (package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
 (package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
 
+(package! counsel-org-clock)
 
 ;; disabled
 (package! org-pretty-tags :disable t)
@@ -2234,7 +2280,8 @@ org packages:
 (package! org-roam :disable t)
 #+end_src
 
-pyim packages:
+** pyim packages
+
 #+begin_src emacs-lisp
 ;; (package! rime)
 ;; (package! liberime)
@@ -2244,7 +2291,8 @@ pyim packages:
 ;; (package! posframe :recipe (:host github :repo "tumashu/posframe"))
 #+end_src
 
-dev packages:
+** dev packages
+
 #+begin_src emacs-lisp
 (package! leetcode)
 (package! instant-rename-tag
@@ -2266,7 +2314,14 @@ dev packages:
 
 #+end_src
 
-disabled packages
+** face enhancement
+
+#+begin_src emacs-lisp
+;; (package! all-the-icons-ivy-rich)
+#+end_src
+
+** disabled packages
+
 #+begin_src  emacs-lisp
 (package! bookmark :disable t)
 (package! tree-sitter :disable t)
