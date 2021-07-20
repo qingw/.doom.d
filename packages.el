@@ -42,6 +42,7 @@
   (:host github
    :repo "tecosaur/org-pandoc-import"
    :files ("*.el" "filters" "preprocessors")))
+
 (package! org-super-agenda)
 (package! ox-gfm)
 (package! org-ol-tree
@@ -59,6 +60,7 @@
   :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
 (package! youdao-dictionary)
 
+(package! hungry-delete)
 (package! move-text)
 (package! pangu-spacing)
 (package! parrot)

@@ -542,7 +542,7 @@ private:
  :n     "iM"    #'lsp-ui-imenu
 
  ;; / -> Search
- :n     "/r"    #'deadgrep
+ ;; :n     "/r"    #'deadgrep
 )
 #+end_src
 ** Org-mode
@@ -691,7 +691,8 @@ private:
 #+begin_src emacs-lisp
 (use-package! hungry-delete
   :config
-  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
+  (add-hook! 'after-init-hook #'global-hungry-delete-mode)
+  (global-hungry-delete-mode 1))
 #+end_src
 ** Imenu
 
@@ -1028,6 +1029,7 @@ is selected, only the bare key is returned."
 #+begin_src emacs-lisp
 (use-package! org-super-agenda
   :commands (org-super-agenda-mode))
+
 (after! org-agenda
   (org-super-agenda-mode))
 
@@ -1038,8 +1040,7 @@ is selected, only the bare key is returned."
       org-agenda-tags-column 100 ;; from testing this seems to be a good value
       org-agenda-compact-blocks t
       org-agenda-breadcrumbs-separator " ❱ "
-      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
-      )
+      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now")
 
 (setq org-agenda-custom-commands
       '(("o" "Overview"
@@ -1522,6 +1523,7 @@ Use `.prettierrc` file for prettier.
   (:host github
    :repo "tecosaur/org-pandoc-import"
    :files ("*.el" "filters" "preprocessors")))
+
 (package! org-super-agenda)
 (package! ox-gfm)
 (package! org-ol-tree
@@ -1548,6 +1550,7 @@ Use `.prettierrc` file for prettier.
 ** Text Operation
 
 #+begin_src emacs-lisp
+(package! hungry-delete)
 (package! move-text)
 (package! pangu-spacing)
 (package! parrot)

@@ -243,7 +243,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  :n     "iM"    #'lsp-ui-imenu
 
  ;; / -> Search
- :n     "/r"    #'deadgrep
+ ;; :n     "/r"    #'deadgrep
 )
 
 (map! :map org-mode-map
@@ -338,7 +338,8 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (use-package! hungry-delete
   :config
-  (add-hook! 'after-init-hook #'global-hungry-delete-mode))
+  (add-hook! 'after-init-hook #'global-hungry-delete-mode)
+  (global-hungry-delete-mode 1))
 
 (global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
 
@@ -614,6 +615,7 @@ is selected, only the bare key is returned."
 
 (use-package! org-super-agenda
   :commands (org-super-agenda-mode))
+
 (after! org-agenda
   (org-super-agenda-mode))
 
@@ -624,8 +626,7 @@ is selected, only the bare key is returned."
       org-agenda-tags-column 100 ;; from testing this seems to be a good value
       org-agenda-compact-blocks t
       org-agenda-breadcrumbs-separator " ❱ "
-      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
-      )
+      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now")
 
 (setq org-agenda-custom-commands
       '(("o" "Overview"
