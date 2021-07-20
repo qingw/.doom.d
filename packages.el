@@ -1,98 +1,40 @@
-;; -*- no-byte-compile: t; -*-
+(package! dotenv-mode)
 
-;; (when IS-LINUX
-;;   (package! eaf :recipe (:host github
-;;                             :repo "manateelazycat/emacs-application-framework"
-;;                             :files ("*")
-;;                             :no-byte-compile t))
+(package! crux)
+(package! deft)
+(package! ranger)
 
-(package! visual-fill-column)
-(package! move-text)
-(package! parrot)
-;; (package! lexic :recipe (:local-repo "lisp/lexic"))
+(package! selectric-mode
+  :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
 
+(package! osx-lib)
+(package! emacs-everywhere
+  :recipe (:host github
+           :repo "tecosaur/emacs-everywhere"))
+
+(package! counsel-tramp)
+
+(package! org-fancy-priorities)
+(package! valign)
+
+(package! bm)
+
+(package! anzu)
 (package! deadgrep)
 (package! color-rg :recipe (:host github :repo "manateelazycat/color-rg"))
-(package! youdao-dictionary)
-
-;; fast, friendly searching with ripgrep and Emacs
-(package! ranger)
-;; http://www.baidu.com
-(package! link-hint)
-(package! deft)
-(package! anzu)
-(package! pangu-spacing)
 (package! visual-regexp)
 (package! visual-regexp-steriods
   :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
-(package! osx-lib)
-(package! crux)
+(package! youdao-dictionary)
+
+(package! move-text)
+(package! pangu-spacing)
+(package! parrot)
 (package! string-inflection)
-(package! valign)
-(package! dotenv-mode)
-
-(package! maple-iedit :recipe (:host github
-                               :repo "honmaple/emacs-maple-iedit"))
-
-(package! hungry-delete)
-(package! bm)
-
-(package! counsel-tramp)
-(package! emacs-everywhere :recipe (:host github :repo "tecosaur/emacs-everywhere"))
-
-;; type sound
-(package! selectric-mode :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")
-
-(package! org-fancy-priorities)
-(package! org-pretty-table
-  :recipe (:host github :repo "Fuco1/org-pretty-table")
-  :pin "87772a9469d91770f87bfa788580fca69b9e697a")
-;; ~=/* 符号显示优化
-(package! org-appear :recipe (:host github :repo "awth13/org-appear")
-  :pin "6ee49875f8bdefafbde849f5628d673e9740cf8c")
-;; 算术符号显示，如 x 的平方 $a^2$ -> 对应数学表示型式
-(package! org-fragtog :pin "0151cabc7aa9f244f82e682b87713b344d780c23")
-;; 目录树
-(package! org-ol-tree :recipe (:host github :repo "Townk/org-ol-tree")
-  :pin "207c748aa5fea8626be619e8c55bdb1c16118c25")
-(package! engrave-faces :recipe (:host github :repo "tecosaur/engrave-faces"))
-(package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f")
-(package! org-pandoc-import :recipe
-  (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "filters" "preprocessors")))
-(package! org-super-agenda :pin "f5e80e4d0da6b2eeda9ba21e021838fa6a495376")
-(package! doct
-  :recipe (:host github :repo "progfolio/doct")
-  :pin "67fc46c8a68989b932bce879fbaa62c6a2456a1f")
-(package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
-(package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
-
-(package! counsel-org-clock)
-
-;; disabled
-(package! org-pretty-tags :disable t)
-(package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5" :disable t)
-(package! org-roam :disable t)
-
-(package! leetcode)
-(package! instant-rename-tag
-  :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
-(package! js-doc)
-(package! imenu-list)
-(package! yasnippet-snippets)
-(package! git-gutter)
-(package! systemd :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
-
-;; web
-(package! web-beautify)
-(package! prettier-js)
-(package! ob-typescript)
-(package! phpactor)
-
-;; ast
+(package! maple-iedit
+  :recipe (:host github
+           :repo "honmaple/emacs-maple-iedit"))
 
 (package! bookmark :disable t)
-(package! import-js :disable t)
 (package! tide :disable t)
 (package! eldoc :disable t)
-(package! vue-mode :disable t)
-(package! cnfonts :disable t)
