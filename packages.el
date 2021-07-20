@@ -1,13 +1,12 @@
 ;; -*- no-byte-compile: t; -*-
 
-(package! visual-fill-column)
-
 ;; (when IS-LINUX
 ;;   (package! eaf :recipe (:host github
 ;;                             :repo "manateelazycat/emacs-application-framework"
 ;;                             :files ("*")
 ;;                             :no-byte-compile t))
 
+(package! visual-fill-column)
 (package! move-text)
 (package! parrot)
 ;; (package! lexic :recipe (:local-repo "lisp/lexic"))
@@ -37,7 +36,6 @@
 
 (package! hungry-delete)
 (package! bm)
-(package! highlight-indent-guides)
 
 (package! counsel-tramp)
 (package! emacs-everywhere :recipe (:host github :repo "tecosaur/emacs-everywhere"))
@@ -75,13 +73,6 @@
 (package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5" :disable t)
 (package! org-roam :disable t)
 
-;; (package! rime)
-;; (package! liberime)
-;; (package! pyim)
-;; (package! fcitx)
-;; (package! ace-pinyin)
-;; (package! posframe :recipe (:host github :repo "tumashu/posframe"))
-
 (package! leetcode)
 (package! instant-rename-tag
   :recipe (:host github :repo "manateelazycat/instant-rename-tag"))
@@ -99,20 +90,9 @@
 
 ;; ast
 
-;; (package! all-the-icons-ivy-rich)
-
 (package! bookmark :disable t)
-(package! tree-sitter :disable t)
-(package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
 (package! tide :disable t)
-(package! golden-ratio :disable t)
 (package! eldoc :disable t)
 (package! vue-mode :disable t)
-(package! good-scroll :disable t
-  :recipe (:host github :repo "io12/good-scroll.el"))
-(package! ein :disable t :recipe (:host github
-                       :repo "millejoh/emacs-ipython-notebook"
-                       :files ("lisp/*.el")
-                       :build (:not compile)))
 (package! cnfonts :disable t)

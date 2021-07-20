@@ -145,6 +145,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-;"     #'avy-goto-char-2
  "C-s"     #'+default/search-buffer
 
+
  ;; smartparen
  ;; "C-("     #'sp-backward-slurp-sexp
  ;; "C-)"     #'sp-forward-slurp-sexp
@@ -282,24 +283,6 @@ Uses `current-date-time-format' for the formatting the date/time."
            (unless (string= "-" project-name)
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 
-;;; config.el -*- lexical-binding: t; -*-
-
-;; (after! all-the-icons-ivy
-;;   (dolist (cmd '( counsel-dired-jump
-;;                   counsel-projectile-find-dir
-;;                   counsel-projectile-switch-project
-;;                   ;; aj/choose-file-from
-;;                   ))
-;;     (ivy-set-display-transformer cmd #'all-the-icons-ivy-file-transformer)))
-
-;; (use-package! all-the-icons-ivy-rich
-;;   :disabled
-;;   :after ivy-rich
-;;   :init (all-the-icons-ivy-rich-mode 1)
-;;   :config
-;;   (setf (car (cdr (car (cdr (nth 1 (plist-get (cadr all-the-icons-ivy-rich-display-transformers-list) :columns)))))) 60)
-;;   )
-
 (after! avy
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
@@ -351,9 +334,6 @@ Uses `current-date-time-format' for the formatting the date/time."
                (bm-buffer-save-all)
                (bm-repository-save))))
 
-(setq calc-angle-mode 'rad  ; radians are rad
-      calc-symbolic-mode t) ; keeps expressions like \sqrt{2} irrational for as long as possible
-
 (use-package! color-rg
   :commands (color-rg-search-input
              color-rg-search-symbol
@@ -367,22 +347,6 @@ Uses `current-date-time-format' for the formatting the date/time."
         company-minimum-prefix-length 2)
   ;; (setq company-show-numbers t)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
-
-;; (when (display-graphic-p)
-;;   (use-package! eaf
-;;     :if (eq system-type 'gnu/linux)
-;;     :custom
-;;     (eaf-find-alternate-file-in-dired t)
-;;     :config
-;;     (add-hook! 'eaf-mode-hook 'xah-fly-keys-off)
-
-;;     (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-;;     (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-
-;;     (defun eaf-open-google ()
-;;       "Open Google using EAF."
-;;       (interactive)
-;;       (eaf-open-browser "https://www.google.com")))
 
 (use-package! emacs-everywhere
   :if (daemonp)
@@ -414,13 +378,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 (setq evil-split-window-below t
       evil-vsplit-window-right t)
 
-(use-package! highlight-indent-guides
-  :config
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-auto-enabled nil)
-  (set-face-background 'highlight-indent-guides-even-face "dimgray")
-  (set-face-foreground 'highlight-indent-guides-character-face "dimgray"))
-
 (use-package! hungry-delete
   :config
   (add-hook! 'after-init-hook #'global-hungry-delete-mode))
@@ -442,41 +399,9 @@ Uses `current-date-time-format' for the formatting the date/time."
           ("C-t" . map-iedit-skip-and-match-next)
           ("C-T" . map-iedit-skip-and-match-previous)))
 
-(setq golden-ratio-exclude-modes
-      '("calendar-mode"
-        "org-agenda-mode"
-        "help-mode"
-        "dired-mode"
-        "ranger-mode"
-        "helpful-mode"
-        "rxt-help-mode"
-        "treemacs-mode" ))
-  (setq golden-ratio-exclude-buffer-names
-      '("*Org tags*"
-        "*Org todo*"
-        "*info*"
-        "*Messages*"))
-
-(use-package! golden-ratio
-  :after-call pre-command-hook
-  :config
-  (golden-ratio-mode +1)
-  ;; Using this hook for resizing windows is less precise than
-  ;; `doom-switch-window-hook'.
-  (remove-hook 'window-configuration-change-hook #'golden-ratio)
-  (add-hook 'doom-switch-window-hook #'golden-ratio))
-
-(use-package! good-scroll
-  :config
-  (good-scroll-mode 1))
-;; (global-set-key [remap evil-scroll-up] #'good-scroll-up)
-;; (global-set-key [remap evil-scroll-down] #'good-scroll-down)
-;; (global-set-key [remap evil-scroll-page-up] #'good-scroll-down-full-screen)
-;; (global-set-key [remap evil-scroll-page-down] #'good-scroll-up-full-screen)
-
 (use-package! link-hint
   :config
-  (setq browse-url-browser-function 'browse-url-chromium
+  (setq browse-url-browser-function 'browse-url
         browse-url-generic-args '("--target" "tab")))
 
 (use-package! visual-regexp
@@ -484,105 +409,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
-
-(use-package! ein
-  :config
-  (setq ob-ein-languages
-   (quote
-    (("ein-python" . python)
-     ("ein-R" . R)
-     ("ein-r" . R)
-     ("ein-rust" . rust)
-     ("ein-haskell" . haskell)
-     ("ein-julia" . julia))))
-  )
-
-(after! ein:ipynb-mode                  ;
-  (poly-ein-mode 1)
-  (hungry-delete-mode -1)
-  )
-
-;; (defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
-;; (setq-default pyim-english-input-switch-functions
-;;               '(pyim-probe-dynamic-english
-;;                 pyim-probe-isearch-mode
-;;                 pyim-probe-program-mode
-;;                 pyim-probe-org-structure-template))
-;; (setq-default pyim-punctuation-half-width-functions
-;;               '(pyim-probe-punctuation-line-beginning
-;;                 pyim-probe-punctuation-after-punctuation))
-
-;; (use-package! pyim
-;;   :demand t
-;;   :defer 1
-;;   :diminish pyim-isearch-mode
-;;   :init
-;;   (setq default-input-method "pyim"
-;;         pyim-title "ㄓ"
-;;         pyim-default-scheme 'rime
-;;         pyim-page-length 7
-;;         pyim-page-tooltip 'posframe) ;;'popup) ;;proframe)
-
-;;   :config
-;;   (setq-default pyim-english-input-switch-functions
-;;                 '(pyim-probe-dynamic-english
-;;                   pyim-probe-evil-normal-mode
-;;                   pyim-probe-program-mode
-;;                   pyim-probe-org-structure-template))
-
-;;   (setq-default pyim-punctuation-half-width-functions
-;;                 '(pyim-probe-punctuation-line-beginning
-;;                   pyim-probe-punctuation-after-punctuation)))
-
-;; (defvar liberime-is-loaded nil)
-
-;; (use-package! liberime
-;;   :when (featurep! +rime)
-;;   :load-path (lambda()(expand-file-name "liberime" +my-ext-dir))
-;;   :defer 1
-;;   :unless liberime-is-loaded
-;;   :custom
-;;   (rime_share_data_dir "/Library/Input Methods/Squirrel.app/Contents/SharedSupport/")
-;;   (rime_user_data_dir (expand-file-name "rime" +my-ext-dir))
-;;   :init
-;;   (module-load (expand-file-name "liberime.so" +my-ext-dir))
-;;   :config
-;;   (setq liberime-is-loaded t)
-;;   (liberime-start rime_share_data_dir rime_user_data_dir)
-;;   (liberime-select-schema  "wubi_pinyin")) ;;"wubi_pinyin"))  luna_pinyin_simp"))
-
-;; ;; 中英文之间添加空格
-;; (use-package! pangu-spacing
-;;   :hook (text-mode . pangu-spacing-mode)
-;;   :config
-;;   ;; Always insert `real' space in org-mode .
-;;   (setq-hook! 'org-mode-hook pangu-spacing-real-insert-separtor t))
-
-;; (use-package! fcitx
-;;   :after evil
-;;   :config
-;;   (when (executable-find "fcitx-remote")
-;;     (fcitx-evil-turn-on)))
-
-;; (use-package! ace-pinyin
-;;   :after avy
-;;   :init (setq ace-pinyin-use-avy t)
-;;   :config (ace-pinyin-global-mode t))
-
-;;; Hacks
-
-;; (defun +chinese*org-html-paragraph (paragraph contents info)
-;;   "Join consecutive Chinese lines into a single long line without unwanted space
-;; when exporting org-mode to html."
-;;   (let* ((fix-regexp "[[:multibyte:]]")
-;;          (origin-contents contents)
-;;          (fixed-contents
-;;           (replace-regexp-in-string
-;;            (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)")
-;;            "\\1\\2"
-;;            origin-contents)))
-;;     (list paragraph fixed-contents info)))
-;; (advice-add #'org-html-paragraph :filter-args #'+chinese*org-html-paragraph)
 
 (use-package! js-doc
   :bind (:map js2-mode-map
@@ -738,13 +564,6 @@ Uses `current-date-time-format' for the formatting the date/time."
   )
 (define-key global-map (kbd "C-c s") 'counsel-tramp)
 
-;; (add-transient-hook! 'prog-mode-hook
-;;  (require 'tree-sitter-langs)
-;;  (global-tree-sitter-mode))
-
-;; (add-hook! 'tree-sitter-after-on-hook
-;;          #'tree-sitter-hl-mode)
-
 (setq css-indent-offset 2
       js2-basic-offset 2
       js-switch-indent-offset 2
@@ -845,229 +664,6 @@ _p_ : Previous
 
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
-
-;; (use-package! zoom
-;;   :hook ((doom-first-input . zoom-mode))
-;;   :config
-;;   (setq zoom-size '(0.8 . 0.8)
-;;         zoom-ignored-major-modes '(dired-mode vterm-mode help-mode helpful-mode rxt-help-mode help-mode-menu org-mode)
-;;         zoom-ignored-buffer-names '("*doom:scratch*" "*info*" "*helpful variable: argv*")
-;;         zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
-;;         zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
-
-;; [[file:config.org::*Elfeed^{Failed}][Elfeed^{Failed}:1]]
-(setq rmh-elfeed-org-files '("~/.gclrc/org/elfeed.org"))
-(use-package! visual-fill-column
-  :after org)
-;; Elfeed^{Failed}:1 ends here
-
-;; [[file:config.org::*Keybindings][Keybindings:1]]
-(map! :map elfeed-search-mode-map
-      :after elfeed-search
-      [remap kill-this-buffer] "q"
-      [remap kill-buffer] "q"
-      :n doom-leader-key nil
-      :n "q" #'+rss/quit
-      :n "e" #'elfeed-update
-      :n "r" #'elfeed-search-untag-all-unread
-      :n "u" #'elfeed-search-tag-all-unread
-      :n "s" #'elfeed-search-live-filter
-      :n "RET" #'elfeed-search-show-entry
-      :n "p" #'elfeed-show-pdf
-      :n "+" #'elfeed-search-tag-all
-      :n "-" #'elfeed-search-untag-all
-      :n "S" #'elfeed-search-set-filter
-      :n "b" #'elfeed-search-browse-url
-      :n "y" #'elfeed-search-yank)
-(map! :map elfeed-show-mode-map
-      :after elfeed-show
-      [remap kill-this-buffer] "q"
-      [remap kill-buffer] "q"
-      :n doom-leader-key nil
-      :nm "q" #'+rss/delete-pane
-      :nm "o" #'ace-link-elfeed
-      :nm "RET" #'org-ref-elfeed-add
-      :nm "n" #'elfeed-show-next
-      :nm "N" #'elfeed-show-prev
-      :nm "p" #'elfeed-show-pdf
-      :nm "+" #'elfeed-show-tag
-      :nm "-" #'elfeed-show-untag
-      :nm "s" #'elfeed-show-new-live-search
-      :nm "y" #'elfeed-show-yank)
-;; Keybindings:1 ends here
-
-;; [[file:config.org::*可用性][可用性:1]]
-(after! elfeed-search
-  (set-evil-initial-state! 'elfeed-search-mode 'normal))
-(after! elfeed-show-mode
-  (set-evil-initial-state! 'elfeed-show-mode   'normal))
-
-(after! evil-snipe
-  (push 'elfeed-show-mode   evil-snipe-disabled-modes)
-  (push 'elfeed-search-mode evil-snipe-disabled-modes))
-;; 可用性:1 ends here
-
-;; [[file:config.org::*视图效果][视图效果:1]]
-(after! elfeed
-
-  (elfeed-org)
-  (use-package! elfeed-link)
-
-  (setq elfeed-search-filter "@1-week-ago +unread"
-        elfeed-search-print-entry-function '+rss/elfeed-search-print-entry
-        elfeed-search-title-min-width 80
-        elfeed-show-entry-switch #'pop-to-buffer
-        elfeed-show-entry-delete #'+rss/delete-pane
-        elfeed-show-refresh-function #'+rss/elfeed-show-refresh--better-style
-        shr-max-image-proportion 0.6)
-
-  (add-hook! 'elfeed-show-mode-hook (hide-mode-line-mode 1))
-  (add-hook! 'elfeed-search-update-hook #'hide-mode-line-mode)
-
-  (defface elfeed-show-title-face '((t (:weight ultrabold :slant italic :height 1.5)))
-    "title face in elfeed show buffer"
-    :group 'elfeed)
-  (defface elfeed-show-author-face `((t (:weight light)))
-    "title face in elfeed show buffer"
-    :group 'elfeed)
-  (set-face-attribute 'elfeed-search-title-face nil
-                      :foreground 'nil
-                      :weight 'light)
-
-  (defadvice! +rss-elfeed-wrap-h-nicer ()
-    "Enhances an elfeed entry's readability by wrapping it to a width of
-`fill-column' and centering it with `visual-fill-column-mode'."
-    :override #'+rss-elfeed-wrap-h
-    (setq-local truncate-lines nil
-                shr-width 120
-                visual-fill-column-center-text t
-                default-text-properties '(line-height 1.1))
-    (let ((inhibit-read-only t)
-          (inhibit-modification-hooks t))
-      (visual-fill-column-mode)
-      ;; (setq-local shr-current-font '(:family "Merriweather" :height 1.2))
-      (set-buffer-modified-p nil)))
-
-  (defun +rss/elfeed-search-print-entry (entry)
-    "Print ENTRY to the buffer."
-    (let* ((elfeed-goodies/tag-column-width 40)
-           (elfeed-goodies/feed-source-column-width 30)
-           (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
-           (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
-           (feed (elfeed-entry-feed entry))
-           (feed-title
-            (when feed
-              (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
-           (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
-           (tags-str (concat (mapconcat 'identity tags ",")))
-           (title-width (- (window-width) elfeed-goodies/feed-source-column-width
-                           elfeed-goodies/tag-column-width 4))
-
-           (tag-column (elfeed-format-column
-                        tags-str (elfeed-clamp (length tags-str)
-                                               elfeed-goodies/tag-column-width
-                                               elfeed-goodies/tag-column-width)
-                        :left))
-           (feed-column (elfeed-format-column
-                         feed-title (elfeed-clamp elfeed-goodies/feed-source-column-width
-                                                  elfeed-goodies/feed-source-column-width
-                                                  elfeed-goodies/feed-source-column-width)
-                         :left)))
-
-      (insert (propertize feed-column 'face 'elfeed-search-feed-face) " ")
-      (insert (propertize tag-column 'face 'elfeed-search-tag-face) " ")
-      (insert (propertize title 'face title-faces 'kbd-help title))
-      (setq-local line-spacing 0.2)))
-
-  (defun +rss/elfeed-show-refresh--better-style ()
-    "Update the buffer to match the selected entry, using a mail-style."
-    (interactive)
-    (let* ((inhibit-read-only t)
-           (title (elfeed-entry-title elfeed-show-entry))
-           (date (seconds-to-time (elfeed-entry-date elfeed-show-entry)))
-           (author (elfeed-meta elfeed-show-entry :author))
-           (link (elfeed-entry-link elfeed-show-entry))
-           (tags (elfeed-entry-tags elfeed-show-entry))
-           (tagsstr (mapconcat #'symbol-name tags ", "))
-           (nicedate (format-time-string "%a, %e %b %Y %T %Z" date))
-           (content (elfeed-deref (elfeed-entry-content elfeed-show-entry)))
-           (type (elfeed-entry-content-type elfeed-show-entry))
-           (feed (elfeed-entry-feed elfeed-show-entry))
-           (feed-title (elfeed-feed-title feed))
-           (base (and feed (elfeed-compute-base (elfeed-feed-url feed)))))
-      (erase-buffer)
-      (insert "\n")
-      (insert (format "%s\n\n" (propertize title 'face 'elfeed-show-title-face)))
-      (insert (format "%s\t" (propertize feed-title 'face 'elfeed-search-feed-face)))
-      (when (and author elfeed-show-entry-author)
-        (insert (format "%s\n" (propertize author 'face 'elfeed-show-author-face))))
-      (insert (format "%s\n\n" (propertize nicedate 'face 'elfeed-log-date-face)))
-      (when tags
-        (insert (format "%s\n"
-                        (propertize tagsstr 'face 'elfeed-search-tag-face))))
-      ;; (insert (propertize "Link: " 'face 'message-header-name))
-      ;; (elfeed-insert-link link link)
-      ;; (insert "\n")
-      (cl-loop for enclosure in (elfeed-entry-enclosures elfeed-show-entry)
-               do (insert (propertize "Enclosure: " 'face 'message-header-name))
-               do (elfeed-insert-link (car enclosure))
-               do (insert "\n"))
-      (insert "\n")
-      (if content
-          (if (eq type 'html)
-              (elfeed-insert-html content base)
-            (insert content))
-        (insert (propertize "(empty)\n" 'face 'italic)))
-      (goto-char (point-min))))
-
-  )
-;; 视图效果:1 ends here
-
-;; [[file:config.org::*功能性][功能性:1]]
-(after! elfeed-show
-  (require 'url)
-
-  (defvar elfeed-pdf-dir
-    (expand-file-name "pdfs/"
-                      (file-name-directory (directory-file-name elfeed-enclosure-default-dir))))
-
-  (defvar elfeed-link-pdfs
-    '(("https://www.jstatsoft.org/index.php/jss/article/view/v0\\([^/]+\\)" . "https://www.jstatsoft.org/index.php/jss/article/view/v0\\1/v\\1.pdf")
-      ("http://arxiv.org/abs/\\([^/]+\\)" . "https://arxiv.org/pdf/\\1.pdf"))
-    "List of alists of the form (REGEX-FOR-LINK . FORM-FOR-PDF)")
-
-  (defun elfeed-show-pdf (entry)
-    (interactive
-     (list (or elfeed-show-entry (elfeed-search-selected :ignore-region))))
-    (let ((link (elfeed-entry-link entry))
-          (feed-name (plist-get (elfeed-feed-meta (elfeed-entry-feed entry)) :title))
-          (title (elfeed-entry-title entry))
-          (file-view-function
-           (lambda (f)
-             (when elfeed-show-entry
-               (elfeed-kill-buffer))
-             (pop-to-buffer (find-file-noselect f))))
-          pdf)
-
-      (let ((file (expand-file-name
-                   (concat (subst-char-in-string ?/ ?, title) ".pdf")
-                   (expand-file-name (subst-char-in-string ?/ ?, feed-name)
-                                     elfeed-pdf-dir))))
-        (if (file-exists-p file)
-            (funcall file-view-function file)
-          (dolist (link-pdf elfeed-link-pdfs)
-            (when (and (string-match-p (car link-pdf) link)
-                       (not pdf))
-              (setq pdf (replace-regexp-in-string (car link-pdf) (cdr link-pdf) link))))
-          (if (not pdf)
-              (message "No associated PDF for entry")
-            (message "Fetching %s" pdf)
-            (unless (file-exists-p (file-name-directory file))
-              (make-directory (file-name-directory file) t))
-            (url-copy-file pdf file)
-            (funcall file-view-function file))))))
-  )
-;; 功能性:1 ends here
 
 (defadvice! shut-up-org-problematic-hooks (orig-fn &rest args)
   :around #'org-fancy-priorities-mode

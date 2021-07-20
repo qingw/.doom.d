@@ -439,6 +439,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-;"     #'avy-goto-char-2
  "C-s"     #'+default/search-buffer
 
+
  ;; smartparen
  ;; "C-("     #'sp-backward-slurp-sexp
  ;; "C-)"     #'sp-forward-slurp-sexp
@@ -624,30 +625,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
-#+begin_src emacs-lisp :comments no
-;;; config.el -*- lexical-binding: t; -*-
-#+end_src
-
-** all-the-icons-ivy-rich
-
-#+begin_src emacs-lisp
-;; (after! all-the-icons-ivy
-;;   (dolist (cmd '( counsel-dired-jump
-;;                   counsel-projectile-find-dir
-;;                   counsel-projectile-switch-project
-;;                   ;; aj/choose-file-from
-;;                   ))
-;;     (ivy-set-display-transformer cmd #'all-the-icons-ivy-file-transformer)))
-
-;; (use-package! all-the-icons-ivy-rich
-;;   :disabled
-;;   :after ivy-rich
-;;   :init (all-the-icons-ivy-rich-mode 1)
-;;   :config
-;;   (setf (car (cdr (car (cdr (nth 1 (plist-get (cadr all-the-icons-ivy-rich-display-transformers-list) :columns)))))) 60)
-;;   )
-#+end_src
-
 ** avy
 #+begin_src emacs-lisp
 (after! avy
@@ -707,13 +684,6 @@ bm package
                 (bm-buffer-save-all)
                 (bm-repository-save))))
 #+end_src
-** Calc & CalcTex
-
-#+begin_src emacs-lisp
-(setq calc-angle-mode 'rad  ; radians are rad
-      calc-symbolic-mode t) ; keeps expressions like \sqrt{2} irrational for as long as possible
-#+end_src
-
 ** color-rg
 
 #+begin_src emacs-lisp
@@ -732,27 +702,6 @@ bm package
         company-minimum-prefix-length 2)
   ;; (setq company-show-numbers t)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
-#+end_src
-** TODO EAF
-
-[[https://www.gtrun.org/custom/config.html][GuangTao’s Doom Emacs config]]
-
-#+begin_src emacs-lisp
-;; (when (display-graphic-p)
-;;   (use-package! eaf
-;;     :if (eq system-type 'gnu/linux)
-;;     :custom
-;;     (eaf-find-alternate-file-in-dired t)
-;;     :config
-;;     (add-hook! 'eaf-mode-hook 'xah-fly-keys-off)
-
-;;     (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-;;     (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-
-;;     (defun eaf-open-google ()
-;;       "Open Google using EAF."
-;;       (interactive)
-;;       (eaf-open-browser "https://www.google.com")))
 #+end_src
 ** Emacs Everywhere
 
@@ -809,17 +758,6 @@ bm package
 | ~g~       | 重新搜索                  |
 | ~TAB~     | 展开/闭合结果             |
 | ~C-c C-k~ | 停止正在执行的搜索        |
-** highlight-indent-guides
-
-#+begin_src emacs-lisp
-(use-package! highlight-indent-guides
-  :config
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-auto-enabled nil)
-  (set-face-background 'highlight-indent-guides-even-face "dimgray")
-  (set-face-foreground 'highlight-indent-guides-character-face "dimgray"))
-#+end_src
-
 ** hungry-delete
 
 #+begin_src emacs-lisp
@@ -848,44 +786,6 @@ bm package
            ("C-T" . map-iedit-skip-and-match-previous)))
 #+end_src
 
-** golden-ratio
-
-#+begin_src emacs-lisp
-(setq golden-ratio-exclude-modes
-      '("calendar-mode"
-        "org-agenda-mode"
-        "help-mode"
-        "dired-mode"
-        "ranger-mode"
-        "helpful-mode"
-        "rxt-help-mode"
-        "treemacs-mode" ))
-  (setq golden-ratio-exclude-buffer-names
-      '("*Org tags*"
-        "*Org todo*"
-        "*info*"
-        "*Messages*"))
-
-(use-package! golden-ratio
-  :after-call pre-command-hook
-  :config
-  (golden-ratio-mode +1)
-  ;; Using this hook for resizing windows is less precise than
-  ;; `doom-switch-window-hook'.
-  (remove-hook 'window-configuration-change-hook #'golden-ratio)
-  (add-hook 'doom-switch-window-hook #'golden-ratio))
-#+end_src
-** good-scroll
-
-#+begin_src emacs-lisp
-(use-package! good-scroll
-  :config
-  (good-scroll-mode 1))
-;; (global-set-key [remap evil-scroll-up] #'good-scroll-up)
-;; (global-set-key [remap evil-scroll-down] #'good-scroll-down)
-;; (global-set-key [remap evil-scroll-page-up] #'good-scroll-down-full-screen)
-;; (global-set-key [remap evil-scroll-page-down] #'good-scroll-up-full-screen)
-#+end_src
 ** link-hint
 
 链接管理。
@@ -893,10 +793,10 @@ bm package
 #+begin_src emacs-lisp
 (use-package! link-hint
   :config
-  (setq browse-url-browser-function 'browse-url-chromium
+  (setq browse-url-browser-function 'browse-url
         browse-url-generic-args '("--target" "tab")))
 #+end_src
-** search & replace
+** visual-regexp
 
 #+begin_src emacs-lisp
 (use-package! visual-regexp
@@ -905,129 +805,6 @@ bm package
 (use-package! visual-regexp-steriods
   :commands (vr/select-replace vr/select-query-replace))
 #+end_src
-** ein, emacs-ipython-notebook
-
-#+begin_src emacs-lisp
-(use-package! ein
-  :config
-  (setq ob-ein-languages
-   (quote
-    (("ein-python" . python)
-     ("ein-R" . R)
-     ("ein-r" . R)
-     ("ein-rust" . rust)
-     ("ein-haskell" . haskell)
-     ("ein-julia" . julia))))
-  )
-
-(after! ein:ipynb-mode                  ;
-  (poly-ein-mode 1)
-  (hungry-delete-mode -1)
-  )
-#+end_src
-** pyim
-
-配置来源：[[https://github.com/eggcaker/.doom.d/blob/main/modules/private/my-chinese/config.el][.doom.d/config.el at main · eggcaker/.doom.d]]
-
-直截使用 Rime - Squirrel 就可以了，用外部其他的主要就是卡。
-
-#+begin_src emacs-lisp
-;; (defvar +my-ext-dir (expand-file-name "~/.doom.d/extensions"))
-;; (setq-default pyim-english-input-switch-functions
-;;               '(pyim-probe-dynamic-english
-;;                 pyim-probe-isearch-mode
-;;                 pyim-probe-program-mode
-;;                 pyim-probe-org-structure-template))
-;; (setq-default pyim-punctuation-half-width-functions
-;;               '(pyim-probe-punctuation-line-beginning
-;;                 pyim-probe-punctuation-after-punctuation))
-
-;; (use-package! pyim
-;;   :demand t
-;;   :defer 1
-;;   :diminish pyim-isearch-mode
-;;   :init
-;;   (setq default-input-method "pyim"
-;;         pyim-title "ㄓ"
-;;         pyim-default-scheme 'rime
-;;         pyim-page-length 7
-;;         pyim-page-tooltip 'posframe) ;;'popup) ;;proframe)
-
-;;   :config
-;;   (setq-default pyim-english-input-switch-functions
-;;                 '(pyim-probe-dynamic-english
-;;                   pyim-probe-evil-normal-mode
-;;                   pyim-probe-program-mode
-;;                   pyim-probe-org-structure-template))
-
-;;   (setq-default pyim-punctuation-half-width-functions
-;;                 '(pyim-probe-punctuation-line-beginning
-;;                   pyim-probe-punctuation-after-punctuation)))
-
-;; (defvar liberime-is-loaded nil)
-
-;; (use-package! liberime
-;;   :when (featurep! +rime)
-;;   :load-path (lambda()(expand-file-name "liberime" +my-ext-dir))
-;;   :defer 1
-;;   :unless liberime-is-loaded
-;;   :custom
-;;   (rime_share_data_dir "/Library/Input Methods/Squirrel.app/Contents/SharedSupport/")
-;;   (rime_user_data_dir (expand-file-name "rime" +my-ext-dir))
-;;   :init
-;;   (module-load (expand-file-name "liberime.so" +my-ext-dir))
-;;   :config
-;;   (setq liberime-is-loaded t)
-;;   (liberime-start rime_share_data_dir rime_user_data_dir)
-;;   (liberime-select-schema  "wubi_pinyin")) ;;"wubi_pinyin"))  luna_pinyin_simp"))
-
-;; ;; 中英文之间添加空格
-;; (use-package! pangu-spacing
-;;   :hook (text-mode . pangu-spacing-mode)
-;;   :config
-;;   ;; Always insert `real' space in org-mode .
-;;   (setq-hook! 'org-mode-hook pangu-spacing-real-insert-separtor t))
-
-;; (use-package! fcitx
-;;   :after evil
-;;   :config
-;;   (when (executable-find "fcitx-remote")
-;;     (fcitx-evil-turn-on)))
-
-;; (use-package! ace-pinyin
-;;   :after avy
-;;   :init (setq ace-pinyin-use-avy t)
-;;   :config (ace-pinyin-global-mode t))
-
-;;; Hacks
-
-;; (defun +chinese*org-html-paragraph (paragraph contents info)
-;;   "Join consecutive Chinese lines into a single long line without unwanted space
-;; when exporting org-mode to html."
-;;   (let* ((fix-regexp "[[:multibyte:]]")
-;;          (origin-contents contents)
-;;          (fixed-contents
-;;           (replace-regexp-in-string
-;;            (concat "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)")
-;;            "\\1\\2"
-;;            origin-contents)))
-;;     (list paragraph fixed-contents info)))
-;; (advice-add #'org-html-paragraph :filter-args #'+chinese*org-html-paragraph)
-#+end_src
-
-[[https://gist.github.com/merrickluo/553f39c131d0eb717cd59f72c9d4b60d][Use pyim + liberime in doom-emacs]]
-
-[[https://github.com/merrickluo/liberime][merrickluo/liberime: A emacs dynamic module provide librime bindings for emacs]]
-
-[[https://github.com/tumashu/pyim][tumashu/pyim: 一个 emacs 中文输入法，支持全拼，双拼，五笔，仓颉和Rime，pyim 是 GNU elpa 包。]]
-
-[[https://github.com/DogLooksGood/emacs-rime/blob/master/INSTALLATION.org][emacs-rime/INSTALLATION.org at master · DogLooksGood/emacs-rime]]
-
-[[https://rime.im/download/][下載及安裝 | RIME | 中州韻輸入法引擎]]
-
-[[https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html][在Mac版的Emacs中使用RIME输入法]]
-
-[[https://github.com/tumashu/pyim-greatdict][tumashu/pyim-greatdict: A chinese-pyim dict, which include three million words!]]
 ** js-doc
 
 #+begin_src emacs-lisp
@@ -1225,23 +1002,6 @@ bm package
   )
 (define-key global-map (kbd "C-c s") 'counsel-tramp)
 #+end_src
-** tree-sitter
-
-#+begin_example
-Tree-sitter is a general programming language parser that efficiently builds and updates Abstract Syntax Trees (AST) for your code. Basically, it can read programming languages and understand the structure and meaning of code without having to execute it. Among many amazing things, one of its best and simplest features to take advantage of is richer syntax highlighting, which is what I use it for in Emacs.
-
-— https://hungyi.net/posts/use-emacs-tree-sitter-doom-emacs/
-#+end_example
-
-#+begin_src emacs-lisp
-;; (add-transient-hook! 'prog-mode-hook
-;;  (require 'tree-sitter-langs)
-;;  (global-tree-sitter-mode))
-
-;; (add-hook! 'tree-sitter-after-on-hook
-;;          #'tree-sitter-hl-mode)
-#+end_src
-
 ** web dev
 
 #+begin_src emacs-lisp
@@ -1357,238 +1117,6 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 #+begin_src emacs-lisp
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
-#+end_src
-** zoom
-
-#+begin_src emacs-lisp
-;; (use-package! zoom
-;;   :hook ((doom-first-input . zoom-mode))
-;;   :config
-;;   (setq zoom-size '(0.8 . 0.8)
-;;         zoom-ignored-major-modes '(dired-mode vterm-mode help-mode helpful-mode rxt-help-mode help-mode-menu org-mode)
-;;         zoom-ignored-buffer-names '("*doom:scratch*" "*info*" "*helpful variable: argv*")
-;;         zoom-ignored-buffer-name-regexps '("^\\*calc" "\\*helpful variable: .*\\*")
-;;         zoom-ignore-predicates (list (lambda () (> (count-lines (point-min) (point-max)) 20)))))
-#+end_src
-* Elfeed^{Failed}
-#+begin_src emacs-lisp
-(setq rmh-elfeed-org-files '("~/.gclrc/org/elfeed.org"))
-(use-package! visual-fill-column
-  :after org)
-#+end_src
-** Keybindings
-
-#+begin_src emacs-lisp
-(map! :map elfeed-search-mode-map
-      :after elfeed-search
-      [remap kill-this-buffer] "q"
-      [remap kill-buffer] "q"
-      :n doom-leader-key nil
-      :n "q" #'+rss/quit
-      :n "e" #'elfeed-update
-      :n "r" #'elfeed-search-untag-all-unread
-      :n "u" #'elfeed-search-tag-all-unread
-      :n "s" #'elfeed-search-live-filter
-      :n "RET" #'elfeed-search-show-entry
-      :n "p" #'elfeed-show-pdf
-      :n "+" #'elfeed-search-tag-all
-      :n "-" #'elfeed-search-untag-all
-      :n "S" #'elfeed-search-set-filter
-      :n "b" #'elfeed-search-browse-url
-      :n "y" #'elfeed-search-yank)
-(map! :map elfeed-show-mode-map
-      :after elfeed-show
-      [remap kill-this-buffer] "q"
-      [remap kill-buffer] "q"
-      :n doom-leader-key nil
-      :nm "q" #'+rss/delete-pane
-      :nm "o" #'ace-link-elfeed
-      :nm "RET" #'org-ref-elfeed-add
-      :nm "n" #'elfeed-show-next
-      :nm "N" #'elfeed-show-prev
-      :nm "p" #'elfeed-show-pdf
-      :nm "+" #'elfeed-show-tag
-      :nm "-" #'elfeed-show-untag
-      :nm "s" #'elfeed-show-new-live-search
-      :nm "y" #'elfeed-show-yank)
-#+end_src
-
-** 可用性
-
-#+begin_src emacs-lisp
-(after! elfeed-search
-  (set-evil-initial-state! 'elfeed-search-mode 'normal))
-(after! elfeed-show-mode
-  (set-evil-initial-state! 'elfeed-show-mode   'normal))
-
-(after! evil-snipe
-  (push 'elfeed-show-mode   evil-snipe-disabled-modes)
-  (push 'elfeed-search-mode evil-snipe-disabled-modes))
-#+end_src
-
-** 视图效果
-
-#+begin_src emacs-lisp
-(after! elfeed
-
-  (elfeed-org)
-  (use-package! elfeed-link)
-
-  (setq elfeed-search-filter "@1-week-ago +unread"
-        elfeed-search-print-entry-function '+rss/elfeed-search-print-entry
-        elfeed-search-title-min-width 80
-        elfeed-show-entry-switch #'pop-to-buffer
-        elfeed-show-entry-delete #'+rss/delete-pane
-        elfeed-show-refresh-function #'+rss/elfeed-show-refresh--better-style
-        shr-max-image-proportion 0.6)
-
-  (add-hook! 'elfeed-show-mode-hook (hide-mode-line-mode 1))
-  (add-hook! 'elfeed-search-update-hook #'hide-mode-line-mode)
-
-  (defface elfeed-show-title-face '((t (:weight ultrabold :slant italic :height 1.5)))
-    "title face in elfeed show buffer"
-    :group 'elfeed)
-  (defface elfeed-show-author-face `((t (:weight light)))
-    "title face in elfeed show buffer"
-    :group 'elfeed)
-  (set-face-attribute 'elfeed-search-title-face nil
-                      :foreground 'nil
-                      :weight 'light)
-
-  (defadvice! +rss-elfeed-wrap-h-nicer ()
-    "Enhances an elfeed entry's readability by wrapping it to a width of
-`fill-column' and centering it with `visual-fill-column-mode'."
-    :override #'+rss-elfeed-wrap-h
-    (setq-local truncate-lines nil
-                shr-width 120
-                visual-fill-column-center-text t
-                default-text-properties '(line-height 1.1))
-    (let ((inhibit-read-only t)
-          (inhibit-modification-hooks t))
-      (visual-fill-column-mode)
-      ;; (setq-local shr-current-font '(:family "Merriweather" :height 1.2))
-      (set-buffer-modified-p nil)))
-
-  (defun +rss/elfeed-search-print-entry (entry)
-    "Print ENTRY to the buffer."
-    (let* ((elfeed-goodies/tag-column-width 40)
-           (elfeed-goodies/feed-source-column-width 30)
-           (title (or (elfeed-meta entry :title) (elfeed-entry-title entry) ""))
-           (title-faces (elfeed-search--faces (elfeed-entry-tags entry)))
-           (feed (elfeed-entry-feed entry))
-           (feed-title
-            (when feed
-              (or (elfeed-meta feed :title) (elfeed-feed-title feed))))
-           (tags (mapcar #'symbol-name (elfeed-entry-tags entry)))
-           (tags-str (concat (mapconcat 'identity tags ",")))
-           (title-width (- (window-width) elfeed-goodies/feed-source-column-width
-                           elfeed-goodies/tag-column-width 4))
-
-           (tag-column (elfeed-format-column
-                        tags-str (elfeed-clamp (length tags-str)
-                                               elfeed-goodies/tag-column-width
-                                               elfeed-goodies/tag-column-width)
-                        :left))
-           (feed-column (elfeed-format-column
-                         feed-title (elfeed-clamp elfeed-goodies/feed-source-column-width
-                                                  elfeed-goodies/feed-source-column-width
-                                                  elfeed-goodies/feed-source-column-width)
-                         :left)))
-
-      (insert (propertize feed-column 'face 'elfeed-search-feed-face) " ")
-      (insert (propertize tag-column 'face 'elfeed-search-tag-face) " ")
-      (insert (propertize title 'face title-faces 'kbd-help title))
-      (setq-local line-spacing 0.2)))
-
-  (defun +rss/elfeed-show-refresh--better-style ()
-    "Update the buffer to match the selected entry, using a mail-style."
-    (interactive)
-    (let* ((inhibit-read-only t)
-           (title (elfeed-entry-title elfeed-show-entry))
-           (date (seconds-to-time (elfeed-entry-date elfeed-show-entry)))
-           (author (elfeed-meta elfeed-show-entry :author))
-           (link (elfeed-entry-link elfeed-show-entry))
-           (tags (elfeed-entry-tags elfeed-show-entry))
-           (tagsstr (mapconcat #'symbol-name tags ", "))
-           (nicedate (format-time-string "%a, %e %b %Y %T %Z" date))
-           (content (elfeed-deref (elfeed-entry-content elfeed-show-entry)))
-           (type (elfeed-entry-content-type elfeed-show-entry))
-           (feed (elfeed-entry-feed elfeed-show-entry))
-           (feed-title (elfeed-feed-title feed))
-           (base (and feed (elfeed-compute-base (elfeed-feed-url feed)))))
-      (erase-buffer)
-      (insert "\n")
-      (insert (format "%s\n\n" (propertize title 'face 'elfeed-show-title-face)))
-      (insert (format "%s\t" (propertize feed-title 'face 'elfeed-search-feed-face)))
-      (when (and author elfeed-show-entry-author)
-        (insert (format "%s\n" (propertize author 'face 'elfeed-show-author-face))))
-      (insert (format "%s\n\n" (propertize nicedate 'face 'elfeed-log-date-face)))
-      (when tags
-        (insert (format "%s\n"
-                        (propertize tagsstr 'face 'elfeed-search-tag-face))))
-      ;; (insert (propertize "Link: " 'face 'message-header-name))
-      ;; (elfeed-insert-link link link)
-      ;; (insert "\n")
-      (cl-loop for enclosure in (elfeed-entry-enclosures elfeed-show-entry)
-               do (insert (propertize "Enclosure: " 'face 'message-header-name))
-               do (elfeed-insert-link (car enclosure))
-               do (insert "\n"))
-      (insert "\n")
-      (if content
-          (if (eq type 'html)
-              (elfeed-insert-html content base)
-            (insert content))
-        (insert (propertize "(empty)\n" 'face 'italic)))
-      (goto-char (point-min))))
-
-  )
-#+end_src
-** 功能性
-
-#+begin_src emacs-lisp
-(after! elfeed-show
-  (require 'url)
-
-  (defvar elfeed-pdf-dir
-    (expand-file-name "pdfs/"
-                      (file-name-directory (directory-file-name elfeed-enclosure-default-dir))))
-
-  (defvar elfeed-link-pdfs
-    '(("https://www.jstatsoft.org/index.php/jss/article/view/v0\\([^/]+\\)" . "https://www.jstatsoft.org/index.php/jss/article/view/v0\\1/v\\1.pdf")
-      ("http://arxiv.org/abs/\\([^/]+\\)" . "https://arxiv.org/pdf/\\1.pdf"))
-    "List of alists of the form (REGEX-FOR-LINK . FORM-FOR-PDF)")
-
-  (defun elfeed-show-pdf (entry)
-    (interactive
-     (list (or elfeed-show-entry (elfeed-search-selected :ignore-region))))
-    (let ((link (elfeed-entry-link entry))
-          (feed-name (plist-get (elfeed-feed-meta (elfeed-entry-feed entry)) :title))
-          (title (elfeed-entry-title entry))
-          (file-view-function
-           (lambda (f)
-             (when elfeed-show-entry
-               (elfeed-kill-buffer))
-             (pop-to-buffer (find-file-noselect f))))
-          pdf)
-
-      (let ((file (expand-file-name
-                   (concat (subst-char-in-string ?/ ?, title) ".pdf")
-                   (expand-file-name (subst-char-in-string ?/ ?, feed-name)
-                                     elfeed-pdf-dir))))
-        (if (file-exists-p file)
-            (funcall file-view-function file)
-          (dolist (link-pdf elfeed-link-pdfs)
-            (when (and (string-match-p (car link-pdf) link)
-                       (not pdf))
-              (setq pdf (replace-regexp-in-string (car link-pdf) (cdr link-pdf) link))))
-          (if (not pdf)
-              (message "No associated PDF for entry")
-            (message "Fetching %s" pdf)
-            (unless (file-exists-p (file-name-directory file))
-              (make-directory (file-name-directory file) t))
-            (url-copy-file pdf file)
-            (funcall file-view-function file))))))
-  )
 #+end_src
 * org-mode 配置
 :PROPERTIES:
@@ -2179,7 +1707,7 @@ is selected, only the bare key is returned."
   (setq counsel-org-clock-history-limit 20)
   )
 #+end_src
-* 包管理(packages.el)
+* packages.el
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
 :END:
@@ -2187,12 +1715,6 @@ is selected, only the bare key is returned."
 This file shouldn't be byte compiled.
 #+begin_src emacs-lisp :tangle "packages.el" :comments no
 ;; -*- no-byte-compile: t; -*-
-#+end_src
-
-** for Elfeed
-#+begin_src emacs-lisp
-(package! visual-fill-column)
-
 #+end_src
 
 ** tools
@@ -2204,6 +1726,7 @@ This file shouldn't be byte compiled.
 ;;                             :files ("*")
 ;;                             :no-byte-compile t))
 
+(package! visual-fill-column)
 (package! move-text)
 (package! parrot)
 ;; (package! lexic :recipe (:local-repo "lisp/lexic"))
@@ -2233,7 +1756,6 @@ This file shouldn't be byte compiled.
 
 (package! hungry-delete)
 (package! bm)
-(package! highlight-indent-guides)
 
 (package! counsel-tramp)
 (package! emacs-everywhere :recipe (:host github :repo "tecosaur/emacs-everywhere"))
@@ -2280,17 +1802,6 @@ This file shouldn't be byte compiled.
 (package! org-roam :disable t)
 #+end_src
 
-** pyim packages
-
-#+begin_src emacs-lisp
-;; (package! rime)
-;; (package! liberime)
-;; (package! pyim)
-;; (package! fcitx)
-;; (package! ace-pinyin)
-;; (package! posframe :recipe (:host github :repo "tumashu/posframe"))
-#+end_src
-
 ** dev packages
 
 #+begin_src emacs-lisp
@@ -2314,49 +1825,19 @@ This file shouldn't be byte compiled.
 
 #+end_src
 
-** face enhancement
-
-#+begin_src emacs-lisp
-;; (package! all-the-icons-ivy-rich)
-#+end_src
-
 ** disabled packages
 
 #+begin_src  emacs-lisp
 (package! bookmark :disable t)
-(package! tree-sitter :disable t)
-(package! tree-sitter-langs :disable t)
 (package! import-js :disable t)
 (package! tide :disable t)
-(package! golden-ratio :disable t)
 (package! eldoc :disable t)
 (package! vue-mode :disable t)
-(package! good-scroll :disable t
-  :recipe (:host github :repo "io12/good-scroll.el"))
-(package! ein :disable t :recipe (:host github
-                       :repo "millejoh/emacs-ipython-notebook"
-                       :files ("lisp/*.el")
-                       :build (:not compile)))
 (package! cnfonts :disable t)
 
 
 #+end_src
 
-* rime
-
-[[https://github.com/maomiui/rime][maomiui/rime: Rime 鼠须管（Squirrel）朙月拼音｜小鹤双拼｜自然码双拼配置]]
 * Emacs(native-comp) Install
 
 [[https://emacs-china.org/t/nix-mac-emacs-nativecomp/14509/20][Nix + Mac 用户现在可以直接下载编译好的 emacs-nativecomp 可执行文件了 - Emacs-general - Emacs China]]
-* issues
-
-1. Device 1 is not a termcap terminal device.
-
-   [[https://github.com/syl20bnr/spacemacs/issues/13391][Xserver Error in Wsl: Device 1 is not a termcap terminal device. · Issue #13391 · syl20bnr/spacemacs]]
-
-   [[https://github.com/microsoft/WSL/issues/5065][[WSL2] [Interop] Keep a single shared /run/WSL/* socket · Issue #5065 · microsoft/WSL]]
-
-   #+begin_src bash
-   # add to .zshrc
-   export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
-   #+end_src
