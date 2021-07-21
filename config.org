@@ -1271,6 +1271,7 @@ is selected, only the bare key is returned."
                                :file +org-capture-project-changelog-file))
                    )
                   ("\tCentralised project templates"
+                   :icon ("ionic-project" :set "fileicon" :color "cyan")
                    :keys "o"
                    :type entry
                    :prepend t
@@ -1391,22 +1392,22 @@ is selected, only the bare key is returned."
       ""
       ((org-agenda-overriding-header "")
        (org-super-agenda-groups
-        '((:name "Next to do"   :todo "NEXT"        :order 1)
-          (:name "Important"    :tag "Important"    :order 6    :priority "A")
-          (:name "Due Today"    :deadline today     :order 2)
-          (:name "Due Soon"     :deadline future    :order 8)
-          (:name "Overdue"      :deadline past      :order 7    :face error)
-          (:name "Emacs"        :tag "Emacs"        :order 10)
-          (:name "Vue"          :tag "Vue"          :order 11)
-          (:name "React"        :tag "React"        :order 12)
-          (:name "Assignments"  :tag "Assignment"   :order 20)
-          (:name "Waiting"      :todo "WAITING"     :order 21)
-          (:name "Issues"       :tag "Issue"        :order 22)
-          (:name "Projects"     :tag "Project"      :order 24)
-          (:name "Research"     :tag "Research"     :order 25)
-          (:name "To read"      :tag "Read"         :order 30)
-          (:name "University"   :tag "uni"          :order 32)
-          (:name "Trivial"
+        '((:name "Next(接下来)"         :todo "NEXT"        :order 1)
+          (:name "Important(重要)"     :tag "Important"    :order 2    :priority "A")
+          (:name "Due Today(今天完成)" :deadline today     :order 3)
+          (:name "Due Soon(很快过期)"  :deadline future    :order 8)
+          (:name "Overdue(过期)"      :deadline past      :order 9    :face error)
+          (:name "Emacs"             :tag "Emacs"        :order 10)
+          (:name "Vue"               :tag "Vue"          :order 15)
+          (:name "React"             :tag "React"        :order 18)
+          (:name "Assignments(作业)"  :tag "Assignment"   :order 20)
+          (:name "Waiting(等待)"      :todo "WAITING"     :order 21)
+          (:name "To read(阅读)"      :tag "Read"         :order 25)
+          (:name "Issues(问题)"       :tag "Issue"        :order 30)
+          (:name "Projects(项目)"     :tag "Project"      :order 40)
+          (:name "Research(研究)"     :tag "Research"     :order 50)
+          (:name "University(综合)"   :tag "uni"          :order 60)
+          (:name "Trivial(不重要)"
            :priority<= "E"
            :tag ("Trivial" "Unimportant")
            :todo ("SOMEDAY" )
