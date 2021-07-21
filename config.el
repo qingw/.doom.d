@@ -92,6 +92,26 @@ Uses `current-date-time-format' for the formatting the date/time."
      command)))
 
 ;;;###autoload
+(defun aj-fix-buffer-file-name-for-indirect-buffers-a (orig-fn &rest args)
+  "Advice for functions expecting `buffer-file-name' to work."
+  (let ((buffer-file-name buffer-file-truename))
+    (cl-letf (((symbol-function 'buffer-file-name)
+               (lambda (&optional buffer)
+                 "Return value of `buffer-file-truename'."
+                 (with-current-buffer (or buffer (current-buffer))
+                   buffer-file-truename))))
+      (apply orig-fn args))))
+
+;;;###autoload
+(defun aj-zeal-at-point-run-search-on-wsl-a (search)
+  "Launch Windows Zeal from WSL emacs.
+Use `call-process' instead of `start-process'.
+Use in conjunction with
+https://github.com/Konfekt/wsl-gui-bins/blob/master/zeal
+"
+  (call-process (executable-find "zeal") nil 0 nil search))
+
+;;;###autoload
 (defun aj-org-agenda-save-and-refresh-a (&rest _)
   "Save org files and refresh.
 Only org files contributing to `org-agenda' are saved.
@@ -101,6 +121,36 @@ which one is currently active."
   (if (string-match "Org QL" (buffer-name))
       (org-ql-view-refresh)
     (org-agenda-redo)))
+
+;;;###autoload
+(defun aj-org-roam-setup-dailies-file-h ()
+  "Setup org-roam dailies file to my taste.
+Initialy create id inside top-level \":PROPERTIES:\" drawer.
+Finally save buffer.
+"
+  (let ((fname (or (buffer-file-name)
+                   (buffer-file-name (buffer-base-buffer))))
+        hstub)
+    ;; Run this only when file is newly created (hasn't been saved yet)
+    (unless (file-exists-p fname)
+      (org-id-get-create)
+      (save-buffer))
+
+    (goto-char (point-max))
+    (newline)
+    ;; prompt for HH:MM if we are not in present day file
+    (if (string-equal (format-time-string "%Y-%m-%d")
+                      (file-name-sans-extension
+                       (file-name-nondirectory
+                        (or (buffer-file-name)
+                            (buffer-file-name (buffer-base-buffer))))))
+        (setq hstub (format-time-string "* %H:%M " (current-time)))
+      (setq hstub (concat "* " (ivy-read
+                                "Time of the day (HH:MM): "
+                                nil)
+                          " ")))
+    (insert hstub)
+    (evil-insert 0)))
 
 (setq doom-theme 'doom-vibrant)
 
@@ -520,6 +570,12 @@ which one is currently active."
 
 (use-package! engrave-faces-latex
   :after ox-latex)
+
+(use-package! valign
+  :custom
+  (valign-fancy-bar t)
+  :hook
+  (org-mode . valign-mode))
 
 (after! org-clock
   (advice-add #'org-clock-in :after (lambda (&rest _)
@@ -978,11 +1034,66 @@ is selected, only the bare key is returned."
            :order 90)
           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 
-(use-package! valign
-  :custom
-  (valign-fancy-bar t)
-  :hook
-  (org-mode . valign-mode))
+;; (use-package! org-roam-lib
+  ;; :after org-roam)
+
+(after! org-roam
+  (add-hook 'org-roam-dailies-find-file-hook #'aj-org-roam-setup-dailies-file-h)
+  (add-hook
+   'org-roam-capture-after-find-file-hook
+   (lambda ()
+     (org-id-get-create)
+     (save-buffer)
+     (org-roam-db-update)))
+
+  (doom-store-persist "custom" '(org-roam-directory))
+
+  (setq +org-roam-open-buffer-on-find-file nil
+        org-roam-db-update-method 'immediate
+        org-roam-buffer-width 0.2
+        org-roam-buffer-position 'left
+        org-roam-tag-sources '(prop vanilla all-directories)
+
+        org-roam-prefer-id-links t
+        org-roam-db-location (expand-file-name
+                              "org-roam.db"
+                              (concat doom-etc-dir (file-name-nondirectory org-roam-directory)))
+        org-roam-dailies-directory "journal/"
+        org-roam-capture-templates
+        `(("d" "default" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name ,(concat +org-roam-inbox-prefix "%<%Y%m%d%H%M%S>-${slug}")
+           :head "#+title: ${title}\n"
+           :unnarrowed t
+           ))
+        org-roam-capture-ref-templates
+        `(("r" "ref" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name ,(concat +org-roam-inbox-prefix "${slug}")
+           :head "#+title: ${title}\n#+roam_key: ${ref}"
+           :unnarrowed t
+           :immediate-finish t
+           ))
+        org-roam-dailies-capture-templates
+        `(("d" "default" entry (function org-roam-capture--get-point)
+           "* %?"
+           :file-name ,(concat org-roam-dailies-directory "%<%Y-%m-%d>")
+           :head "#+title: %<%A, %d %B %Y>\n"
+           ))
+        org-roam-capture-immediate-template
+        `("d" "default" plain #'org-roam-capture--get-point
+          "%?"
+          :file-name ,(concat +org-roam-inbox-prefix "%<%Y%m%d%H%M%S>-${slug}")
+          :head "#+title: ${title}\n"
+          :unnarrowed t
+          :immediate-finish t
+          )
+        )
+
+  (advice-add #'org-roam-db--update-meta :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
+  (advice-add #'org-roam-doctor :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
+  (advice-add #'org-roam-link--replace-link-on-save :after #'+org-roam/replace-file-with-id-link)
+  )
 
 (use-package! parrot
   :config
@@ -1062,6 +1173,15 @@ is selected, only the bare key is returned."
        "C-}" #'sp-backward-barf-sexp
        ))
 
+(after! treemacs
+  (setq
+   evil-treemacs-state-cursor 'box
+   treemacs-project-follow-cleanup t
+   treemacs-width 25
+   )
+  (treemacs-follow-mode +1)
+  )
+
 (use-package! visual-regexp
   :commands (vr/select-replace vr/select-query-replace))
 
@@ -1124,3 +1244,27 @@ is selected, only the bare key is returned."
 
 (use-package! js-react-redux-yasnippets
   :after yasnippet)
+
+(after! python
+  (set-docsets! 'python-mode "Python_3")
+  (set-popup-rule! "*Python*"     :size 16 :vslot -2 :side 'bottom :select t :quit t :ttl nil :modeline nil)
+  )
+
+(after! python-pytest
+  (advice-add #'python-pytest--find-test-file
+              :around
+              (lambda (orig-fn &rest args)
+                (if (string-match "exercism" (projectile-project-name))
+                    (concat (file-name-sans-extension (buffer-file-name))
+                            "_test.py")
+                  (apply orig-fn args))))
+  )
+
+(use-package! zeal-at-point
+  :commands (zeal-at-point zeal-at-point-search zeal-at-point-set-docset)
+  :config
+  (add-to-list 'zeal-at-point-mode-alist '(web-mode . "html"))
+  (add-to-list 'zeal-at-point-mode-alist '(rjsx-mode . ("vue" "react" "javascript" "typescript")))
+  (add-to-list 'zeal-at-point-mode-alist '(pug-mode . ("html" "pug")))
+  (advice-add #'zeal-at-point-run-search :override #'aj-zeal-at-point-run-search-on-wsl-a)
+  )

@@ -57,6 +57,7 @@
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
+** mine
 #+begin_src emacs-lisp :comments no
 ;;;###autoload
 (defun gcl/use-eslint-from-node-modules ()
@@ -151,8 +152,29 @@ Uses `current-date-time-format' for the formatting the date/time."
     (async-shell-command
      command)))
 #+end_src
+** aj(AloisJanicek)
+#+begin_src emacs-lisp
+;;;###autoload
+(defun aj-fix-buffer-file-name-for-indirect-buffers-a (orig-fn &rest args)
+  "Advice for functions expecting `buffer-file-name' to work."
+  (let ((buffer-file-name buffer-file-truename))
+    (cl-letf (((symbol-function 'buffer-file-name)
+               (lambda (&optional buffer)
+                 "Return value of `buffer-file-truename'."
+                 (with-current-buffer (or buffer (current-buffer))
+                   buffer-file-truename))))
+      (apply orig-fn args))))
 
-** org-agenda
+;;;###autoload
+(defun aj-zeal-at-point-run-search-on-wsl-a (search)
+  "Launch Windows Zeal from WSL emacs.
+Use `call-process' instead of `start-process'.
+Use in conjunction with
+https://github.com/Konfekt/wsl-gui-bins/blob/master/zeal
+"
+  (call-process (executable-find "zeal") nil 0 nil search))
+#+end_src
+** org-mode
 
 #+begin_src emacs-lisp
 ;;;###autoload
@@ -165,6 +187,36 @@ which one is currently active."
   (if (string-match "Org QL" (buffer-name))
       (org-ql-view-refresh)
     (org-agenda-redo)))
+
+;;;###autoload
+(defun aj-org-roam-setup-dailies-file-h ()
+  "Setup org-roam dailies file to my taste.
+Initialy create id inside top-level \":PROPERTIES:\" drawer.
+Finally save buffer.
+"
+  (let ((fname (or (buffer-file-name)
+                   (buffer-file-name (buffer-base-buffer))))
+        hstub)
+    ;; Run this only when file is newly created (hasn't been saved yet)
+    (unless (file-exists-p fname)
+      (org-id-get-create)
+      (save-buffer))
+
+    (goto-char (point-max))
+    (newline)
+    ;; prompt for HH:MM if we are not in present day file
+    (if (string-equal (format-time-string "%Y-%m-%d")
+                      (file-name-sans-extension
+                       (file-name-nondirectory
+                        (or (buffer-file-name)
+                            (buffer-file-name (buffer-base-buffer))))))
+        (setq hstub (format-time-string "* %H:%M " (current-time)))
+      (setq hstub (concat "* " (ivy-read
+                                "Time of the day (HH:MM): "
+                                nil)
+                          " ")))
+    (insert hstub)
+    (evil-insert 0)))
 #+end_src
 * Init.el
 :PROPERTIES:
@@ -285,7 +337,7 @@ which one is currently active."
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
-       ;;(dart +flutter)   ; paint ui and not much else
+       (dart +flutter +lsp)   ; paint ui and not much else
        ;;elixir            ; erlang done right
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
@@ -300,8 +352,8 @@ which one is currently active."
        ;;(haskell +dante)  ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
-       json              ; At least it ain't XML
-       ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
+       (json +lsp)              ; At least it ain't XML
+       (java +meghanada +lsp) ; the poster child for carpal tunnel syndrome
        (javascript +lsp)        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -311,7 +363,7 @@ which one is currently active."
         +fold)
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       lua               ; one-based indices? one-based indices
+       (lua +lsp)               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
@@ -330,8 +382,9 @@ which one is currently active."
         +present
         +protocol
         +pomodoro
-        +roam)
-       php               ; perl's insecure younger brother
+        +roam
+        +noter)
+       (php +lsp)               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        (python +lsp +pyright)            ; beautiful is better than ugly
@@ -344,13 +397,13 @@ which one is currently active."
        (rust +lsp)              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        (scheme +guile)   ; a fully conniving family of lisps
-       (sh +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
+       (sh +lsp +powershell)                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       web               ; the tubes
-       yaml              ; JSON, but readable
+       (web +lsp)               ; the tubes
+       (yaml +lsp)              ; JSON, but readable
        ;;zig               ; C, but simpler
 
        :email
@@ -918,6 +971,16 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
 (use-package! engrave-faces-latex
   :after ox-latex)
 #+end_src
+*** valign
+
+#+begin_src emacs-lisp
+(use-package! valign
+  :custom
+  (valign-fancy-bar t)
+  :hook
+  (org-mode . valign-mode))
+#+end_src
+
 *** org-clock
 #+begin_src emacs-lisp
 (after! org-clock
@@ -1416,16 +1479,70 @@ is selected, only the bare key is returned."
           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 #+end_src
 
-*** valign
+*** org-roam
 
 #+begin_src emacs-lisp
-(use-package! valign
-  :custom
-  (valign-fancy-bar t)
-  :hook
-  (org-mode . valign-mode))
-#+end_src
+;; (use-package! org-roam-lib
+  ;; :after org-roam)
 
+(after! org-roam
+  (add-hook 'org-roam-dailies-find-file-hook #'aj-org-roam-setup-dailies-file-h)
+  (add-hook
+   'org-roam-capture-after-find-file-hook
+   (lambda ()
+     (org-id-get-create)
+     (save-buffer)
+     (org-roam-db-update)))
+
+  (doom-store-persist "custom" '(org-roam-directory))
+
+  (setq +org-roam-open-buffer-on-find-file nil
+        org-roam-db-update-method 'immediate
+        org-roam-buffer-width 0.2
+        org-roam-buffer-position 'left
+        org-roam-tag-sources '(prop vanilla all-directories)
+
+        org-roam-prefer-id-links t
+        org-roam-db-location (expand-file-name
+                              "org-roam.db"
+                              (concat doom-etc-dir (file-name-nondirectory org-roam-directory)))
+        org-roam-dailies-directory "journal/"
+        org-roam-capture-templates
+        `(("d" "default" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name ,(concat +org-roam-inbox-prefix "%<%Y%m%d%H%M%S>-${slug}")
+           :head "#+title: ${title}\n"
+           :unnarrowed t
+           ))
+        org-roam-capture-ref-templates
+        `(("r" "ref" plain #'org-roam-capture--get-point
+           "%?"
+           :file-name ,(concat +org-roam-inbox-prefix "${slug}")
+           :head "#+title: ${title}\n#+roam_key: ${ref}"
+           :unnarrowed t
+           :immediate-finish t
+           ))
+        org-roam-dailies-capture-templates
+        `(("d" "default" entry (function org-roam-capture--get-point)
+           "* %?"
+           :file-name ,(concat org-roam-dailies-directory "%<%Y-%m-%d>")
+           :head "#+title: %<%A, %d %B %Y>\n"
+           ))
+        org-roam-capture-immediate-template
+        `("d" "default" plain #'org-roam-capture--get-point
+          "%?"
+          :file-name ,(concat +org-roam-inbox-prefix "%<%Y%m%d%H%M%S>-${slug}")
+          :head "#+title: ${title}\n"
+          :unnarrowed t
+          :immediate-finish t
+          )
+        )
+
+  (advice-add #'org-roam-db--update-meta :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
+  (advice-add #'org-roam-doctor :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
+  (advice-add #'org-roam-link--replace-link-on-save :after #'+org-roam/replace-file-with-id-link)
+  )
+#+end_src
 ** OSX
 
 Keybindings:
@@ -1525,6 +1642,18 @@ ignore some directories.
        "C-}" #'sp-backward-barf-sexp
        ))
 #+end_src
+** Treemacs
+
+#+begin_src emacs-lisp
+(after! treemacs
+  (setq
+   evil-treemacs-state-cursor 'box
+   treemacs-project-follow-cleanup t
+   treemacs-width 25
+   )
+  (treemacs-follow-mode +1)
+  )
+#+end_src
 ** Visual-regexp
 #+begin_src emacs-lisp
 (use-package! visual-regexp
@@ -1615,6 +1744,35 @@ Use `.prettierrc` file for prettier.
 (use-package! js-react-redux-yasnippets
   :after yasnippet)
 #+end_src
+** Python
+
+#+begin_src emacs-lisp
+(after! python
+  (set-docsets! 'python-mode "Python_3")
+  (set-popup-rule! "*Python*"     :size 16 :vslot -2 :side 'bottom :select t :quit t :ttl nil :modeline nil)
+  )
+
+(after! python-pytest
+  (advice-add #'python-pytest--find-test-file
+              :around
+              (lambda (orig-fn &rest args)
+                (if (string-match "exercism" (projectile-project-name))
+                    (concat (file-name-sans-extension (buffer-file-name))
+                            "_test.py")
+                  (apply orig-fn args))))
+  )
+#+end_src
+** Zeal
+#+begin_src emacs-lisp
+(use-package! zeal-at-point
+  :commands (zeal-at-point zeal-at-point-search zeal-at-point-set-docset)
+  :config
+  (add-to-list 'zeal-at-point-mode-alist '(web-mode . "html"))
+  (add-to-list 'zeal-at-point-mode-alist '(rjsx-mode . ("vue" "react" "javascript" "typescript")))
+  (add-to-list 'zeal-at-point-mode-alist '(pug-mode . ("html" "pug")))
+  (advice-add #'zeal-at-point-run-search :override #'aj-zeal-at-point-run-search-on-wsl-a)
+  )
+#+end_src
 * My Packages
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -1624,6 +1782,10 @@ Use `.prettierrc` file for prettier.
 #+begin_src emacs-lisp
 (package! dotenv-mode)
 (package! leetcode)
+
+(package! zeal-at-point
+  :recipe (:host github :repo "jinzhu/zeal-at-point")
+  :pin "0fc3263f44e95acd3e9d91057677621ce4d297ee")
 #+end_src
 *** WEB
 
@@ -1725,9 +1887,5 @@ Use `.prettierrc` file for prettier.
 ** Disabled
 
 #+begin_src emacs-lisp
-(package! bookmark :disable t)
-(package! tide :disable t)
-(package! eldoc :disable t)
-(package! valign :disable t)
-;; (package! grip-mode :disable t)    ; for markdown-mode
+(disable-packages! bookmark tide eldoc valign grip-mode org-roam)
 #+end_src

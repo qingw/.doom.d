@@ -1,6 +1,10 @@
 (package! dotenv-mode)
 (package! leetcode)
 
+(package! zeal-at-point
+  :recipe (:host github :repo "jinzhu/zeal-at-point")
+  :pin "0fc3263f44e95acd3e9d91057677621ce4d297ee")
+
 (package! instant-rename-tag
   :recipe (:host github
            :repo "manateelazycat/instant-rename-tag"))
@@ -71,8 +75,4 @@
   :recipe (:host github
            :repo "honmaple/emacs-maple-iedit"))
 
-(package! bookmark :disable t)
-(package! tide :disable t)
-(package! eldoc :disable t)
-(package! valign :disable t)
-;; (package! grip-mode :disable t)    ; for markdown-mode
+(disable-packages! bookmark tide eldoc valign grip-mode org-roam)
