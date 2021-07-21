@@ -5,6 +5,7 @@
   :recipe (:host github
            :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+(package! js-react-redux-yasnippets)
 (package! jest)
 (package! phpactor)
 (package! prettier-js)

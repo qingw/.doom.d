@@ -1495,6 +1495,12 @@ Use `.prettierrc` file for prettier.
   (set-popup-rule! "*jest\*"            :size 20            :side 'bottom :select t :quit t :modeline nil)
   )
 #+end_src
+*** react
+
+#+begin_src emacs-lisp
+(use-package! js-react-redux-yasnippets
+  :after yasnippet)
+#+end_src
 * My Packages
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -1512,6 +1518,7 @@ Use `.prettierrc` file for prettier.
   :recipe (:host github
            :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+(package! js-react-redux-yasnippets)
 (package! jest)
 (package! phpactor)
 (package! prettier-js)

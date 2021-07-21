@@ -1016,3 +1016,6 @@ is selected, only the bare key is returned."
 
   (set-popup-rule! "*jest\*"            :size 20            :side 'bottom :select t :quit t :modeline nil)
   )
+
+(use-package! js-react-redux-yasnippets
+  :after yasnippet)
