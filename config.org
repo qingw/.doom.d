@@ -885,7 +885,7 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
    org-pretty-entities t
    org-hierarchical-todo-statistics t
 
-   org-startup-with-inline-images t
+   ;; org-startup-with-inline-images t
    org-hide-emphasis-markers t
    org-fontify-whole-heading-line nil
    org-src-fontify-natively t

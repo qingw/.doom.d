@@ -494,7 +494,7 @@ which one is currently active."
    org-pretty-entities t
    org-hierarchical-todo-statistics t
 
-   org-startup-with-inline-images t
+   ;; org-startup-with-inline-images t
    org-hide-emphasis-markers t
    org-fontify-whole-heading-line nil
    org-src-fontify-natively t
