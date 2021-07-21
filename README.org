@@ -827,17 +827,59 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
            ("C-T" . map-iedit-skip-and-match-previous)))
 #+end_src
 ** Org-mode
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook #'+org-pretty-mode)
-(add-hook 'org-mode-hook
-          (lambda () (display-line-numbers-mode -1)))
 
+#+begin_src emacs-lisp
 ;; (org-hide-emphasis-markers t)
 (setq org-list-demote-modify-bullet
       '(("+" . "-")
         ("-" . "+")
         ("*" . "+")
         ("1." . "a.")))
+
+(after! org
+  (add-hook 'org-mode-hook #'+org-pretty-mode)
+  (add-hook 'org-mode-hook #'doom-display-line-numbers-h)
+  (add-hook 'org-mode-hook (lambda () (visual-line-mode -1)))
+
+  (setq
+   org-todo-keywords
+   '((sequence "TODO(t)" "PROJECT(p)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "SOMEDAY(s)" "MAYBE(m)" "|" "DONE(d)" "CANCELLED(c)")
+     (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+     (sequence "|" "OKAY(o)" "YES(y)" "NO(x)"))
+   org-todo-keyword-faces `(("NEXT" . ,(doom-color 'green))
+                            ("TODO" . ,(doom-color 'yellow))
+                            ("PROJECT" . ,(doom-color 'tan))
+                            ("WAIT" . ,(doom-color 'teal))
+                            ("HOLD" . ,(doom-color 'red))
+                            ("IDEA" . ,(doom-color 'tomato))
+                            ("OKAY" . ,(doom-color 'cyan))
+                            ;; ,(if (eq doom-theme 'doom-vibrant)
+                                 ;; (cons "OKAY" (doom-color 'base7))
+                               ;; (cons "OKAY" (doom-color 'base5)))
+                            ("YES" . ,(doom-color 'blue))
+                            ("SOMEDAY" . ,(doom-color 'base7))
+                            ("MAYBE" . ,(doom-color 'base5)))
+   org-enforce-todo-dependencies nil ;; if t, it hides todo entries with todo children from agenda
+   org-enforce-todo-checkbox-dependencies nil
+   org-provide-todo-statistics t
+   org-pretty-entities t
+   org-hierarchical-todo-statistics t
+
+   org-startup-with-inline-images t
+   org-hide-emphasis-markers t
+   org-fontify-whole-heading-line nil
+   org-src-fontify-natively t
+   org-imenu-depth 9
+
+   org-use-property-inheritance t
+
+   org-log-done 'time
+   org-log-redeadline 'time
+   org-log-reschedule 'time
+   org-log-into-drawer "LOGBOOK"
+   org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"
+   )
+  )
 #+end_src
 
 *** counsel-org-clock
@@ -881,10 +923,8 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
   :config
   (setq org-appear-autoemphasis t
         org-appear-autosubmarkers t
-        org-appear-autolinks nil)
-  ;; for proper first-time setup, `org-appear--set-elements'
-  ;; needs to be run after other hooks have acted.
-  (run-at-time nil nil #'org-appear--set-elements))
+        org-appear-autolinks t)
+  )
 #+end_src
 
 *** org-fancy-priorities
