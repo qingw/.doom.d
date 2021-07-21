@@ -200,12 +200,12 @@ Uses `current-date-time-format' for the formatting the date/time."
  "C-c d d"         #'insert-current-date-time
  "C-c d t"         #'insert-current-time
  ;; f -> file, directory, ...
- "C-c f o"         #'curx-open-with
+ "C-c f o"         #'crux-open-with
  ;; s -> search, replace, ...
  "C-c s r"         #'vr/replace
  "C-c s q"         #'vr/query-replace
  ;; u -> url, ...
- "C-c u u"      #'curx-view-url
+ "C-c u u"      #'crux-view-url
  "C-c u o"      #'link-hint-open-link
  "C-c u c"      #'link-hint-copy-link
  "C-c u a"      #'link-hint-open-link-at-point
@@ -232,7 +232,7 @@ Uses `current-date-time-format' for the formatting the date/time."
  :n        "bf"    #'osx-lib-reveal-in-finder
 
  ;; f -> File
- :n        "fo"    #'curx-open-with
+ :n        "fo"    #'crux-open-with
  :n        "fj"    #'dired-jump
 
  ;; d -> directory
@@ -419,6 +419,12 @@ Uses `current-date-time-format' for the formatting the date/time."
 '("go" "python" "ipython" "bash" "sh" "js" "typescript" "css"))
 (dolist (lang org-babel-lang-list)
 (eval `(lsp-org-babel-enable ,lang)))
+
+;; (use-package! grip-mode
+;;   :hook ((markdown-mode org-mode) . grip-mode)
+;;   :config
+;;   (setq grip-github-user "gcclll"
+;;         grip-github-password "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"))
 
 (use-package! maple-iedit
    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
@@ -986,3 +992,27 @@ is selected, only the bare key is returned."
 (add-hook 'js2-mode-hook 'maybe-use-prettier)
 (add-hook 'web-mode-hook 'maybe-use-prettier)
 (add-hook 'rjsx-mode-hook 'maybe-use-prettier)
+
+;; set docsets
+(after! (:any js-mode js2-mode rjsx-mode web-mode typescript-mode)
+  (set-docsets! '(js-mode js2-mode rjsx-mode web-mode typescript-mode)
+    "JavaScript" "AngularJS" "Bootstrap_4" "jQuery" "NodeJS" "React" "VueJS" "TypeScript"))
+
+(use-package! jest
+  :after js2-mode
+  :config
+  (advice-add #'jest--project-root :around (lambda (orig-fn &rest args)
+                                             (if (string-match "exercism" (projectile-project-name))
+                                                 (cl-letf (((symbol-function 'projectile-project-root)
+                                                            (lambda (&rest _)
+                                                              (file-name-directory buffer-file-name))))
+                                                   (apply orig-fn args))
+                                               (apply orig-fn args))))
+  (setq jest-pdb-track nil)
+  (add-hook 'jest-mode-hook (lambda ()
+                              (evil-motion-state)
+                              ))
+
+
+  (set-popup-rule! "*jest\*"            :size 20            :side 'bottom :select t :quit t :modeline nil)
+  )

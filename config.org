@@ -499,12 +499,12 @@ private:
  "C-c d d"         #'insert-current-date-time
  "C-c d t"         #'insert-current-time
  ;; f -> file, directory, ...
- "C-c f o"         #'curx-open-with
+ "C-c f o"         #'crux-open-with
  ;; s -> search, replace, ...
  "C-c s r"         #'vr/replace
  "C-c s q"         #'vr/query-replace
  ;; u -> url, ...
- "C-c u u"      #'curx-view-url
+ "C-c u u"      #'crux-view-url
  "C-c u o"      #'link-hint-open-link
  "C-c u c"      #'link-hint-copy-link
  "C-c u a"      #'link-hint-open-link-at-point
@@ -531,7 +531,7 @@ private:
  :n        "bf"    #'osx-lib-reveal-in-finder
 
  ;; f -> File
- :n        "fo"    #'curx-open-with
+ :n        "fo"    #'crux-open-with
  :n        "fj"    #'dired-jump
 
  ;; d -> directory
@@ -793,7 +793,19 @@ open Lsp in org source block:
 (dolist (lang org-babel-lang-list)
 (eval `(lsp-org-babel-enable ,lang)))
 #+end_src
+** Markdown
+*** Grip-mode
 
+issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
+(void-variable vc-log-view-type)/
+
+#+begin_src emacs-lisp
+;; (use-package! grip-mode
+;;   :hook ((markdown-mode org-mode) . grip-mode)
+;;   :config
+;;   (setq grip-github-user "gcclll"
+;;         grip-github-password "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"))
+#+end_src
 ** Maple-iedit
 
 #+begin_src emacs-lisp
@@ -1454,8 +1466,35 @@ Use `.prettierrc` file for prettier.
 (add-hook 'js2-mode-hook 'maybe-use-prettier)
 (add-hook 'web-mode-hook 'maybe-use-prettier)
 (add-hook 'rjsx-mode-hook 'maybe-use-prettier)
+
+;; set docsets
+(after! (:any js-mode js2-mode rjsx-mode web-mode typescript-mode)
+  (set-docsets! '(js-mode js2-mode rjsx-mode web-mode typescript-mode)
+    "JavaScript" "AngularJS" "Bootstrap_4" "jQuery" "NodeJS" "React" "VueJS" "TypeScript"))
 #+end_src
 
+*** jest
+
+#+begin_src emacs-lisp
+(use-package! jest
+  :after js2-mode
+  :config
+  (advice-add #'jest--project-root :around (lambda (orig-fn &rest args)
+                                             (if (string-match "exercism" (projectile-project-name))
+                                                 (cl-letf (((symbol-function 'projectile-project-root)
+                                                            (lambda (&rest _)
+                                                              (file-name-directory buffer-file-name))))
+                                                   (apply orig-fn args))
+                                               (apply orig-fn args))))
+  (setq jest-pdb-track nil)
+  (add-hook 'jest-mode-hook (lambda ()
+                              (evil-motion-state)
+                              ))
+
+
+  (set-popup-rule! "*jest\*"            :size 20            :side 'bottom :select t :quit t :modeline nil)
+  )
+#+end_src
 * My Packages
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -1473,10 +1512,12 @@ Use `.prettierrc` file for prettier.
   :recipe (:host github
            :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+(package! jest)
 (package! phpactor)
 (package! prettier-js)
 (package! ob-typescript)
 (package! web-beautify)
+
 #+end_src
 ** File&Directory Management
 
@@ -1558,9 +1599,8 @@ Use `.prettierrc` file for prettier.
 (package! maple-iedit
   :recipe (:host github
            :repo "honmaple/emacs-maple-iedit"))
-
-
 #+end_src
+
 ** Disabled
 
 #+begin_src emacs-lisp
@@ -1568,4 +1608,5 @@ Use `.prettierrc` file for prettier.
 (package! tide :disable t)
 (package! eldoc :disable t)
 (package! valign :disable t)
+;; (package! grip-mode :disable t)    ; for markdown-mode
 #+end_src

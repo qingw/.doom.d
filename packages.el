@@ -5,6 +5,7 @@
   :recipe (:host github
            :repo "manateelazycat/instant-rename-tag"))
 (package! js-doc)
+(package! jest)
 (package! phpactor)
 (package! prettier-js)
 (package! ob-typescript)
@@ -73,3 +74,4 @@
 (package! tide :disable t)
 (package! eldoc :disable t)
 (package! valign :disable t)
+;; (package! grip-mode :disable t)    ; for markdown-mode

@@ -2,11 +2,8 @@
 # name: xinfo
 # key: xinfo
 # --
-alias $1info='echo "=== alias $1 ==="
-echo ""
-echo "-- sx, sshx, 加强版 ssh 命令工具"
-echo ""
-echo "   sxa    = sshx add <name> -l user@ip:port, 添加 ssh 记录"
-echo "------------------------------------------------------------"
-echo ""
-'
+alias $1info='echo -e "=== alias $1 ===
+-- $2
+
+   $3      = $4
+"'
