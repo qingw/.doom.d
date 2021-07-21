@@ -690,118 +690,6 @@ is selected, only the bare key is returned."
         (when buffer (kill-buffer buffer))))))
 (advice-add 'org-mks :override #'org-mks-pretty)
 
-(after! org-agenda
-  (advice-add #'org-agenda-archive :after #'org-save-all-org-buffers)
-  (advice-add #'org-agenda-archive-default :after #'org-save-all-org-buffers)
-  (advice-add #'org-agenda-refile :after (lambda (&rest _)
-                                           "Refresh view."
-                                           (if (string-match "Org QL" (buffer-name))
-                                               (org-ql-view-refresh)
-                                             (org-agenda-redo))))
-  (advice-add #'org-agenda-redo :around #'doom-shut-up-a)
-  (advice-add #'org-agenda-set-effort :after #'org-save-all-org-buffers)
-  (advice-add #'org-schedule :after (lambda (&rest _)
-                                      (org-save-all-org-buffers)))
-  (advice-add #'org-deadline :after (lambda (&rest _)
-                                      (org-save-all-org-buffers)))
-  (advice-add #'+org-change-title :after (lambda (&rest _)
-                                           (org-save-all-org-buffers)))
-  (advice-add #'org-cut-special :after #'org-save-all-org-buffers)
-  (advice-add #'counsel-org-tag :after #'org-save-all-org-buffers)
-  (advice-add #'org-agenda-todo :after #'aj-org-agenda-save-and-refresh-a)
-  (advice-add #'org-todo :after (lambda (&rest _)
-                                  (org-save-all-org-buffers)))
-  (advice-add #'org-agenda-kill :after #'aj-org-agenda-save-and-refresh-a)
-
-  (setq
-      org-agenda-prefix-format '((agenda    . "  %-6t %6e ")
-                                 (timeline  . "  %-6t %6e ")
-                                 (todo      . "  %-6t %6e ")
-                                 (tags      . "  %-6t %6e ")
-                                 (search    . "%l")
-                                 )
-      org-agenda-tags-column 80
-      org-agenda-todo-list-sublevels t
-      org-agenda-include-deadlines t
-      org-agenda-log-mode-items '(closed clock state)
-      org-agenda-block-separator nil
-      org-agenda-compact-blocks t
-      org-agenda-breadcrumbs-separator " ❱ "
-      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
-      org-agenda-sorting-strategy
-      '((agenda habit-down time-up effort-up priority-down category-keep)
-        (todo   priority-up effort-up todo-state-up category-keep)
-        (tags   priority-down category-keep)
-        (search category-keep))
-   )
-  )
-
-(use-package! org-super-agenda
-  :commands (org-super-agenda-mode))
-
-(after! org-agenda
-  (org-super-agenda-mode))
-
-(setq org-agenda-custom-commands
-      '(("o" "Overview"
-         ((agenda "" ((org-agenda-span 'day)
-                      (org-super-agenda-groups
-                       '((:name "Today"
-                          :time-grid t
-                          :date today
-                          :todo "TODAY"
-                          :scheduled today
-                          :order 1)))))
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '((:name "Next to do"
-                           :todo "NEXT"
-                           :order 1)
-                          (:name "Important"
-                           :tag "Important"
-                           :priority "A"
-                           :order 6)
-                          (:name "Due Today"
-                           :deadline today
-                           :order 2)
-                          (:name "Due Soon"
-                           :deadline future
-                           :order 8)
-                          (:name "Overdue"
-                           :deadline past
-                           :face error
-                           :order 7)
-                          (:name "Assignments"
-                           :tag "Assignment"
-                           :order 10)
-                          (:name "Issues"
-                           :tag "Issue"
-                           :order 12)
-                          (:name "Emacs"
-                           :tag "Emacs"
-                           :order 13)
-                          (:name "Projects"
-                           :tag "Project"
-                           :order 14)
-                          (:name "Research"
-                           :tag "Research"
-                           :order 15)
-                          (:name "To read"
-                           :tag "Read"
-                           :order 30)
-                          (:name "Waiting"
-                           :todo "WAITING"
-                           :order 20)
-                          (:name "University"
-                           :tag "uni"
-                           :order 32)
-                          (:name "Trivial"
-                           :priority<= "E"
-                           :tag ("Trivial" "Unimportant")
-                           :todo ("SOMEDAY" )
-                           :order 90)
-                          (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
-
 (use-package! doct
   :commands (doct))
 
@@ -860,6 +748,24 @@ is selected, only the bare key is returned."
                               "Send an email %^{urgancy|soon|ASAP|anon|at some point|eventually} to %^{recipiant}"
                               "about %^{topic}"
                               "%U %i %a"))
+                  ("Web" :keys "w"
+                   :icon ("web" :set "material" :color "yellow")
+                   :file +org-capture-todo-file
+                   :prepend t
+                   :headline "Web"
+                   :type entry
+                   :template ("* [ ] %{desc}%? :%{i-type}:"
+                              "%i %a")
+                   :children (("Vue" :keys "v"
+                               :icon ("vue" :set "fileicon" :color "green")
+                               :desc ""
+                               :i-type "web:vue")
+                              ("React" :keys "r"
+                               :icon ("react" :set "alltheicon" :color "blue")
+                               :desc ""
+                               :i-type "web:react"
+                               ))
+                   )
                   ("Interesting" :keys "i"
                    :icon ("eye" :set "faicon" :color "lcyan")
                    :file +org-capture-todo-file
@@ -980,6 +886,95 @@ is selected, only the bare key is returned."
         (interactive)
         (set-window-parameter nil 'mode-line-format 'none)
         (org-capture)))
+
+(after! org-agenda
+  (advice-add #'org-agenda-archive :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-archive-default :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-refile :after (lambda (&rest _)
+                                           "Refresh view."
+                                           (if (string-match "Org QL" (buffer-name))
+                                               (org-ql-view-refresh)
+                                             (org-agenda-redo))))
+  (advice-add #'org-agenda-redo :around #'doom-shut-up-a)
+  (advice-add #'org-agenda-set-effort :after #'org-save-all-org-buffers)
+  (advice-add #'org-schedule :after (lambda (&rest _)
+                                      (org-save-all-org-buffers)))
+  (advice-add #'org-deadline :after (lambda (&rest _)
+                                      (org-save-all-org-buffers)))
+  (advice-add #'+org-change-title :after (lambda (&rest _)
+                                           (org-save-all-org-buffers)))
+  (advice-add #'org-cut-special :after #'org-save-all-org-buffers)
+  (advice-add #'counsel-org-tag :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-todo :after #'aj-org-agenda-save-and-refresh-a)
+  (advice-add #'org-todo :after (lambda (&rest _)
+                                  (org-save-all-org-buffers)))
+  (advice-add #'org-agenda-kill :after #'aj-org-agenda-save-and-refresh-a)
+
+  (setq
+      org-agenda-prefix-format '((agenda    . "  %-6t %6e ")
+                                 (timeline  . "  %-6t %6e ")
+                                 (todo      . "  %-6t %6e ")
+                                 (tags      . "  %-6t %6e ")
+                                 (search    . "%l")
+                                 )
+      org-agenda-tags-column 80
+      org-agenda-todo-list-sublevels t
+      org-agenda-include-deadlines t
+      org-agenda-log-mode-items '(closed clock state)
+      org-agenda-block-separator nil
+      org-agenda-compact-blocks t
+      org-agenda-breadcrumbs-separator " ❱ "
+      org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
+      org-agenda-sorting-strategy
+      '((agenda habit-down time-up effort-up priority-down category-keep)
+        (todo   priority-up effort-up todo-state-up category-keep)
+        (tags   priority-down category-keep)
+        (search category-keep))
+   )
+  )
+
+(use-package! org-super-agenda
+  :commands (org-super-agenda-mode))
+
+(after! org-agenda
+  (org-super-agenda-mode))
+
+(setq
+ org-agenda-custom-commands
+ '(("o" "Overview"
+    ((agenda "" ((org-agenda-span 'day)
+                 (org-super-agenda-groups
+                  '((:name "Today"
+                     :time-grid t
+                     :date today
+                     :todo "TODAY"
+                     :scheduled today
+                     :order 1)))))
+     (alltodo
+      ""
+      ((org-agenda-overriding-header "")
+       (org-super-agenda-groups
+        '((:name "Next to do"   :todo "NEXT"        :order 1)
+          (:name "Important"    :tag "Important"    :order 6    :priority "A")
+          (:name "Due Today"    :deadline today     :order 2)
+          (:name "Due Soon"     :deadline future    :order 8)
+          (:name "Overdue"      :deadline past      :order 7    :face error)
+          (:name "Emacs"        :tag "Emacs"        :order 10)
+          (:name "Vue"          :tag "Vue"          :order 11)
+          (:name "React"        :tag "React"        :order 12)
+          (:name "Assignments"  :tag "Assignment"   :order 20)
+          (:name "Waiting"      :todo "WAITING"     :order 21)
+          (:name "Issues"       :tag "Issue"        :order 22)
+          (:name "Projects"     :tag "Project"      :order 24)
+          (:name "Research"     :tag "Research"     :order 25)
+          (:name "To read"      :tag "Read"         :order 30)
+          (:name "University"   :tag "uni"          :order 32)
+          (:name "Trivial"
+           :priority<= "E"
+           :tag ("Trivial" "Unimportant")
+           :todo ("SOMEDAY" )
+           :order 90)
+          (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 
 (use-package! valign
   :custom
