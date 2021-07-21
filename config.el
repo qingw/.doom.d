@@ -91,6 +91,17 @@ Uses `current-date-time-format' for the formatting the date/time."
     (async-shell-command
      command)))
 
+;;;###autoload
+(defun aj-org-agenda-save-and-refresh-a (&rest _)
+  "Save org files and refresh.
+Only org files contributing to `org-agenda' are saved.
+Refreshed are `org-agenda' org `org-ql-view', depending on
+which one is currently active."
+  (org-save-all-org-buffers)
+  (if (string-match "Org QL" (buffer-name))
+      (org-ql-view-refresh)
+    (org-agenda-redo)))
+
 (setq doom-theme 'doom-vibrant)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
@@ -452,7 +463,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (after! org
   (add-hook 'org-mode-hook #'+org-pretty-mode)
-  (add-hook 'org-mode-hook #'doom-display-line-numbers-h)
   (add-hook 'org-mode-hook (lambda () (visual-line-mode -1)))
 
   (setq
@@ -661,6 +671,30 @@ is selected, only the bare key is returned."
                    (t (error "No entry available")))))))
         (when buffer (kill-buffer buffer))))))
 (advice-add 'org-mks :override #'org-mks-pretty)
+
+(after! org-agenda
+  (advice-add #'org-agenda-archive :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-archive-default :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-refile :after (lambda (&rest _)
+                                           "Refresh view."
+                                           (if (string-match "Org QL" (buffer-name))
+                                               (org-ql-view-refresh)
+                                             (org-agenda-redo))))
+  (advice-add #'org-agenda-redo :around #'doom-shut-up-a)
+  (advice-add #'org-agenda-set-effort :after #'org-save-all-org-buffers)
+  (advice-add #'org-schedule :after (lambda (&rest _)
+                                      (org-save-all-org-buffers)))
+  (advice-add #'org-deadline :after (lambda (&rest _)
+                                      (org-save-all-org-buffers)))
+  (advice-add #'+org-change-title :after (lambda (&rest _)
+                                           (org-save-all-org-buffers)))
+  (advice-add #'org-cut-special :after #'org-save-all-org-buffers)
+  (advice-add #'counsel-org-tag :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-todo :after #'aj-org-agenda-save-and-refresh-a)
+  (advice-add #'org-todo :after (lambda (&rest _)
+                                  (org-save-all-org-buffers)))
+  (advice-add #'org-agenda-kill :after #'aj-org-agenda-save-and-refresh-a)
+                )
 
 (use-package! org-super-agenda
   :commands (org-super-agenda-mode))

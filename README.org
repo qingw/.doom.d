@@ -151,6 +151,21 @@ Uses `current-date-time-format' for the formatting the date/time."
     (async-shell-command
      command)))
 #+end_src
+
+** org-agenda
+
+#+begin_src emacs-lisp
+;;;###autoload
+(defun aj-org-agenda-save-and-refresh-a (&rest _)
+  "Save org files and refresh.
+Only org files contributing to `org-agenda' are saved.
+Refreshed are `org-agenda' org `org-ql-view', depending on
+which one is currently active."
+  (org-save-all-org-buffers)
+  (if (string-match "Org QL" (buffer-name))
+      (org-ql-view-refresh)
+    (org-agenda-redo)))
+#+end_src
 * Init.el
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "init.el" :comments no
@@ -838,7 +853,6 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
 
 (after! org
   (add-hook 'org-mode-hook #'+org-pretty-mode)
-  (add-hook 'org-mode-hook #'doom-display-line-numbers-h)
   (add-hook 'org-mode-hook (lambda () (visual-line-mode -1)))
 
   (setq
@@ -858,7 +872,11 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
                                ;; (cons "OKAY" (doom-color 'base5)))
                             ("YES" . ,(doom-color 'blue))
                             ("SOMEDAY" . ,(doom-color 'base7))
-                            ("MAYBE" . ,(doom-color 'base5)))
+                            ("MAYBE" . ,(doom-color 'base5))
+                            ("[ ]" . ,(doom-color 'green))
+                            ("[-]" . ,(doom-color 'yellow))
+                            ("[?]" . ,(doom-color 'red))
+                            )
    org-enforce-todo-dependencies nil ;; if t, it hides todo entries with todo children from agenda
    org-enforce-todo-checkbox-dependencies nil
    org-provide-todo-statistics t
@@ -1074,6 +1092,33 @@ is selected, only the bare key is returned."
                    (t (error "No entry available")))))))
         (when buffer (kill-buffer buffer))))))
 (advice-add 'org-mks :override #'org-mks-pretty)
+#+end_src
+*** org-agenda
+
+#+begin_src emacs-lisp
+(after! org-agenda
+  (advice-add #'org-agenda-archive :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-archive-default :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-refile :after (lambda (&rest _)
+                                           "Refresh view."
+                                           (if (string-match "Org QL" (buffer-name))
+                                               (org-ql-view-refresh)
+                                             (org-agenda-redo))))
+  (advice-add #'org-agenda-redo :around #'doom-shut-up-a)
+  (advice-add #'org-agenda-set-effort :after #'org-save-all-org-buffers)
+  (advice-add #'org-schedule :after (lambda (&rest _)
+                                      (org-save-all-org-buffers)))
+  (advice-add #'org-deadline :after (lambda (&rest _)
+                                      (org-save-all-org-buffers)))
+  (advice-add #'+org-change-title :after (lambda (&rest _)
+                                           (org-save-all-org-buffers)))
+  (advice-add #'org-cut-special :after #'org-save-all-org-buffers)
+  (advice-add #'counsel-org-tag :after #'org-save-all-org-buffers)
+  (advice-add #'org-agenda-todo :after #'aj-org-agenda-save-and-refresh-a)
+  (advice-add #'org-todo :after (lambda (&rest _)
+                                  (org-save-all-org-buffers)))
+  (advice-add #'org-agenda-kill :after #'aj-org-agenda-save-and-refresh-a)
+                )
 #+end_src
 
 *** org-super-agenda
