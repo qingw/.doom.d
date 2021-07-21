@@ -506,7 +506,7 @@ which one is currently active."
    org-log-redeadline 'time
    org-log-reschedule 'time
    org-log-into-drawer "LOGBOOK"
-   org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"
+   ;; org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA"
    )
   )
 
@@ -754,7 +754,7 @@ is selected, only the bare key is returned."
                    :prepend t
                    :headline "Web"
                    :type entry
-                   :template ("* [ ] %{desc}%? :%{i-type}:"
+                   :template ("* TODO %{desc}%? :%{i-type}:"
                               "%i %a")
                    :children (("Vue" :keys "v"
                                :icon ("vue" :set "fileicon" :color "green")
