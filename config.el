@@ -105,7 +105,8 @@ which one is currently active."
 (setq doom-theme 'doom-vibrant)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
-(setq doom-font (font-spec :family "Fira Code" :size 16))
+(setq doom-font (font-spec :family "Fira Code" :size 15))
+;; (setq doom-font (font-spec :family "Source Code Pro" :size 15))
 
 ;; set title
 ;; (setq frame-title-format
@@ -157,7 +158,7 @@ which one is currently active."
       web-mode-enable-current-column-highlight t
 
       ;; org
-      org-roam-directory "~/.doom.d/.local/roam/"
+      org-roam-directory "~/.gclrc/roam/"
       org-directory "~/.gclrc/org/"
       org-log-done 'time                        ; having the time a item is done sounds convenient
       org-list-allow-alphabetical t             ; have a. A. a) A) list bullets
