@@ -250,6 +250,7 @@ Finally save buffer.
 
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 ;; (global-set-key (kbd ",") nil)
+(map! "C-e" nil)
 
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
@@ -257,24 +258,56 @@ Finally save buffer.
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
 
-;; unbind
-(map! "C-e" nil)
-
 (map!
- ;; --------------- M, Option/Alt ---------------
  ;; "M-1"          #'bm-toggle
  ;; "M-2"          #'bm-next
  ;; "M-@"          #'bm-previous
  "M--"          #'gcl/goto-match-paren
  "M-i"          #'parrot-rotate-next-word-at-point
- ;; --------------- C, Control ---------------
+ )
+
+(map!
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
  "C-;"          #'avy-goto-char-2
- ;; --------------- s, Command ---------------
+ )
+
+(map!
+ ;; a -> applications, ...
+ "C-c a c"      #'org-mac-chrome-insert-frontmost-url
+
+ ;; d -> date, time, ...
+ "C-c d d"      #'insert-current-date-time
+ "C-c d t"      #'insert-current-time
+
+ ;; f -> file, directory, ...
+ "C-c f o"      #'crux-open-with
+
+ ;; s -> search, replace, ...
+ "C-c s r"      #'vr/replace
+ "C-c s q"      #'vr/query-replace
+
+ ;; u -> url, ...
+ "C-c u u"      #'crux-view-url
+ "C-c u o"      #'link-hint-open-link
+ "C-c u c"      #'link-hint-copy-link
+ "C-c u a"      #'link-hint-open-link-at-point
+ "C-c u C"      #'link-hint-copy-link-at-point
+
+ ;; y -> youdao, ...
+ "C-c y y"      #'youdao-dictionary-search-at-point+
+ )
+
+(map!
+ ;; "C-x p"        #'vmd-mode
+ ;; "C-x d"        #'dash-at-point
+ ;; "C-x D"        #'dash-at-point-with-docset
+ )
+
+(map!
  "s-<"          #'move-text-up
  "s->"          #'move-text-down
  ;; "s-'"          #'cycle-quotes
@@ -286,43 +319,26 @@ Finally save buffer.
  ;; "s-p d"      #'projector-run-default-shell-command
  ;; "s-p r"      #'projector-run-shell-command-project-root
  ;; "s-p R"      #'projector-rerun-buffer-process
+ )
 
+(map!
+ :n     "+"     #'evil-numbers/inc-at-pt
+ :n     "-"     #'evil-numbers/dec-at-pt
 
- ;; --------------- C-c ---------------
- ;; a -> applications, ...
- "C-c a c"      #'org-mac-chrome-insert-frontmost-url
- ;; d -> date, time, ...
- "C-c d d"      #'insert-current-date-time
- "C-c d t"      #'insert-current-time
- ;; f -> file, directory, ...
- "C-c f o"      #'crux-open-with
- ;; s -> search, replace, ...
- "C-c s r"      #'vr/replace
- "C-c s q"      #'vr/query-replace
- ;; u -> url, ...
- "C-c u u"      #'crux-view-url
- "C-c u o"      #'link-hint-open-link
- "C-c u c"      #'link-hint-copy-link
- "C-c u a"      #'link-hint-open-link-at-point
- "C-c u C"      #'link-hint-copy-link-at-point
- ;; y -> youdao, ...
- "C-c y y"      #'youdao-dictionary-search-at-point+
-
- ;; --------------- C-x ---------------
- ;; "C-x p"        #'vmd-mode
-
- ;; --------------- Evil ---------------
+ ;; g
  :n     "g["    #'beginning-of-defun
  :n     "g]"    #'end-of-defun
  :n     "gd"    #'xref-find-definitions
  :n     "gD"    #'xref-find-references
  :n     "gb"    #'xref-pop-marker-stack
+
+ ;; z
  :n     "z-"    #'sp-splice-sexp
  :n     "z."    #'emmet-wrap-with-markup
- :n     "+"     #'evil-numbers/inc-at-pt
- :n     "-"     #'evil-numbers/dec-at-pt
 
- ;; --------------- Leader SPC ---------------
+ )
+
+(map!
  :leader
  :nv    "SPC"   #'execute-extended-command
 
@@ -346,7 +362,7 @@ Finally save buffer.
 
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
-)
+ )
 
 (map! :map org-mode-map
       :n       "tt"     #'org-todo
