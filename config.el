@@ -273,6 +273,9 @@ Finally save buffer.
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
  "C-;"          #'avy-goto-char-2
+ ;; "C-`"          #'popper-toggle-latest
+ ;; "C-~"          #'popper-cycle
+
  )
 
 (map!
@@ -461,6 +464,10 @@ Finally save buffer.
   :bind
   (("C-x d" . dash-at-point)
    ("C-x D" . dash-at-point-with-docset)))
+
+(use-package! delsel
+  :config
+  (delete-selection-mode t))
 
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
@@ -1254,16 +1261,14 @@ is selected, only the bare key is returned."
   :bind
   ("C-`" . popper-toggle-latest)
   ("C-~" . popper-cycle)
+  ("C-s-`" . popper-kill-latest-popup)
   :custom
   (popper-reference-buffers
-   '("\\*Messages\\*"
-     "\\*Backtrace\\*"
-     "\\*Warnings\\*"
+   '("*eshell*"
+     "*vterm*"
      "Output\\*$"
      "*Process List*"
      "COMMIT_EDITMSG"
-     help-mode
-     helpful-mode
      embark-collect-mode
      grep-mode
      rg-mode

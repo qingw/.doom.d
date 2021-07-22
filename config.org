@@ -587,6 +587,9 @@ private:
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
  "C-;"          #'avy-goto-char-2
+ ;; "C-`"          #'popper-toggle-latest
+ ;; "C-~"          #'popper-cycle
+
  )
 #+end_src
 
@@ -832,6 +835,12 @@ private:
 | ~g~       | 重新搜索                  |
 | ~TAB~     | 展开/闭合结果             |
 | ~C-c C-k~ | 停止正在执行的搜索        |
+** Delsel
+#+begin_src emacs-lisp
+(use-package! delsel
+  :config
+  (delete-selection-mode t))
+#+end_src
 ** Dotenv-mode
 #+begin_src emacs-lisp
 (use-package! dotenv-mode
@@ -1745,16 +1754,14 @@ Keybindings:
   :bind
   ("C-`" . popper-toggle-latest)
   ("C-~" . popper-cycle)
+  ("C-s-`" . popper-kill-latest-popup)
   :custom
   (popper-reference-buffers
-   '("\\*Messages\\*"
-     "\\*Backtrace\\*"
-     "\\*Warnings\\*"
+   '("*eshell*"
+     "*vterm*"
      "Output\\*$"
      "*Process List*"
      "COMMIT_EDITMSG"
-     help-mode
-     helpful-mode
      embark-collect-mode
      grep-mode
      rg-mode
@@ -2062,6 +2069,7 @@ Window management packages.
 
 #+begin_src emacs-lisp
 (package! cycle-quotes)
+(package! delsel)
 (package! hungry-delete)
 (package! move-text)
 (package! pangu-spacing)

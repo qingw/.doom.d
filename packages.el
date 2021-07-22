@@ -73,6 +73,7 @@
 (package! youdao-dictionary)
 
 (package! cycle-quotes)
+(package! delsel)
 (package! hungry-delete)
 (package! move-text)
 (package! pangu-spacing)
