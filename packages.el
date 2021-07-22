@@ -11,6 +11,10 @@
 (package! prettier-js)
 (package! ob-typescript)
 (package! web-beautify)
+;; (package! ts-comint)
+(package! dash-at-point
+  :recipe (:host github
+           :repo "waymondo/dash-at-point"))
 
 (package! crux)
 (package! deft)

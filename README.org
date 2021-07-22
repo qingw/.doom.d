@@ -551,6 +551,7 @@ private:
 ** Unbindings
 #+begin_src emacs-lisp
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
+(global-set-key (kbd ",") nil)
 #+end_src
 ** F1~12
 
@@ -614,6 +615,9 @@ private:
  "C-c u C"      #'link-hint-copy-link-at-point
  ;; y -> youdao, ...
  "C-c y y"      #'youdao-dictionary-search-at-point+
+
+ ;; --------------- C-x ---------------
+ ;; "C-x p"        #'vmd-mode
 
  ;; --------------- Evil ---------------
  :n     "g["    #'beginning-of-defun
@@ -764,6 +768,13 @@ private:
     (run-with-timer 0.1 nil #'emacs-everywhere-raise-frame-1))
   (defun emacs-everywhere-raise-frame-1 ()
     (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
+#+end_src
+** Dash-at-point
+#+begin_src emacs-lisp
+(use-package! dash-at-point
+  :bind
+  ((",d" . dash-at-point)
+   (",D" . dash-at-point-with-docset)))
 #+end_src
 ** Deadgrep
 
@@ -1887,7 +1898,10 @@ Use `.prettierrc` file for prettier.
 (package! prettier-js)
 (package! ob-typescript)
 (package! web-beautify)
-
+;; (package! ts-comint)
+(package! dash-at-point
+  :recipe (:host github
+           :repo "waymondo/dash-at-point"))
 #+end_src
 ** File&Directory Management
 

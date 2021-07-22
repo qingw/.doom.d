@@ -249,6 +249,7 @@ Finally save buffer.
   (load custom-file))
 
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
+;; (global-set-key (kbd ",") nil)
 
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
@@ -306,6 +307,9 @@ Finally save buffer.
  "C-c u C"      #'link-hint-copy-link-at-point
  ;; y -> youdao, ...
  "C-c y y"      #'youdao-dictionary-search-at-point+
+
+ ;; --------------- C-x ---------------
+ ;; "C-x p"        #'vmd-mode
 
  ;; --------------- Evil ---------------
  :n     "g["    #'beginning-of-defun
@@ -433,6 +437,11 @@ Finally save buffer.
     (run-with-timer 0.1 nil #'emacs-everywhere-raise-frame-1))
   (defun emacs-everywhere-raise-frame-1 ()
     (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
+
+(use-package! dash-at-point
+  :bind
+  ((",d" . dash-at-point)
+   (",D" . dash-at-point-with-docset)))
 
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
