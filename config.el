@@ -273,14 +273,12 @@ Finally save buffer.
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
  "C-;"          #'avy-goto-char-2
- ;; s - Command
+ ;; --------------- s, Command ---------------
  "s-<"          #'move-text-up
  "s->"          #'move-text-down
  ;; "s-'"          #'cycle-quotes
  "s-i"          #'gcl/string-inflection-cycle-auto
- ;; "s-p r"        #'projector-run-shell-command-project-root
- ;; "s-p R"        #'projector-run-default-shell-command
- ;; "s-p b"        #'projector-switch-to-shell-buffer
+ ;; "s-p x"     # projector-...
 
  ;; --------------- C-c ---------------
  ;; a -> applications, ...
@@ -1215,10 +1213,14 @@ is selected, only the bare key is returned."
   :after
   (projectile vterm))
 
-(map! "s-p r"  #'projector-run-shell-command-project-root
-      "s-p R"  #'projector-run-default-shell-command
-      "s-p b"  #'projector-switch-to-shell-buffer
-      )
+(map!
+ "s-p b"      #'projector-switch-to-shell-buffer
+ "s-p B"      #'projector-run-shell-command-current-directory-background
+ "s-p c"      #'projector-run-shell-command-current-directory
+ "s-p d"      #'projector-run-default-shell-command
+ "s-p r"      #'projector-run-shell-command-project-root
+ "s-p R"      #'projector-rerun-buffer-process
+)
 
 (after! ranger
   :config
