@@ -440,8 +440,8 @@ Finally save buffer.
 
 (use-package! dash-at-point
   :bind
-  ((",d" . dash-at-point)
-   (",D" . dash-at-point-with-docset)))
+  (("C-x d" . dash-at-point)
+   ("C-x D" . dash-at-point-with-docset)))
 
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))

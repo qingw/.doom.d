@@ -551,7 +551,7 @@ private:
 ** Unbindings
 #+begin_src emacs-lisp
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
-(global-set-key (kbd ",") nil)
+;; (global-set-key (kbd ",") nil)
 #+end_src
 ** F1~12
 
@@ -773,8 +773,8 @@ private:
 #+begin_src emacs-lisp
 (use-package! dash-at-point
   :bind
-  ((",d" . dash-at-point)
-   (",D" . dash-at-point-with-docset)))
+  (("C-x d" . dash-at-point)
+   ("C-x D" . dash-at-point-with-docset)))
 #+end_src
 ** Deadgrep
 
