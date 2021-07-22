@@ -177,6 +177,8 @@ Finally save buffer.
 ;;            (unless (string= "-" project-name)
 ;;              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 
+(doom-load-envvars-file "~/.doom.d/env" )
+
 (defadvice! +literate-tangle-async-h ()
   "A very simplified version of `+literate-tangle-h', but async."
   :override #'+literate-tangle-h
@@ -246,6 +248,8 @@ Finally save buffer.
 (when (file-exists-p custom-file)
   (load custom-file))
 
+(global-set-key (kbd "s-p") nil)        ; ns-print-buffer
+
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
@@ -274,6 +278,9 @@ Finally save buffer.
  "s->"          #'move-text-down
  ;; "s-'"          #'cycle-quotes
  "s-i"          #'gcl/string-inflection-cycle-auto
+ ;; "s-p r"        #'projector-run-shell-command-project-root
+ ;; "s-p R"        #'projector-run-default-shell-command
+ ;; "s-p b"        #'projector-switch-to-shell-buffer
 
  ;; --------------- C-c ---------------
  ;; a -> applications, ...
@@ -323,6 +330,10 @@ Finally save buffer.
  ;; i -> Insert, Imenu
  :n     "im"    #'imenu-list
  :n     "iM"    #'lsp-ui-imenu
+
+ ;; r -> Run
+ ;; :n     "rp"    #'projector-run-shell-command-project-root
+ ;; :n     "rP"    #'projector-run-default-shell-command
 
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
@@ -1199,6 +1210,15 @@ is selected, only the bare key is returned."
 (defun projectile-ignored-project-function (filepath)
   "Return t if FILEPATH is within any of `projectile-ignored-projects'"
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
+
+(use-package! projector
+  :after
+  (projectile vterm))
+
+(map! "s-p r"  #'projector-run-shell-command-project-root
+      "s-p R"  #'projector-run-default-shell-command
+      "s-p b"  #'projector-switch-to-shell-buffer
+      )
 
 (after! ranger
   :config

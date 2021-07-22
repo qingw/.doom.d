@@ -53,6 +53,7 @@
 (package! bm)
 (package! imenu-list)
 (package! git-gutter)
+(package! projector)
 (package! yasnippet-snippets)
 
 (package! anzu)

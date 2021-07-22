@@ -467,6 +467,8 @@ auto generate code into config.el, init.el, packages.el, ..., and run `cp-config
 to bakup some of my private things.
 
 #+begin_src emacs-lisp
+(doom-load-envvars-file "~/.doom.d/env" )
+
 (defadvice! +literate-tangle-async-h ()
   "A very simplified version of `+literate-tangle-h', but async."
   :override #'+literate-tangle-h
@@ -546,6 +548,10 @@ private:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
+** Unbindings
+#+begin_src emacs-lisp
+(global-set-key (kbd "s-p") nil)        ; ns-print-buffer
+#+end_src
 ** F1~12
 
 #+begin_src emacs-lisp
@@ -580,6 +586,9 @@ private:
  "s->"          #'move-text-down
  ;; "s-'"          #'cycle-quotes
  "s-i"          #'gcl/string-inflection-cycle-auto
+ ;; "s-p r"        #'projector-run-shell-command-project-root
+ ;; "s-p R"        #'projector-run-default-shell-command
+ ;; "s-p b"        #'projector-switch-to-shell-buffer
 
  ;; --------------- C-c ---------------
  ;; a -> applications, ...
@@ -629,6 +638,10 @@ private:
  ;; i -> Insert, Imenu
  :n     "im"    #'imenu-list
  :n     "iM"    #'lsp-ui-imenu
+
+ ;; r -> Run
+ ;; :n     "rp"    #'projector-run-shell-command-project-root
+ ;; :n     "rP"    #'projector-run-default-shell-command
 
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
@@ -1668,6 +1681,17 @@ ignore some directories.
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 #+end_src
 
+** Projector
+#+begin_src emacs-lisp
+(use-package! projector
+  :after
+  (projectile vterm))
+
+(map! "s-p r"  #'projector-run-shell-command-project-root
+      "s-p R"  #'projector-run-default-shell-command
+      "s-p b"  #'projector-switch-to-shell-buffer
+      )
+#+end_src
 ** Ranger
 
 #+begin_src emacs-lisp
@@ -1897,6 +1921,7 @@ Use `.prettierrc` file for prettier.
 (package! bm)
 (package! imenu-list)
 (package! git-gutter)
+(package! projector)
 (package! yasnippet-snippets)
 #+end_src
 ** Search
