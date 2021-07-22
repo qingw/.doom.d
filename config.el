@@ -1,4 +1,9 @@
 ;;;###autoload
+(defun gcl/edit-zsh-configuration ()
+  (interactive)
+  (find-file "~/.zshrc"))
+
+;;;###autoload
 (defun gcl/use-eslint-from-node-modules ()
     "Set local eslint if available."
     (let* ((root (locate-dominating-file
@@ -215,6 +220,17 @@ Finally save buffer.
       org-export-in-background t                ; run export processes in external emacs process
       org-catch-invisible-edits 'smart          ; try not to accidently do weird stuff in invisible regions
       org-fontify-done-headline t               ; 已完成的加上删除线
+
+      ;; scroll behavior
+      redisplay-dont-pause t
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1
+
+      ;; mouse wheel
+      mouse-wheel-follow-mouse 't
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))
     )
 
 (setq-default
@@ -241,31 +257,32 @@ Finally save buffer.
 
 (map!
  ;; --------------- M, Option/Alt ---------------
- "M--"                  #'gcl/goto-match-paren
- "M-i"                  #'parrot-rotate-next-word-at-point
+ "M--"          #'gcl/goto-match-paren
+ "M-i"          #'parrot-rotate-next-word-at-point
  ;; --------------- C, Control ---------------
- :niv   "C-e"           #'evil-end-of-line
- :niv   "C-="           #'er/expand-region
- "C-a"  #'crux-move-beginning-of-line
- "C-s"  #'+default/search-buffer
- "C-:"   #'avy-goto-char
- "C-;"   #'avy-goto-char-2
+ :niv   "C-e"   #'evil-end-of-line
+ :niv   "C-="   #'er/expand-region
+ "C-a"          #'crux-move-beginning-of-line
+ "C-s"          #'+default/search-buffer
+ "C-:"          #'avy-goto-char
+ "C-;"          #'avy-goto-char-2
  ;; s - Command
- "s-<"     #'move-text-up
- "s->"     #'move-text-down
- "s-i"     #'gcl/string-inflection-cycle-auto
+ "s-<"          #'move-text-up
+ "s->"          #'move-text-down
+ ;; "s-'"          #'cycle-quotes
+ "s-i"          #'gcl/string-inflection-cycle-auto
 
  ;; --------------- C-c ---------------
  ;; a -> applications, ...
- "C-c a c"         #'org-mac-chrome-insert-frontmost-url
+ "C-c a c"      #'org-mac-chrome-insert-frontmost-url
  ;; d -> date, time, ...
- "C-c d d"         #'insert-current-date-time
- "C-c d t"         #'insert-current-time
+ "C-c d d"      #'insert-current-date-time
+ "C-c d t"      #'insert-current-time
  ;; f -> file, directory, ...
- "C-c f o"         #'crux-open-with
+ "C-c f o"      #'crux-open-with
  ;; s -> search, replace, ...
- "C-c s r"         #'vr/replace
- "C-c s q"         #'vr/query-replace
+ "C-c s r"      #'vr/replace
+ "C-c s q"      #'vr/query-replace
  ;; u -> url, ...
  "C-c u u"      #'crux-view-url
  "C-c u o"      #'link-hint-open-link
@@ -288,14 +305,14 @@ Finally save buffer.
 
  ;; --------------- Leader SPC ---------------
  :leader
- :nv       "SPC"   #'execute-extended-command
+ :nv    "SPC"   #'execute-extended-command
 
  ;; b -> Buffer
- :n        "bf"    #'osx-lib-reveal-in-finder
+ :n     "bf"    #'osx-lib-reveal-in-finder
 
  ;; f -> File
- :n        "fo"    #'crux-open-with
- :n        "fj"    #'dired-jump
+ :n     "fo"    #'crux-open-with
+ :n     "fj"    #'dired-jump
 
  ;; d -> directory
  :n     "dd"    #'deft
@@ -355,6 +372,10 @@ Finally save buffer.
   (setq company-idle-delay 0.5
         company-minimum-prefix-length 2)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
+
+(use-package! cycle-quotes
+  :bind
+  ("s-'" . cycle-quotes))
 
 (use-package! emacs-everywhere
   :if (daemonp)
@@ -1208,6 +1229,8 @@ is selected, only the bare key is returned."
 
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
+
+;; (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
 
 (defun maybe-use-prettier ()
   "Enable prettier-js-mode if an rc file is located."

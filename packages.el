@@ -62,6 +62,7 @@
   :recipe (:host github :repo "benma/visual-regexp-steroids.el"))
 (package! youdao-dictionary)
 
+(package! cycle-quotes)
 (package! hungry-delete)
 (package! move-text)
 (package! pangu-spacing)
