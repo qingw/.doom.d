@@ -283,6 +283,10 @@ Finally save buffer.
  ;; a -> applications, ...
  "C-c a c"      #'org-mac-chrome-insert-frontmost-url
 
+ ;; b -> bookmark, buffer ...
+ "C-c b l"      #'bm-show-all
+ "C-c b s"      #'bm-buffer-save
+
  ;; d -> date, time, ...
  "C-c d d"      #'insert-current-date-time
  "C-c d t"      #'insert-current-time
