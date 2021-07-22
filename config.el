@@ -1259,12 +1259,3 @@ is selected, only the bare key is returned."
                             "_test.py")
                   (apply orig-fn args))))
   )
-
-(use-package! zeal-at-point
-  :commands (zeal-at-point zeal-at-point-search zeal-at-point-set-docset)
-  :config
-  (add-to-list 'zeal-at-point-mode-alist '(web-mode . "html"))
-  (add-to-list 'zeal-at-point-mode-alist '(rjsx-mode . ("vue" "react" "javascript" "typescript")))
-  (add-to-list 'zeal-at-point-mode-alist '(pug-mode . ("html" "pug")))
-  (advice-add #'zeal-at-point-run-search :override #'aj-zeal-at-point-run-search-on-wsl-a)
-  )

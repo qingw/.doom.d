@@ -1,10 +1,6 @@
 (package! dotenv-mode)
 (package! leetcode)
 
-(package! zeal-at-point
-  :recipe (:host github :repo "jinzhu/zeal-at-point")
-  :pin "0fc3263f44e95acd3e9d91057677621ce4d297ee")
-
 (package! instant-rename-tag
   :recipe (:host github
            :repo "manateelazycat/instant-rename-tag"))

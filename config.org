@@ -1762,17 +1762,6 @@ Use `.prettierrc` file for prettier.
                   (apply orig-fn args))))
   )
 #+end_src
-** Zeal
-#+begin_src emacs-lisp
-(use-package! zeal-at-point
-  :commands (zeal-at-point zeal-at-point-search zeal-at-point-set-docset)
-  :config
-  (add-to-list 'zeal-at-point-mode-alist '(web-mode . "html"))
-  (add-to-list 'zeal-at-point-mode-alist '(rjsx-mode . ("vue" "react" "javascript" "typescript")))
-  (add-to-list 'zeal-at-point-mode-alist '(pug-mode . ("html" "pug")))
-  (advice-add #'zeal-at-point-run-search :override #'aj-zeal-at-point-run-search-on-wsl-a)
-  )
-#+end_src
 * My Packages
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
@@ -1782,10 +1771,6 @@ Use `.prettierrc` file for prettier.
 #+begin_src emacs-lisp
 (package! dotenv-mode)
 (package! leetcode)
-
-(package! zeal-at-point
-  :recipe (:host github :repo "jinzhu/zeal-at-point")
-  :pin "0fc3263f44e95acd3e9d91057677621ce4d297ee")
 #+end_src
 *** WEB
 
