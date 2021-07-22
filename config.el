@@ -340,25 +340,28 @@ Finally save buffer.
 
 (map!
  :leader
- :nv    "SPC"   #'execute-extended-command
+ :nv    "SPC"           #'execute-extended-command
 
  ;; b -> Buffer
- :n     "bf"    #'osx-lib-reveal-in-finder
+ :n     "bf"            #'osx-lib-reveal-in-finder
 
  ;; f -> File
- :n     "fo"    #'crux-open-with
- :n     "fj"    #'dired-jump
+ :n     "fo"            #'crux-open-with
+ :n     "fj"            #'dired-jump
 
  ;; d -> directory
- :n     "dd"    #'deft
+ :n     "dd"            #'deft
+
+ ;; d -> edit
+ :n     "es"            #'sudo-edit
 
  ;; i -> Insert, Imenu
- :n     "im"    #'imenu-list
- :n     "iM"    #'lsp-ui-imenu
+ :n     "im"            #'imenu-list
+ :n     "iM"            #'lsp-ui-imenu
 
  ;; r -> Run
- ;; :n     "rp"    #'projector-run-shell-command-project-root
- ;; :n     "rP"    #'projector-run-default-shell-command
+ ;; :n     "rp"         #'projector-run-shell-command-project-root
+ ;; :n     "rP"         #'projector-run-default-shell-command
 
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
@@ -1247,6 +1250,35 @@ is selected, only the bare key is returned."
 
         ))
 
+(use-package! popper
+  :bind
+  ("C-`" . popper-toggle-latest)
+  ("C-~" . popper-cycle)
+  :custom
+  (popper-reference-buffers
+   '("\\*Messages\\*"
+     "\\*Backtrace\\*"
+     "\\*Warnings\\*"
+     "Output\\*$"
+     "*Process List*"
+     "COMMIT_EDITMSG"
+     help-mode
+     helpful-mode
+     embark-collect-mode
+     grep-mode
+     rg-mode
+     rspec-compilation-mode
+     inf-ruby-mode
+     nodejs-repl-mode
+     ts-comint-mode
+     compilation-mode))
+  :config
+  (defun zero-point-thirty-seven () 0.37)
+  (advice-add 'popper-determine-window-height :override #'zero-point-thirty-seven)
+  :init
+  (popper-mode)
+  )
+
 (setq projectile-ignored-projects '("~/" "/tmp" "~/.emacs.d/.local/straight/repos/"))
 (defun projectile-ignored-project-function (filepath)
   "Return t if FILEPATH is within any of `projectile-ignored-projects'"
@@ -1282,6 +1314,9 @@ is selected, only the bare key is returned."
        "C-{" #'sp-backward-slurp-sexp
        "C-}" #'sp-backward-barf-sexp
        ))
+
+(map!
+ )
 
 (after! treemacs
   (setq
