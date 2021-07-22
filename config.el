@@ -254,10 +254,18 @@ Finally save buffer.
       :n        ","     nil)
 
 (global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
+(global-set-key (kbd "<f2>") 'gcl-jump/body)        ; ns-print-buffer
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
+(map! :map dired-mode-map
+      "<f2>"    #'gcl-dired/body
+      :map ranger-mode-map
+      "<f2>"    #'gcl-dired/body
+      :map web-mode-map
+      "<f2>"    #'hydra-web-mode/body
+      )
 
 (map!
  ;; "M-1"          #'bm-toggle
@@ -367,6 +375,10 @@ Finally save buffer.
  :n     "im"            #'imenu-list
  :n     "iM"            #'lsp-ui-imenu
 
+ ;; l -> load, ...
+ :n     "lr"            #'ranger
+ :n     "ld"            #'dired
+
  ;; r -> Run
  ;; :n     "rp"         #'projector-run-shell-command-project-root
  ;; :n     "rP"         #'projector-run-default-shell-command
@@ -398,10 +410,6 @@ Finally save buffer.
       "C-c c c"        #'counsel-org-clock-context
       "C-c c r"        #'counsel-org-clock-rebuild-history
 )
-
-(map! :map web-mode-map
-      "<f2>"    #'hydra-web-mode/body
-      )
 
 (global-set-key (kbd "M-g f") 'avy-goto-line)
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
@@ -509,7 +517,6 @@ Finally save buffer.
   ("l" gcl-jump-line/body "Avy Line Jump")
   ("w" gcl-jump-word/body "Avy Word Jump")
   )
-(global-set-key (kbd "<f2>") 'gcl-jump/body)        ; ns-print-buffer
 
 (defhydra gcl-jump-char (:color blue :columns 3 :hint nil)
   "Jump By Char ->"
@@ -541,6 +548,60 @@ Finally save buffer.
   ("o" avy-goto-word-or-subword-1 "word or subword")
   ("s" avy-subword-0 "subword-0")
   ("S" avy-subword-1 "subword-1")
+  )
+
+(defhydra gcl-dired (:color blue :hint nil)
+  "
+Mark              Operate         Misc              Navigate
+----              -------         ----              --------
+_fd_: flag del    _C_: copy       _+_: mkdir        _<up>_: up directory
+_f#_: autosave    _R_: rename     _o_: open other
+_f~_: backups     _D_: delete
+_f&_: garbage     _F_: open marks
+_fe_: extension
+----
+_m_: mark         _T_: touch
+_/_: directories  _M_: chmod
+_@_: symlinks     _G_: chgrp
+_O_: omitted      _O_: chown
+----
+_U_: unmark all   _A_: find regx
+_t_: toggle marks _Q_: find/rep
+"
+    ;; marking
+  ("t" dired-toggle-marks "Toggle marks")
+  ("m" dired-mark "mark" :exit nil)
+  ("u" dired-unmark "unmark" :exit nil)
+  ("fd" dired-flag-file-deletion "Flag for deletion")
+  ("f#" dired-flag-auto-save-files "Flag autosave")
+  ("f~" dired-flag-backup-files "Flag backup files")
+  ("f&" dired-flag-garbage-files "Flag garbage files")
+  ("fe" dired-flag-extension "Flag extension")
+  ("/" dired-mark-directories "Mark directories")
+  ("@" dired-mark-symlinks "Mark symlinks")
+  ("." dired-mark-extension  "Mark extension")
+  ("O" dired-mark-omitted "Mark omitted")
+  ("U" dired-unmark-all-marks "Unmark all marks")
+
+  ("C" dired-do-copy)
+  ("R" dired-do-rename)
+  ("D" dired-do-delete :exit nil)
+  ("F" dired-do-find-marked-files)
+  ("!" dired-do-shell-command)
+  ("&" dired-do-async-shell-command)
+
+  ("T" dired-do-touch)
+  ("M" dired-do-chmod)
+  ("G" dired-do-chgrp)
+  ("O" dired-do-chown)
+
+  ("A" dired-do-find-regexp)
+  ("Q" dired-do-find-regexp-and-replace)
+
+  ("+" dired-create-directory)
+  ("o" dired-find-file-other-window)
+
+  ("<up>" dired-up-directory)
   )
 
 (global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
