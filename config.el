@@ -257,6 +257,9 @@ Finally save buffer.
 
 (map!
  ;; --------------- M, Option/Alt ---------------
+ ;; "M-1"          #'bm-toggle
+ ;; "M-2"          #'bm-next
+ ;; "M-@"          #'bm-previous
  "M--"          #'gcl/goto-match-paren
  "M-i"          #'parrot-rotate-next-word-at-point
  ;; --------------- C, Control ---------------
