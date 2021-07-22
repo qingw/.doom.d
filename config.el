@@ -278,7 +278,14 @@ Finally save buffer.
  "s->"          #'move-text-down
  ;; "s-'"          #'cycle-quotes
  "s-i"          #'gcl/string-inflection-cycle-auto
- ;; "s-p x"     # projector-...
+ ;; projector --- ---
+ ;; "s-p b"      #'projector-switch-to-shell-buffer
+ ;; "s-p B"      #'projector-run-shell-command-current-directory-background
+ ;; "s-p c"      #'projector-run-shell-command-current-directory
+ ;; "s-p d"      #'projector-run-default-shell-command
+ ;; "s-p r"      #'projector-run-shell-command-project-root
+ ;; "s-p R"      #'projector-rerun-buffer-process
+
 
  ;; --------------- C-c ---------------
  ;; a -> applications, ...
@@ -540,6 +547,17 @@ Finally save buffer.
 ;;   :config
 ;;   (setq grip-github-user "gcclll"
 ;;         grip-github-password "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"))
+
+(use-package! vmd-mode
+  :after markdown-mode
+  :bind
+  (:map markdown-mode-map ("C-x p" . vmd-mode)))
+
+(use-package! pandoc-mode
+  :after (markdown-mode org-mode)
+  :hook
+  (markdown-mode org-mode)
+  (pandoc-mode . pandoc-load-default-settings))
 
 (use-package! maple-iedit
    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)

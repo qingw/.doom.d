@@ -68,10 +68,12 @@
 (package! hungry-delete)
 (package! move-text)
 (package! pangu-spacing)
+(package! pandoc-mode)
 (package! parrot)
 (package! string-inflection)
 (package! maple-iedit
   :recipe (:host github
            :repo "honmaple/emacs-maple-iedit"))
+(package! vmd-mode)
 
 (disable-packages! bookmark tide eldoc valign grip-mode org-roam)
