@@ -540,7 +540,12 @@ Finally save buffer.
   :config
   (setq lsp-headerline-breadcrumb-enable t ; 左上角显示文件路径
         lsp-lens-enable t                  ; 显示被引用次数
-        ))
+        )
+  :bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references)
+         ([remap xref-pop-marker-stack] . lsp-ui-peek-jump-backward)
+         ([remap imenu] . lsp-ui-imenu)))
 
 ;; 关闭自动格式化，全局关闭
 ;; (setq +form-with-lsp nil)
@@ -1305,6 +1310,10 @@ is selected, only the bare key is returned."
 (after! ranger
   :config
   (setq ranger-show-literal nil))
+
+(use-package! restclient
+  :mode (("\\.rest\\'" . restclient-mode)
+         ("\\.restclient\\'" . restclient-mode)))
 
 (sp-local-pair
  '(org-mode)

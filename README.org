@@ -947,7 +947,12 @@ private:
   :config
   (setq lsp-headerline-breadcrumb-enable t ; 左上角显示文件路径
         lsp-lens-enable t                  ; 显示被引用次数
-        ))
+        )
+  :bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references)
+         ([remap xref-pop-marker-stack] . lsp-ui-peek-jump-backward)
+         ([remap imenu] . lsp-ui-imenu)))
 
 ;; 关闭自动格式化，全局关闭
 ;; (setq +form-with-lsp nil)
@@ -1810,6 +1815,13 @@ ignore some directories.
   :config
   (setq ranger-show-literal nil))
 #+end_src
+** Restclient
+
+#+begin_src emacs-lisp
+(use-package! restclient
+  :mode (("\\.rest\\'" . restclient-mode)
+         ("\\.restclient\\'" . restclient-mode)))
+#+end_src
 
 ** Smartparen
 
@@ -1887,7 +1899,7 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
-** Web Development
+** Web
 
 Use `.prettierrc` file for prettier.
 
@@ -1955,6 +1967,8 @@ Use `.prettierrc` file for prettier.
                   (apply orig-fn args))))
   )
 #+end_src
+** Java
+*** [[https://github.com/jdee-emacs/jdee][Jdee]] ?
 * My Packages
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "packages.el" :comments no
