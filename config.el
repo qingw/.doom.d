@@ -332,13 +332,13 @@ Finally save buffer.
       :n       "tpu"    #'org-priority-up
       :n       "tpd"    #'org-priority-down
 
-      "C-c e e"        #'all-the-icons-insert
-      "C-c e a"        #'all-the-icons-insert-faicon
-      "C-c e f"        #'all-the-icons-insert-fileicon
-      "C-c e w"        #'all-the-icons-insert-wicon
-      "C-c e o"        #'all-the-icons-insert-octicon
-      "C-c e m"        #'all-the-icons-insert-material
-      "C-c e i"        #'all-the-icons-insert-alltheicon
+      "C-c e e"         #'all-the-icons-insert
+      "C-c e a"         #'all-the-icons-insert-faicon
+      "C-c e f"         #'all-the-icons-insert-fileicon
+      "C-c e w"         #'all-the-icons-insert-wicon
+      "C-c e o"         #'all-the-icons-insert-octicon
+      "C-c e m"         #'all-the-icons-insert-material
+      "C-c e i"         #'all-the-icons-insert-alltheicon
 
       ;; org clock
       "C-c c i"        #'org-clock-in
@@ -359,6 +359,26 @@ Finally save buffer.
 (after! avy
   ;; home row priorities: 8 6 4 5 - - 1 2 3 7
   (setq avy-keys '(?n ?e ?i ?s ?t ?r ?i ?a)))
+
+(use-package! bm
+  :bind
+  ("M-1" . bm-toggle)
+  ("M-2" . bm-next)
+  ("M-@" . bm-previous)
+  :custom
+  (bm-cycle-all-buffers t)
+  :config
+  (add-hook 'after-init-hook 'bm-repository-load)
+  (add-hook 'kill-buffer-hook #'bm-buffer-save)
+  (add-hook 'kill-emacs-hook #'(lambda nil
+                                 (bm-buffer-save-all)
+                                 (bm-repository-save)))
+  (add-hook 'after-save-hook #'bm-buffer-save)
+  (add-hook 'find-file-hooks   #'bm-buffer-restore)
+  (add-hook 'after-revert-hook #'bm-buffer-restore)
+  (setq bm-repository-file "~/.doom.d/bm-repository")
+  (setq-default bm-buffer-persistence t)
+  )
 
 (use-package! color-rg
   :commands (color-rg-search-input
@@ -1002,7 +1022,8 @@ is selected, only the bare key is returned."
       org-agenda-log-mode-items '(closed clock state)
       org-agenda-block-separator nil
       org-agenda-compact-blocks t
-      org-agenda-breadcrumbs-separator " ❱ "
+      org-agenda-breadcrumbs-separator " ❱
+ "
       org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
       org-agenda-sorting-strategy
       '((agenda habit-down time-up effort-up priority-down category-keep)

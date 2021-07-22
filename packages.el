@@ -50,6 +50,7 @@
 (package! org-ol-tree
   :recipe (:host github :repo "Townk/org-ol-tree"))
 
+(package! bm)
 (package! imenu-list)
 (package! git-gutter)
 (package! yasnippet-snippets)
