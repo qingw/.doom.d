@@ -487,6 +487,16 @@ Finally save buffer.
   (defun emacs-everywhere-raise-frame-1 ()
     (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
 
+(use-package! engine-mode
+  :config
+  (engine/set-keymap-prefix (kbd "C-c s"))
+  ;; (setq engine/browser-function 'eww-browse-url)
+  (defengine google "https://www.google.com/search?q=%s"
+    :keybinding "/")
+  (defengine baidu "https://www.baidu.com/s?wd=%s"
+    :keybinding "b")
+  (engine-mode 1))
+
 (use-package! dash-at-point
   :bind
   (("C-x d" . dash-at-point)
@@ -700,8 +710,9 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 
 (use-package! link-hint
   :config
-  (setq browse-url-browser-function 'browse-url
-        browse-url-generic-args '("--target" "tab")))
+  (setq
+   ;; browse-url-browser-function 'browse-url
+   browse-url-generic-args '("--target" "tab")))
 
 (use-package! lsp-mode
   :hook ((web-mode . lsp)

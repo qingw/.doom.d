@@ -39,6 +39,7 @@
 
 (package! counsel-tramp)
 (package! net-utils)
+(package! engine-mode)
 
 (package! counsel-org-clock)
 (package! doct
