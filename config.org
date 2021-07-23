@@ -798,6 +798,20 @@ private:
         company-minimum-prefix-length 2)
   (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
 #+end_src
+** Counsel-osx-app
+#+begin_src emacs-lisp
+(use-package! counsel-osx-app
+  :bind* ("S-M-SPC" . counsel-osx-app)
+  :commands counsel-osx-app
+  :config
+  (setq counsel-osx-app-location
+        (list "/Applications"
+              "/Applications/Misc"
+              "/Applications/Utilities"
+              (expand-file-name "~/Applications")
+              (expand-file-name "~/.nix-profile/Applications")
+              "/Applications/Xcode.app/Contents/Applications")))
+#+end_src
 ** Cycle-quotes
 #+begin_src emacs-lisp
 (use-package! cycle-quotes
@@ -2262,7 +2276,7 @@ Window management packages.
            :repo "tecosaur/emacs-everywhere"))
 (package! systemd
   :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
-
+(package! counsel-osx-app)
 #+end_src
 ** Network
 #+begin_src emacs-lisp
