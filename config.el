@@ -296,6 +296,9 @@ Finally save buffer.
  ;; f -> file, directory, ...
  "C-c f o"      #'crux-open-with
 
+ ;; n -> network utils
+ ;; "C-c n x"      #'xxx
+
  ;; s -> search, replace, ...
  "C-c s r"      #'vr/replace
  "C-c s q"      #'vr/query-replace
@@ -782,6 +785,23 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
           ("C-p" . maple-iedit-match-previous)
           ("C-t" . map-iedit-skip-and-match-next)
           ("C-T" . map-iedit-skip-and-match-previous)))
+
+(use-package! net-utils
+  :bind
+  (:map mode-specific-map
+        :prefix-map net-utils-prefix-map ; C-c n x
+        :prefix "n"
+        ("p" . ping)
+        ("i" . ifconfig)
+        ("w" . iwconfig)
+        ("n" . netstat)
+        ("p" . ping)
+        ("a" . arp)
+        ("r" . route)
+        ("h" . nslookup-host)
+        ("d" . dig)
+        ("s" . smbclient)
+        ("t" . traceroute)))
 
 ;; (org-hide-emphasis-markers t)
 (setq org-list-demote-modify-bullet

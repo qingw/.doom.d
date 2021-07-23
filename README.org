@@ -614,6 +614,9 @@ private:
  ;; f -> file, directory, ...
  "C-c f o"      #'crux-open-with
 
+ ;; n -> network utils
+ ;; "C-c n x"      #'xxx
+
  ;; s -> search, replace, ...
  "C-c s r"      #'vr/replace
  "C-c s q"      #'vr/query-replace
@@ -1234,6 +1237,25 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
            ("C-p" . maple-iedit-match-previous)
            ("C-t" . map-iedit-skip-and-match-next)
            ("C-T" . map-iedit-skip-and-match-previous)))
+#+end_src
+** Net-utils
+#+begin_src emacs-lisp
+(use-package! net-utils
+  :bind
+  (:map mode-specific-map
+        :prefix-map net-utils-prefix-map ; C-c n x
+        :prefix "n"
+        ("p" . ping)
+        ("i" . ifconfig)
+        ("w" . iwconfig)
+        ("n" . netstat)
+        ("p" . ping)
+        ("a" . arp)
+        ("r" . route)
+        ("h" . nslookup-host)
+        ("d" . dig)
+        ("s" . smbclient)
+        ("t" . traceroute)))
 #+end_src
 ** Org-mode
 
@@ -2245,6 +2267,7 @@ Window management packages.
 ** Network
 #+begin_src emacs-lisp
 (package! counsel-tramp)
+(package! net-utils)
 #+end_src
 ** Org
 #+begin_src emacs-lisp
