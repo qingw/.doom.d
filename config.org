@@ -863,6 +863,10 @@ private:
   (defengine github
     "https://github.com/search?ref=simplesearch&q=%s"
     :keybinding "g")
+  (defengine qwant
+    "https://www.qwant.com/?q=%s"
+    :docstring "什么都能搜到哦~~😍😍"
+    :keybindg "q")
   (defengine rfcs
     "http://pretty-rfc.herokuapp.com/search?q=%s"
     :keybinding "r")
