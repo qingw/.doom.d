@@ -36,10 +36,12 @@
 (package! systemd
   :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
 (package! counsel-osx-app)
+(package! prodigy)
 
 (package! counsel-tramp)
 (package! net-utils)
 (package! engine-mode)
+;; (package! server)
 
 (package! counsel-org-clock)
 (package! doct
@@ -62,6 +64,8 @@
 (package! ox-gfm)
 (package! org-ol-tree
   :recipe (:host github :repo "Townk/org-ol-tree"))
+(package! org-sort-tasks
+  :recipe (:host github :repo "felipelalli/org-sort-tasks"))
 
 (package! bm)
 (package! imenu-list)

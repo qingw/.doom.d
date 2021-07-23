@@ -866,7 +866,7 @@ private:
   (defengine qwant
     "https://www.qwant.com/?q=%s"
     :docstring "什么都能搜到哦~~😍😍"
-    :keybindg "q")
+    :keybinding "q")
   (defengine rfcs
     "http://pretty-rfc.herokuapp.com/search?q=%s"
     :keybinding "r")
@@ -1221,7 +1221,6 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
          ([remap xref-find-references] . lsp-ui-peek-find-references)
          ([remap xref-pop-marker-stack] . lsp-ui-peek-jump-backward)
-         ([remap imenu-list] . lsp-ui-imenu)
          ))
 
 ;; 关闭自动格式化，全局关闭
@@ -1276,14 +1275,6 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
 ;;   (setq grip-github-user "gcclll"
 ;;         grip-github-password "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"))
 #+end_src
-*** Vmd-mode
-#+begin_src emacs-lisp
-(use-package! vmd-mode
-  :after markdown-mode
-  :bind
-  (:map markdown-mode-map ("C-x p" . vmd-mode)))
-#+end_src
-
 *** Pandoc-mode
 #+begin_src emacs-lisp
 (use-package! pandoc-mode
@@ -1292,6 +1283,14 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
   (markdown-mode org-mode)
   (pandoc-mode . pandoc-load-default-settings))
 #+end_src
+*** Vmd-mode
+#+begin_src emacs-lisp
+(use-package! vmd-mode
+  :after markdown-mode
+  :bind
+  (:map markdown-mode-map ("C-x p" . vmd-mode)))
+#+end_src
+
 ** Maple-iedit
 
 #+begin_src emacs-lisp
@@ -1663,7 +1662,7 @@ is selected, only the bare key is returned."
                    :type entry
                    :template ("* %?"
                               "%i %a"))
-                  ("Email" :keys "e"
+                  ("Email" :keys "E"
                    :icon ("envelope" :set "faicon" :color "blue")
                    :file +org-capture-todo-file
                    :prepend t
@@ -2049,6 +2048,7 @@ Keybindings:
 
         ))
 #+end_src
+** PDF
 ** Popper
 #+begin_src emacs-lisp
 (use-package! popper
@@ -2144,6 +2144,20 @@ ignore some directories.
        "C-{" #'sp-backward-slurp-sexp
        "C-}" #'sp-backward-barf-sexp
        ))
+#+end_src
+** Server
+卡死了...
+#+begin_src emacs-lisp
+;; (use-package! server
+;;  :unless (or noninteractive
+;;              alternate-emacs)
+;;  :no-require
+;;  :config
+;;  (unless (file-exists-p "/tmp/gcl-emacs")
+;;    (make-directory "/tmp/gcl-emacs")
+;;    (chmod "/tmp/gcl-emacs" 448))
+;;  (setq server-socket-dir "/tmp/gcl-emacs")
+;;  :hook (after-init . server-start))
 #+end_src
 ** Sudo-edit
 #+begin_src emacs-lisp
@@ -2337,12 +2351,15 @@ Window management packages.
 (package! systemd
   :pin "b6ae63a236605b1c5e1069f7d3afe06ae32a7bae")
 (package! counsel-osx-app)
+(package! prodigy)
 #+end_src
+** Markdown
 ** Network
 #+begin_src emacs-lisp
 (package! counsel-tramp)
 (package! net-utils)
 (package! engine-mode)
+;; (package! server)
 #+end_src
 ** Org
 #+begin_src emacs-lisp
@@ -2367,8 +2384,10 @@ Window management packages.
 (package! ox-gfm)
 (package! org-ol-tree
   :recipe (:host github :repo "Townk/org-ol-tree"))
+(package! org-sort-tasks
+  :recipe (:host github :repo "felipelalli/org-sort-tasks"))
 #+end_src
-
+** PDF
 ** Projectile
 #+begin_src emacs-lisp
 (package! bm)

@@ -511,7 +511,7 @@ Finally save buffer.
   (defengine qwant
     "https://www.qwant.com/?q=%s"
     :docstring "什么都能搜到哦~~😍😍"
-    :keybindg "q")
+    :keybinding "q")
   (defengine rfcs
     "http://pretty-rfc.herokuapp.com/search?q=%s"
     :keybinding "r")
@@ -783,7 +783,6 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
          ([remap xref-find-references] . lsp-ui-peek-find-references)
          ([remap xref-pop-marker-stack] . lsp-ui-peek-jump-backward)
-         ([remap imenu-list] . lsp-ui-imenu)
          ))
 
 ;; 关闭自动格式化，全局关闭
@@ -827,16 +826,16 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 ;;   (setq grip-github-user "gcclll"
 ;;         grip-github-password "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"))
 
-(use-package! vmd-mode
-  :after markdown-mode
-  :bind
-  (:map markdown-mode-map ("C-x p" . vmd-mode)))
-
 (use-package! pandoc-mode
   :after (markdown-mode org-mode)
   :hook
   (markdown-mode org-mode)
   (pandoc-mode . pandoc-load-default-settings))
+
+(use-package! vmd-mode
+  :after markdown-mode
+  :bind
+  (:map markdown-mode-map ("C-x p" . vmd-mode)))
 
 (use-package! maple-iedit
    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
@@ -1162,7 +1161,7 @@ is selected, only the bare key is returned."
                    :type entry
                    :template ("* %?"
                               "%i %a"))
-                  ("Email" :keys "e"
+                  ("Email" :keys "E"
                    :icon ("envelope" :set "faicon" :color "blue")
                    :file +org-capture-todo-file
                    :prepend t
@@ -1600,6 +1599,17 @@ is selected, only the bare key is returned."
        "C-{" #'sp-backward-slurp-sexp
        "C-}" #'sp-backward-barf-sexp
        ))
+
+;; (use-package! server
+;;  :unless (or noninteractive
+;;              alternate-emacs)
+;;  :no-require
+;;  :config
+;;  (unless (file-exists-p "/tmp/gcl-emacs")
+;;    (make-directory "/tmp/gcl-emacs")
+;;    (chmod "/tmp/gcl-emacs" 448))
+;;  (setq server-socket-dir "/tmp/gcl-emacs")
+;;  :hook (after-init . server-start))
 
 (map!
  )
