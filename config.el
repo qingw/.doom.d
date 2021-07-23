@@ -253,19 +253,12 @@ Finally save buffer.
 (map! "C-e" nil
       :n        ","     nil)
 
-(global-set-key (kbd "<f3>") 'hydra-multiple-cursors/body)
 (global-set-key (kbd "<f2>") 'gcl-jump/body)        ; ns-print-buffer
+(global-set-key (kbd "<f3>") 'gcl-everything/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
-(map! :map dired-mode-map
-      "<f2>"    #'gcl-dired/body
-      :map ranger-mode-map
-      "<f2>"    #'gcl-dired/body
-      :map web-mode-map
-      "<f2>"    #'hydra-web-mode/body
-      )
 
 (map!
  ;; "M-1"          #'bm-toggle
@@ -511,11 +504,28 @@ Finally save buffer.
   (add-hook! 'after-init-hook #'global-hungry-delete-mode)
   (global-hungry-delete-mode 1))
 
+(map! :map dired-mode-map
+      "<f2>"    #'gcl-dired/body
+      :map ranger-mode-map
+      "<f2>"    #'gcl-dired/body
+      :map org-agenda-mode-map
+      "<f2>"    #'gcl-agenda-view/body
+      :map web-mode-map
+      "<f2>"    #'hydra-web-mode/body
+      )
+
 (defhydra gcl-jump (:color blue :columns 3 :hint nil)
-  "Jump ->"
-  ("c" gcl-jump-char/body "Avy Char Jump")
-  ("l" gcl-jump-line/body "Avy Line Jump")
-  ("w" gcl-jump-word/body "Avy Word Jump")
+  "Jump -> Body"
+  ("a" gcl-agenda-view/body "Org-Agenda")
+  ("c" gcl-jump-char/body "Char Jump")
+  ("l" gcl-jump-line/body "Line Jump")
+  ("w" gcl-jump-word/body "Word Jump")
+  )
+
+(defhydra gcl-everything (:color blue :columns 3 :hint nil)
+  "🗯 做任何你想不到的事情~~~~ 👁👁👁👁👁👁👁👁👁
+🌻"
+  ("j" gcl-jump/body "Avy")
   )
 
 (defhydra gcl-jump-char (:color blue :columns 3 :hint nil)
@@ -569,19 +579,19 @@ _U_: unmark all   _A_: find regx
 _t_: toggle marks _Q_: find/rep
 "
     ;; marking
-  ("t" dired-toggle-marks "Toggle marks")
-  ("m" dired-mark "mark" :exit nil)
-  ("u" dired-unmark "unmark" :exit nil)
-  ("fd" dired-flag-file-deletion "Flag for deletion")
-  ("f#" dired-flag-auto-save-files "Flag autosave")
-  ("f~" dired-flag-backup-files "Flag backup files")
-  ("f&" dired-flag-garbage-files "Flag garbage files")
-  ("fe" dired-flag-extension "Flag extension")
-  ("/" dired-mark-directories "Mark directories")
-  ("@" dired-mark-symlinks "Mark symlinks")
-  ("." dired-mark-extension  "Mark extension")
-  ("O" dired-mark-omitted "Mark omitted")
-  ("U" dired-unmark-all-marks "Unmark all marks")
+  ("t" dired-toggle-marks)
+  ("m" dired-mark :exit nil)
+  ("u" dired-unmark :exit nil)
+  ("fd" dired-flag-file-deletion)
+  ("f#" dired-flag-auto-save-files)
+  ("f~" dired-flag-backup-files)
+  ("f&" dired-flag-garbage-files)
+  ("fe" dired-flag-extension)
+  ("/" dired-mark-directories)
+  ("@" dired-mark-symlinks)
+  ("." dired-mark-extension)
+  ("O" dired-mark-omitted)
+  ("U" dired-unmark-all-marks)
 
   ("C" dired-do-copy)
   ("R" dired-do-rename)
@@ -603,6 +613,51 @@ _t_: toggle marks _Q_: find/rep
 
   ("<up>" dired-up-directory)
   )
+
+(defun org-agenda-cts ()
+  (and (eq major-mode 'org-agenda-mode)
+       (let ((args (get-text-property
+                    (min (1- (point-max)) (point))
+                    'org-last-args)))
+         (nth 2 args))))
+
+(defhydra gcl-agenda-view (:color blue :columns 3 :hint none)
+    "
+_d_: ?d? day        _g_: time grid=?g?  _a_: arch-trees
+_w_: ?w? week       _[_: inactive       _A_: arch-files
+_t_: ?t? fortnight  _f_: follow=?f?     _r_: clock report=?r?
+_m_: ?m? month      _e_: entry text=?e? _D_: include diary=?D?
+_y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
+    ("SPC" org-agenda-reset-view)
+  ("d" org-agenda-day-view (if (eq 'day (org-agenda-cts)) "[x]" "[ ]"))
+  ("w" org-agenda-week-view (if (eq 'week (org-agenda-cts)) "[x]" "[ ]"))
+  ("t" org-agenda-fortnight-view (if (eq 'fortnight (org-agenda-cts)) "[x]" "[ ]"))
+  ("m" org-agenda-month-view (if (eq 'month (org-agenda-cts)) "[x]" "[ ]"))
+  ("y" org-agenda-year-view (if (eq 'year (org-agenda-cts)) "[x]" "[ ]"))
+  ("l" org-agenda-log-mode (format "% -3S" org-agenda-show-log))
+  ("L" (org-agenda-log-mode '(4)))
+  ("c" (org-agenda-log-mode 'clockcheck))
+  ("f" org-agenda-follow-mode (format "% -3S" org-agenda-follow-mode))
+  ("a" org-agenda-archives-mode)
+  ("A" (org-agenda-archives-mode 'files))
+  ("r" org-agenda-clockreport-mode (format "% -3S" org-agenda-clockreport-mode))
+  ("e" org-agenda-entry-text-mode (format "% -3S" org-agenda-entry-text-mode))
+  ("g" org-agenda-toggle-time-grid (format "% -3S" org-agenda-use-time-grid))
+  ("D" org-agenda-toggle-diary (format "% -3S" org-agenda-include-diary))
+  ("!" org-agenda-toggle-deadlines)
+  ("[" (let ((org-agenda-include-inactive-timestamps t))
+         (org-agenda-check-type t 'timeline 'agenda)
+         (org-agenda-redo)
+         (message "Display now includes inactive timestamps as well")))
+  ("q" (message "Abort") :exit t)
+  ("v" nil)
+  )
+
+(defhydra hydra-movement ()
+  ("j" next-line "down" :column "Vertical")
+  ("k" previous-line "up")
+  ("l" forward-char "forward" :column "Horizontal")
+  ("h" backward-char "back"))
 
 (global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
 
@@ -651,7 +706,8 @@ _t_: toggle marks _Q_: find/rep
          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
          ([remap xref-find-references] . lsp-ui-peek-find-references)
          ([remap xref-pop-marker-stack] . lsp-ui-peek-jump-backward)
-         ([remap imenu] . lsp-ui-imenu)))
+         ([remap imenu-list] . lsp-ui-imenu)
+         ))
 
 ;; 关闭自动格式化，全局关闭
 ;; (setq +form-with-lsp nil)
@@ -1193,13 +1249,20 @@ is selected, only the bare key is returned."
                                  (search    . "%l")
                                  )
       org-agenda-tags-column 80
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-timestamp-if-done t
+      ;; org-agenda-todo-ignore-scheduled t
+      ;; org-agenda-todo-ignore-deadlines t
+      ;; org-agenda-todo-ignore-timestamp t
+      ;; org-agenda-todo-ignore-with-date t
+      org-agenda-start-on-weekday nil ; 从今天开始
       org-agenda-todo-list-sublevels t
       org-agenda-include-deadlines t
       org-agenda-log-mode-items '(closed clock state)
       org-agenda-block-separator nil
       org-agenda-compact-blocks t
-      org-agenda-breadcrumbs-separator " ❱
- "
+      org-agenda-breadcrumbs-separator " ❱ "
       org-agenda-current-time-string "⏰ ┈┈┈┈┈┈┈┈┈┈┈ now"
       org-agenda-sorting-strategy
       '((agenda habit-down time-up effort-up priority-down category-keep)
