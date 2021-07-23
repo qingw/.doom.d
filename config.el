@@ -266,6 +266,7 @@ Finally save buffer.
  ;; "M-@"          #'bm-previous
  "M--"          #'gcl/goto-match-paren
  "M-i"          #'parrot-rotate-next-word-at-point
+ ;; "S-M-SPC"      #'counsel-osx-app
  )
 
 (map!
