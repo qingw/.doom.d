@@ -491,10 +491,51 @@ Finally save buffer.
   :config
   (engine/set-keymap-prefix (kbd "C-c s"))
   ;; (setq engine/browser-function 'eww-browse-url)
-  (defengine google "https://www.google.com/search?q=%s"
-    :keybinding "/")
+  (defengine amazon
+    "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s"
+    :keybinding "a")
   (defengine baidu "https://www.baidu.com/s?wd=%s"
-    :keybinding "b")
+    :keybinding "bb")
+  (defengine baidu-image "https://image.baidu.com/search/index?tn=baiduimage&word=%s"
+    :keybinding "bi")
+  (defengine ctan
+    "http://www.ctan.org/search/?x=1&PORTAL=on&phrase=%s"
+    :docstring "Search the Comprehensive TeX Archive Network (ctan.org)"
+    :keybinding "c")
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+  (defengine github
+    "https://github.com/search?ref=simplesearch&q=%s"
+    :keybinding "g")
+  (defengine rfcs
+    "http://pretty-rfc.herokuapp.com/search?q=%s"
+    :keybinding "r")
+  (defengine stack-overflow
+    "https://stackoverflow.com/search?q=%s"
+    :keybinding "s")
+  (defengine twitter
+    "https://twitter.com/search?q=%s"
+    :keybinding "t")
+  (defengine wolfram-alpha
+    "http://www.wolframalpha.com/input/?i=%s"
+    :docstring "数学搜索引擎，公式，坐标图等。"
+    :keybinding "w") ; 数学搜索引擎，公式，坐标图等
+  (defengine youtube
+    "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
+    :keybinding "y")
+
+  (defengine google-images
+    "http://www.google.com/images?hl=en&source=hp&biw=1440&bih=795&gbv=2&aq=f&aqi=&aql=&oq=&q=%s"
+    :keybinding "/i")
+  (defengine google-maps
+    "http://maps.google.com/maps?q=%s"
+    :docstring "Mappin' it up."
+    :keybinding "/m")
+  (defengine google
+    "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+    :keybinding "//")
+
   (engine-mode 1))
 
 (use-package! dash-at-point
