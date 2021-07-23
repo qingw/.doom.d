@@ -274,6 +274,7 @@ Finally save buffer.
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
+ "C-."          #'avy-goto-word-1
  ;; "C-;"          #'avy-goto-char-2
  ;; "C-`"          #'popper-toggle-latest
  ;; "C-~"          #'popper-cycle
@@ -403,6 +404,10 @@ Finally save buffer.
       "C-c c c"        #'counsel-org-clock-context
       "C-c c r"        #'counsel-org-clock-rebuild-history
 )
+
+(use-package! autoinsert
+  :hook
+  (find-file . auto-insert))
 
 (global-set-key (kbd "M-g f") 'avy-goto-line)
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
@@ -1485,6 +1490,13 @@ is selected, only the bare key is returned."
 (use-package! restclient
   :mode (("\\.rest\\'" . restclient-mode)
          ("\\.restclient\\'" . restclient-mode)))
+
+(use-package! ob-restclient
+  :after org restclient
+  :init
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((restclient . t))))
 
 (sp-local-pair
  '(org-mode)

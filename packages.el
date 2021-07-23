@@ -1,5 +1,6 @@
 (package! dotenv-mode)
 (package! leetcode)
+(package! ob-restclient)
 
 (package! instant-rename-tag
   :recipe (:host github
@@ -18,6 +19,7 @@
 
 (package! crux)
 (package! deft)
+(package! autoinsert)
 (package! ranger)
 (package! sudo-edit)
 

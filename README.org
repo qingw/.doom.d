@@ -589,6 +589,7 @@ private:
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
+ "C-."          #'avy-goto-word-1
  ;; "C-;"          #'avy-goto-char-2
  ;; "C-`"          #'popper-toggle-latest
  ;; "C-~"          #'popper-cycle
@@ -740,6 +741,12 @@ private:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
+** Autoinsert
+#+begin_src emacs-lisp
+(use-package! autoinsert
+  :hook
+  (find-file . auto-insert))
+#+end_src
 ** Avy
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-g f") 'avy-goto-line)
@@ -2016,6 +2023,13 @@ ignore some directories.
 (use-package! restclient
   :mode (("\\.rest\\'" . restclient-mode)
          ("\\.restclient\\'" . restclient-mode)))
+
+(use-package! ob-restclient
+  :after org restclient
+  :init
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((restclient . t))))
 #+end_src
 
 ** Smartparen
@@ -2173,6 +2187,7 @@ Use `.prettierrc` file for prettier.
 #+begin_src emacs-lisp
 (package! dotenv-mode)
 (package! leetcode)
+(package! ob-restclient)
 #+end_src
 *** WEB
 
@@ -2199,6 +2214,7 @@ File and directory management packages.
 #+begin_src emacs-lisp
 (package! crux)
 (package! deft)
+(package! autoinsert)
 (package! ranger)
 (package! sudo-edit)
 #+end_src
