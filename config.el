@@ -421,6 +421,7 @@ Finally save buffer.
       "C-c C-r C-u"     #'verb-export-request-on-point-curl
       "C-c C-r C-b"     #'verb-export-request-on-point-verb
       "C-c C-r C-w"     #'verb-export-request-on-point-eww
+      "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
 
 )
 
@@ -605,12 +606,11 @@ Finally save buffer.
       "<f2>"    #'hydra-web-mode/body
       )
 
-(defhydra gcl-jump (:color blue :columns 3 :hint nil)
+(defhydra gcl-jump-hydra (:color blue :columns 3 :hint nil)
   "Jump -> Body"
   ("a" gcl-agenda-view/body "Org-Agenda")
   ("c" gcl-jump-char/body "Char Jump")
   ("l" gcl-jump-line/body "Line Jump")
-  ("v" gcl-verb-hydra/body "Verb")
   ("w" gcl-jump-word/body "Word Jump")
 
   )
@@ -618,7 +618,8 @@ Finally save buffer.
 (defhydra gcl-everything (:color blue :columns 3 :hint nil)
   "🗯 做任何你想不到的事情~~~~ 👁👁👁👁👁👁👁👁👁
 🌻"
-  ("j" gcl-jump/body "Avy")
+  ("j" gcl-jump-hydra/body "Avy")
+  ("v" gcl-verb-hydra/body "Verb")
   )
 
 (defhydra gcl-jump-char (:color blue :columns 3 :hint nil)
@@ -758,9 +759,14 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   ("f" verb-send-request-on-point "Fullscreen")
   ("m" verb-send-request-on-point-no-window "No Window")
   ("K" verb-kill-all-response-buffers "Kill All")
-  ("u" verb-export-request-on-point-curl "Export Curl")
-  ("b" verb-export-request-on-point-verb "Export Verb")
-  ("v" verb-export-request-on-point-eww "Export EWW")
+
+  ("vl" verb-show-vars "Show Vars")
+  ("vl" verb-set-var "Set Var")
+  ("vu" verb-unset-vars "Unset Vars")
+
+  ("ec" verb-export-request-on-point-curl "Export Curl")
+  ("ev" verb-export-request-on-point-verb "Export Verb")
+  ("ew" verb-export-request-on-point-verb "Export EWW")
   )
 
 (global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
