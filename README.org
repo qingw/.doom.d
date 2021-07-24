@@ -731,12 +731,15 @@ private:
       "C-c e i"         #'all-the-icons-insert-alltheicon
 
       ;; org clock
-      "C-c c i"        #'org-clock-in
-      "C-c c o"        #'org-clock-out
-      "C-c c h"        #'counsel-org-clock-history
-      "C-c c g"        #'counsel-org-clock-goto
-      "C-c c c"        #'counsel-org-clock-context
-      "C-c c r"        #'counsel-org-clock-rebuild-history
+      "C-c c i"         #'org-clock-in
+      "C-c c o"         #'org-clock-out
+      "C-c c h"         #'counsel-org-clock-history
+      "C-c c g"         #'counsel-org-clock-goto
+      "C-c c c"         #'counsel-org-clock-context
+      "C-c c r"         #'counsel-org-clock-rebuild-history
+
+      ;; verb
+      ;; "C-c C-r"         #'verb-command-map
 )
 #+end_src
 ** Web-mode
@@ -1357,9 +1360,18 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
         ("*" . "+")
         ("1." . "a.")))
 
+
+(use-package! org
+  :hook ((verb-mode . org-mode)
+         (+org-pretty-mode . org-mode)))
+
 (after! org
-  (add-hook 'org-mode-hook #'+org-pretty-mode)
   (add-hook 'org-mode-hook (lambda () (visual-line-mode -1)))
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                             (append org-babel-load-languages
+                              '((restclient . t)
+                                (verb . t)))
 
   (setq
    org-todo-keywords
@@ -1431,6 +1443,24 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
   :hook
   (org-mode . valign-mode))
 #+end_src
+*** Verb
+#+begin_src emacs-lisp
+;; unused: b,d,f,g,j,k,m,n,o,p,r,t,u,v,w,x,y,z
+(use-package! verb
+  :after org
+  :config
+  (setq tempo-template-org-verb '("#+begin_src verb :wrap src ob-verb-response"
+                                  nil '> n p n
+                                  "#+end_src" >))
+  )
+
+#+end_src
+
+#+begin_src verb :wrap src ob-verb-response
+get https://api.ipify.org/?format=json
+#+end_src
+
+demos:
 
 *** org-clock
 #+begin_src emacs-lisp
@@ -2376,6 +2406,7 @@ Window management packages.
 (package! net-utils)
 (package! engine-mode)
 ;; (package! server)
+(package! verb)
 #+end_src
 ** Org
 #+begin_src emacs-lisp

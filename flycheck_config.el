@@ -409,7 +409,7 @@ Finally save buffer.
       "C-c c r"         #'counsel-org-clock-rebuild-history
 
       ;; verb
-      ;; "C-c C-r"         #'verb-command-map
+      "C-c C-r"         #'verb-command-map
 )
 
 (use-package! autoinsert
@@ -897,20 +897,17 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
         ("*" . "+")
         ("1." . "a.")))
 
-
-(use-package! org
-  :hook ((verb-mode . org-mode)
-         (+org-pretty-mode . org-mode)))
-
 (after! org
+  (add-hook 'org-mode-hook #'+org-pretty-mode)
   (add-hook 'org-mode-hook (lambda () (visual-line-mode -1)))
 
-  (org-babel-do-load-languages 'org-babel-load-languages
-                             (append org-babel-load-languages
-                              '((restclient . t)
-                                (verb . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((restclient . t)
+     (verb . t)))
 
   (setq
+   org-babel-do-load
    org-todo-keywords
    '((sequence "TODO(t)" "PROJECT(p)" "NEXT(n)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "SOMEDAY(s)" "MAYBE(m)" "|" "DONE(d)" "CANCELLED(c)")
      (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")

@@ -42,6 +42,7 @@
 (package! net-utils)
 (package! engine-mode)
 ;; (package! server)
+(package! verb)
 
 (package! counsel-org-clock)
 (package! doct
