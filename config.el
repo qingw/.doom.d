@@ -751,7 +751,7 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   ("v" nil)
   )
 
-(defhydra gcl-verb-hydra (:colors yellow :columns 3)
+(defhydra gcl-verb-hydra (:colors yellow :columns 3 :hint nil)
   ("r" verb-send-request-on-point-other-window-stay "Send Focus")
   ("s" verb-send-request-on-point-other-window "Send Blur")
   ("f" verb-send-request-on-point "Fullscreen")
