@@ -871,6 +871,22 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
         ("s" . smbclient)
         ("t" . traceroute)))
 
+(use-package! browse-at-remote
+  :config
+  (setq
+   browse-at-remote-remote-type-domains '(("bitbucket.org" . "bitbucket")
+                                          ("github.com" . "github")
+                                          ("gitlab.com" . "gitlab")
+                                          ("git.savannah.gnu.org" . "gnu")
+                                          ("gist.github.com" . "gist")
+                                          ("git.sr.ht" . "sourcehut")
+                                          ("vs-ssh.visualstudio.com" . "ado")
+                                          ("pagure.io" . "pagure")
+                                          ("src.fedoraproject.org" . "pagure")
+                                          ("code.aliyun.com" . "aliyun")
+                                          )
+))
+
 ;; (org-hide-emphasis-markers t)
 (setq org-list-demote-modify-bullet
       '(("+" . "-")
