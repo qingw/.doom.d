@@ -386,11 +386,13 @@ Finally save buffer.
  )
 
 (map! :map org-mode-map
-      :n       "tt"     #'org-todo
-      :n       "tc"     #'org-toggle-checkbox
-      :n       "tpp"    #'org-priority
-      :n       "tpu"    #'org-priority-up
-      :n       "tpd"    #'org-priority-down
+      :n        "tt"     #'org-todo
+      :n        "tc"     #'org-toggle-checkbox
+      :n        "tpp"    #'org-priority
+      :n        "tpu"    #'org-priority-up
+      :n        "tpd"    #'org-priority-down
+
+
 
       "C-c e e"         #'all-the-icons-insert
       "C-c e a"         #'all-the-icons-insert-faicon
@@ -409,7 +411,16 @@ Finally save buffer.
       "C-c c r"         #'counsel-org-clock-rebuild-history
 
       ;; verb
-      ;; "C-c C-r"         #'verb-command-map
+      "C-c C-r C-r"     #'verb-send-request-on-point-other-window-stay
+      "C-c C-r C-s"     #'verb-send-request-on-point-other-window
+      "C-c C-r C-f"     #'verb-send-request-on-point
+      "C-c C-r C-m"     #'verb-send-request-on-point-no-window
+      "C-c C-r C-k"     #'verb-kill-response-buffer-and-window
+      "C-c C-r C-a"     #'verb-kill-all-response-buffers
+      "C-c C-r C-u"     #'verb-export-request-on-point-curl
+      "C-c C-r C-b"     #'verb-export-request-on-point-verb
+      "C-c C-r C-w"     #'verb-export-request-on-point-eww
+
 )
 
 (use-package! autoinsert
@@ -598,7 +609,9 @@ Finally save buffer.
   ("a" gcl-agenda-view/body "Org-Agenda")
   ("c" gcl-jump-char/body "Char Jump")
   ("l" gcl-jump-line/body "Line Jump")
+  ("v" gcl-verb-hydra/body "Verb")
   ("w" gcl-jump-word/body "Word Jump")
+
   )
 
 (defhydra gcl-everything (:color blue :columns 3 :hint nil)
@@ -693,6 +706,12 @@ _t_: toggle marks _Q_: find/rep
   ("<up>" dired-up-directory)
   )
 
+(defhydra hydra-movement ()
+  ("j" next-line "down" :column "Vertical")
+  ("k" previous-line "up")
+  ("l" forward-char "forward" :column "Horizontal")
+  ("h" backward-char "back"))
+
 (defun org-agenda-cts ()
   (and (eq major-mode 'org-agenda-mode)
        (let ((args (get-text-property
@@ -732,11 +751,16 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   ("v" nil)
   )
 
-(defhydra hydra-movement ()
-  ("j" next-line "down" :column "Vertical")
-  ("k" previous-line "up")
-  ("l" forward-char "forward" :column "Horizontal")
-  ("h" backward-char "back"))
+(defhydra gcl-verb-hydra (:colors yellow :columns 3)
+  ("r" verb-send-request-on-point-other-window-stay "Send Focus")
+  ("s" verb-send-request-on-point-other-window "Send Blur")
+  ("f" verb-send-request-on-point "Fullscreen")
+  ("m" verb-send-request-on-point-no-window "No Window")
+  ("K" verb-kill-all-response-buffers "Kill All")
+  ("u" verb-export-request-on-point-curl "Export Curl")
+  ("b" verb-export-request-on-point-verb "Export Verb")
+  ("v" verb-export-request-on-point-eww "Export EWW")
+  )
 
 (global-set-key (kbd "C-'") 'imenu-list-smart-toggle)
 
@@ -899,7 +923,8 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 
 
 (use-package! org
-  :hook ((verb-mode . org-mode)
+  :hook (
+         ;; (verb-mode . org-mode)
          (+org-pretty-mode . org-mode)))
 
 (after! org
@@ -971,13 +996,17 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   :hook
   (org-mode . valign-mode))
 
+;; (setq verb-base-headers '(("User-Agent" . "my-user-agent")))
+
 ;; unused: b,d,f,g,j,k,m,n,o,p,r,t,u,v,w,x,y,z
 (use-package! verb
   :after org
   :config
-  (setq tempo-template-org-verb '("#+begin_src verb :wrap src ob-verb-response"
-                                  nil '> n p n
-                                  "#+end_src" >))
+  (setq
+   tempo-template-org-verb '("#+begin_src verb :wrap src ob-verb-response"
+                             nil '> n p n
+                             "#+end_src" >)
+   verb-auto-kill-response-buffers t)
   )
 
 (after! org-clock
