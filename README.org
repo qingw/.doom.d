@@ -549,11 +549,16 @@ private:
 :END:
 
 ** Unbindings
+[[https://github.com/hlissner/doom-emacs/issues/1099][To Unbind]]
+
+
 #+begin_src emacs-lisp
+
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
-(map! "C-e" nil
-      :n        ","     nil)
+(map! "C-e" nil)
+;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r")
+(undefine-key! "," "C-c C-r")
 #+end_src
 ** F1~12
 
@@ -742,16 +747,16 @@ private:
       "C-c c r"         #'counsel-org-clock-rebuild-history
 
       ;; verb
-      "C-c C-r C-r"     #'verb-send-request-on-point-other-window-stay
-      "C-c C-r C-s"     #'verb-send-request-on-point-other-window
-      "C-c C-r C-f"     #'verb-send-request-on-point
-      "C-c C-r C-m"     #'verb-send-request-on-point-no-window
-      "C-c C-r C-k"     #'verb-kill-response-buffer-and-window
-      "C-c C-r C-a"     #'verb-kill-all-response-buffers
-      "C-c C-r C-u"     #'verb-export-request-on-point-curl
-      "C-c C-r C-b"     #'verb-export-request-on-point-verb
-      "C-c C-r C-w"     #'verb-export-request-on-point-eww
-      "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
+      ;; "C-c C-r C-r"     #'verb-send-request-on-point-other-window-stay
+      ;; "C-c C-r C-s"     #'verb-send-request-on-point-other-window
+      ;; "C-c C-r C-f"     #'verb-send-request-on-point
+      ;; "C-c C-r C-m"     #'verb-send-request-on-point-no-window
+      ;; "C-c C-r C-k"     #'verb-kill-response-buffer-and-window
+      ;; "C-c C-r C-a"     #'verb-kill-all-response-buffers
+      ;; "C-c C-r C-u"     #'verb-export-request-on-point-curl
+      ;; "C-c C-r C-b"     #'verb-export-request-on-point-verb
+      ;; "C-c C-r C-w"     #'verb-export-request-on-point-eww
+      ;; "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
 
 )
 #+end_src
@@ -1393,10 +1398,10 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
         ("1." . "a.")))
 
 
-(use-package! org
-  :hook (
-         ;; (verb-mode . org-mode)
-         (+org-pretty-mode . org-mode)))
+;; (use-package! org
+;;   :hook (
+;;          ;; (verb-mode . org-mode)
+;;          (+org-pretty-mode . org-mode)))
 
 (after! org
   (add-hook 'org-mode-hook (lambda () (visual-line-mode -1)))
@@ -1404,7 +1409,8 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
   (org-babel-do-load-languages 'org-babel-load-languages
                              (append org-babel-load-languages
                               '((restclient . t)
-                                (verb . t)))
+                                (verb . t))
+                              ))
 
   (setq
    org-todo-keywords
@@ -1429,15 +1435,15 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
                             ("[-]" . ,(doom-color 'yellow))
                             ("[?]" . ,(doom-color 'red))
                             )
-   org-enforce-todo-dependencies nil ;; if t, it hides todo entries with todo children from agenda
-   org-enforce-todo-checkbox-dependencies nil
+   ;; org-enforce-todo-dependencies nil ;; if t, it hides todo entries with todo children from agenda
+   ;; org-enforce-todo-checkbox-dependencies nil
    org-provide-todo-statistics t
    org-pretty-entities t
    org-hierarchical-todo-statistics t
 
    ;; org-startup-with-inline-images t
    org-hide-emphasis-markers t
-   org-fontify-whole-heading-line nil
+   ;; org-fontify-whole-heading-line nil
    org-src-fontify-natively t
    org-imenu-depth 9
 
