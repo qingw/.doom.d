@@ -255,7 +255,7 @@ Finally save buffer.
 (undefine-key! evil-normal-state-map ",")
 (undefine-key! org-mode-map "C-c C-r")
 
-(global-set-key (kbd "<f2>") 'gcl-jump/body)        ; ns-print-buffer
+(global-set-key (kbd "<f2>") 'gcl-jump-hydra/body)        ; ns-print-buffer
 (global-set-key (kbd "<f3>") 'gcl-everything/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
@@ -414,16 +414,16 @@ Finally save buffer.
       "C-c c r"         #'counsel-org-clock-rebuild-history
 
       ;; verb
-      ;; "C-c C-r C-r"     #'verb-send-request-on-point-other-window-stay
-      ;; "C-c C-r C-s"     #'verb-send-request-on-point-other-window
-      ;; "C-c C-r C-f"     #'verb-send-request-on-point
-      ;; "C-c C-r C-m"     #'verb-send-request-on-point-no-window
-      ;; "C-c C-r C-k"     #'verb-kill-response-buffer-and-window
-      ;; "C-c C-r C-a"     #'verb-kill-all-response-buffers
-      ;; "C-c C-r C-u"     #'verb-export-request-on-point-curl
-      ;; "C-c C-r C-b"     #'verb-export-request-on-point-verb
-      ;; "C-c C-r C-w"     #'verb-export-request-on-point-eww
-      ;; "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
+      "C-c C-r C-r"     #'verb-send-request-on-point-other-window-stay
+      "C-c C-r C-s"     #'verb-send-request-on-point-other-window
+      "C-c C-r C-f"     #'verb-send-request-on-point
+      "C-c C-r C-m"     #'verb-send-request-on-point-no-window
+      "C-c C-r C-k"     #'verb-kill-response-buffer-and-window
+      "C-c C-r C-a"     #'verb-kill-all-response-buffers
+      "C-c C-r C-u"     #'verb-export-request-on-point-curl
+      "C-c C-r C-b"     #'verb-export-request-on-point-verb
+      "C-c C-r C-w"     #'verb-export-request-on-point-eww
+      "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
 
 )
 
