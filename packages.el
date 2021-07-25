@@ -67,7 +67,7 @@
   :recipe (:host github :repo "Townk/org-ol-tree"))
 (package! org-sort-tasks
   :recipe (:host github :repo "felipelalli/org-sort-tasks"))
-(package! org-preview-html)
+(package! org-preview-html :disable t)
 
 (package! bm)
 (package! imenu-list)

@@ -1,7 +1,7 @@
 #+title: Doom Emacs Configuration
 #+subtitle: The Methods, Management, and Menagerie of Madness
 #+author: Zhicheng Lee
-#+date: @@html:<!--@@{{{git-rev}}}@@html:-->@@@@latex:\\\Large\bfseries@@ {{{modification-time(%Y-%m-%d, t)}}} @@latex:\\\normalsize\mdseries@@{{{modification-time(%H:%M, t)}}} @@latex:\acr{\lowercase{@@{{{timezone}}}@@latex:}}\iffalse@@, {{{git-rev}}}@@latex:\fi@@
+#+date: @@html:<!--@@@@html:<a href="https://github.com/gcclll/.doom.d/commit/fe602c5" style="text-decoration: none"><code style="padding: 0; color: var(--text-light); font-size: inherit; opacity: 0.7">fe602c5</code></a>@@@@latex:\href{https://github.com/gcclll/.doom.d/commit/fe602c5}{fe602c5}@@@@html:-->@@@@latex:\\\Large\bfseries@@ {{{modification-time(%Y-%m-%d, t)}}} @@latex:\\\normalsize\mdseries@@{{{modification-time(%H:%M, t)}}} @@latex:\acr{\lowercase{@@{{{timezone}}}@@latex:}}\iffalse@@, {{{git-rev}}}@@latex:\fi@@
 #+macro: timezone (eval (substring (shell-command-to-string "date +%Z") 0 -1))
 #+macro: git-rev (eval (format "@@html:<a href=\"https://github.com/gcclll/.doom.d/commit/%1$s\" style=\"text-decoration: none\"><code style=\"padding: 0; color: var(--text-light); font-size: inherit; opacity: 0.7\">%1$s</code></a>@@@@latex:\\href{https://github.com/gcclll/.doom.d/commit/%1$s}{%1$s}@@" (substring (shell-command-to-string "git rev-parse --short HEAD") 0 -1)))
 #+startup: fold
@@ -495,6 +495,9 @@ private:
       read-process-output-max (* 1024 1024)
       display-line-numbers-type t
 
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome"
+
       ;; web, js, css
       css-indent-offset 2
       js2-basic-offset 2
@@ -528,6 +531,8 @@ private:
       ;; mouse wheel
       mouse-wheel-follow-mouse 't
       mouse-wheel-scroll-amount '(1 ((shift) . 1))
+
+      vc-log-view-type nil
     )
 
 (setq-default
@@ -2076,6 +2081,10 @@ is selected, only the bare key is returned."
   )
 #+end_src
 *** org-preview-html
+#+begin_src emacs-lisp
+(use-package! org-preview-html
+  :after org)
+#+end_src
 
 ** OSX
 
@@ -2478,7 +2487,7 @@ Window management packages.
   :recipe (:host github :repo "Townk/org-ol-tree"))
 (package! org-sort-tasks
   :recipe (:host github :repo "felipelalli/org-sort-tasks"))
-(package! org-preview-html)
+(package! org-preview-html :disable t)
 #+end_src
 ** PDF
 ** Projectile

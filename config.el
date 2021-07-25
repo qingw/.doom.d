@@ -200,6 +200,9 @@ Finally save buffer.
       read-process-output-max (* 1024 1024)
       display-line-numbers-type t
 
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome"
+
       ;; web, js, css
       css-indent-offset 2
       js2-basic-offset 2
@@ -233,6 +236,8 @@ Finally save buffer.
       ;; mouse wheel
       mouse-wheel-follow-mouse 't
       mouse-wheel-scroll-amount '(1 ((shift) . 1))
+
+      vc-log-view-type nil
     )
 
 (setq-default
@@ -1544,6 +1549,9 @@ is selected, only the bare key is returned."
   (advice-add #'org-roam-doctor :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
   (advice-add #'org-roam-link--replace-link-on-save :after #'+org-roam/replace-file-with-id-link)
   )
+
+(use-package! org-preview-html
+  :after org)
 
 (use-package! parrot
   :config
