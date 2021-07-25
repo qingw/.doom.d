@@ -2075,6 +2075,8 @@ is selected, only the bare key is returned."
   (advice-add #'org-roam-link--replace-link-on-save :after #'+org-roam/replace-file-with-id-link)
   )
 #+end_src
+*** org-preview-html
+
 ** OSX
 
 Keybindings:
@@ -2476,6 +2478,7 @@ Window management packages.
   :recipe (:host github :repo "Townk/org-ol-tree"))
 (package! org-sort-tasks
   :recipe (:host github :repo "felipelalli/org-sort-tasks"))
+(package! org-preview-html)
 #+end_src
 ** PDF
 ** Projectile
