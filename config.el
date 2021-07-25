@@ -201,7 +201,8 @@ Finally save buffer.
       display-line-numbers-type t
 
       browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "google-chrome"
+      browse-url-generic-program "Google Chrome"
+      browse-url-chrome-program "Google Chrome"
 
       ;; web, js, css
       css-indent-offset 2
