@@ -557,8 +557,9 @@ private:
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
 (map! "C-e" nil)
-;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r")
-(undefine-key! "," "C-c C-r")
+;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r" ",")
+(undefine-key! evil-normal-state-map ",")
+(undefine-key! org-mode-map "C-c C-r")
 #+end_src
 ** F1~12
 

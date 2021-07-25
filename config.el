@@ -251,8 +251,9 @@ Finally save buffer.
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
 (map! "C-e" nil)
-;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r")
-(undefine-key! "," "C-c C-r")
+;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r" ",")
+(undefine-key! evil-normal-state-map ",")
+(undefine-key! org-mode-map "C-c C-r")
 
 (global-set-key (kbd "<f2>") 'gcl-jump/body)        ; ns-print-buffer
 (global-set-key (kbd "<f3>") 'gcl-everything/body)
