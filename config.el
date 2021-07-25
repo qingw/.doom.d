@@ -200,10 +200,6 @@ Finally save buffer.
       read-process-output-max (* 1024 1024)
       display-line-numbers-type t
 
-      browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "Google Chrome"
-      browse-url-chrome-program "Google Chrome"
-
       ;; web, js, css
       css-indent-offset 2
       js2-basic-offset 2
@@ -795,11 +791,13 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
         leetcode-save-solutions t
         leetcode-directory "~/github/make-leetcode"))
 
-(use-package! link-hint
-  :config
-  (setq
-   ;; browse-url-browser-function 'browse-url
-   browse-url-generic-args '("--target" "tab")))
+;; (use-package! link-hint
+;;   :config
+;;   (setq
+;;    browse-url-browser-function 'browse-url
+;;    ;; browse-url-generic-args '("--target" "tab")
+;;    )
+;;   )
 
 (use-package! lsp-mode
   :hook ((web-mode . lsp)
