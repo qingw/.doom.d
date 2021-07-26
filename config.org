@@ -550,7 +550,11 @@ private:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
-Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/%2Bevil-bindings.el][evil-bindings.el]]
+Keybindings reference:
+
+[[https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/%2Bevil-bindings.el][evil-bindings.el]]
+
+[[https://github.com/hlissner/doom-emacs/blob/617fc7f1cc6c91d80a30aca0445ae21f1bd5ddc9/modules/editor/evil/config.el][editor/evil/config.el]]
 
 ** Unbindings
 [[https://github.com/hlissner/doom-emacs/issues/1099][To Unbind]]
@@ -602,16 +606,8 @@ Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/mod
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
 
- "C-:"          #'avy-goto-char
- "C-."          #'avy-goto-word-1
-
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
-
- ;; "C-;"          #'avy-goto-char-2
- ;; "C-`"          #'popper-toggle-latest
- ;; "C-~"          #'popper-cycle
-
  )
 #+end_src
 
@@ -716,7 +712,21 @@ Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/mod
 ;; remap gs-> keybinding
 (map! :after evil-easymotion
       :map evilem-map
-      "l" #'avy-goto-word-0)
+      "c"       #'avy-goto-char
+      "C"       #'avy-goto-char-2
+      "w"       #'avy-goto-word-0
+      "W"       #'avy-goto-word-1
+      "ll"      #'avy-goto-line
+      "lu"      #'avy-goto-line-above
+      "ld"      #'avy-goto-line-below
+      )
+
+;; gi == gs
+(map! :after evil-easymotion
+      :m "gi" evilem-map
+      (:map evilem-map
+       "f"      #'+org/attach-file-and-insert-link
+       ))
 #+end_src
 *** SPC
 #+begin_src emacs-lisp
@@ -795,12 +805,6 @@ Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/mod
 )
 #+end_src
 ** Web-mode
-** VTerm-mode
-
-#+begin_src emacs-lisp
-(map! :map vterm-mode-map
-      "C-t" #'+vterm-toggle)
-#+end_src
 * Package Settings
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no

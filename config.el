@@ -281,16 +281,8 @@ Finally save buffer.
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
 
- "C-:"          #'avy-goto-char
- "C-."          #'avy-goto-word-1
-
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
-
- ;; "C-;"          #'avy-goto-char-2
- ;; "C-`"          #'popper-toggle-latest
- ;; "C-~"          #'popper-cycle
-
  )
 
 (map!
@@ -382,7 +374,21 @@ Finally save buffer.
 ;; remap gs-> keybinding
 (map! :after evil-easymotion
       :map evilem-map
-      "l" #'avy-goto-word-0)
+      "c"       #'avy-goto-char
+      "C"       #'avy-goto-char-2
+      "w"       #'avy-goto-word-0
+      "W"       #'avy-goto-word-1
+      "ll"      #'avy-goto-line
+      "lu"      #'avy-goto-line-above
+      "ld"      #'avy-goto-line-below
+      )
+
+;; gi == gs
+(map! :after evil-easymotion
+      :m "gi" evilem-map
+      (:map evilem-map
+       "f"      #'+org/attach-file-and-insert-link
+       ))
 
 (map!
  :leader
@@ -455,9 +461,6 @@ Finally save buffer.
       "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
 
 )
-
-(map! :map vterm-mode-map
-      "C-t" #'+vterm-toggle)
 
 (use-package! autoinsert
   :hook
