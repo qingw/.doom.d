@@ -368,7 +368,6 @@ Finally save buffer.
  ;; z
  :n     "z-"    #'sp-splice-sexp
  :n     "z."    #'emmet-wrap-with-markup
-
  )
 
 ;; remap gs-> keybinding
@@ -382,13 +381,6 @@ Finally save buffer.
       "lu"      #'avy-goto-line-above
       "ld"      #'avy-goto-line-below
       )
-
-;; gi == gs
-(map! :after evil-easymotion
-      :m "gi" evilem-map
-      (:map evilem-map
-       "f"      #'+org/attach-file-and-insert-link
-       ))
 
 (map!
  :leader
@@ -408,6 +400,7 @@ Finally save buffer.
  :n     "es"            #'sudo-edit
 
  ;; i -> Insert, Imenu
+ :n     "ia"            #'+org/attach-file-and-insert-link
  :n     "im"            #'imenu-list
  :n     "iM"            #'lsp-ui-imenu
 

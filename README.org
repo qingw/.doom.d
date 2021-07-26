@@ -690,7 +690,6 @@ Keybindings reference:
 
 *** Evil
 
-
 #+begin_src emacs-lisp
 (map!
  :n     "+"     #'evil-numbers/inc-at-pt
@@ -706,7 +705,6 @@ Keybindings reference:
  ;; z
  :n     "z-"    #'sp-splice-sexp
  :n     "z."    #'emmet-wrap-with-markup
-
  )
 
 ;; remap gs-> keybinding
@@ -720,13 +718,6 @@ Keybindings reference:
       "lu"      #'avy-goto-line-above
       "ld"      #'avy-goto-line-below
       )
-
-;; gi == gs
-(map! :after evil-easymotion
-      :m "gi" evilem-map
-      (:map evilem-map
-       "f"      #'+org/attach-file-and-insert-link
-       ))
 #+end_src
 *** SPC
 #+begin_src emacs-lisp
@@ -748,6 +739,7 @@ Keybindings reference:
  :n     "es"            #'sudo-edit
 
  ;; i -> Insert, Imenu
+ :n     "ia"            #'+org/attach-file-and-insert-link
  :n     "im"            #'imenu-list
  :n     "iM"            #'lsp-ui-imenu
 
