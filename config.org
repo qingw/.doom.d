@@ -627,9 +627,12 @@ private:
  ;; n -> network utils
  ;; "C-c n x"      #'xxx
 
- ;; s -> search, replace, ...
- "C-c s r"      #'vr/replace
- "C-c s q"      #'vr/query-replace
+ ;; s -> search/engine ...
+ ;; "C-c s r"  ;; ...
+
+ ;; s -> replace
+ "C-c r r"      #'vr/replace
+ "C-c r q"      #'vr/query-replace
 
  ;; u -> url, ...
  "C-c u u"      #'crux-view-url
@@ -640,6 +643,19 @@ private:
 
  ;; y -> youdao, ...
  "C-c y y"      #'youdao-dictionary-search-at-point+
+
+ "C-c C-r C-r"          #'verb-send-request-on-point-other-window-stay
+ "C-c C-r C-s"          #'verb-send-request-on-point-other-window
+ "C-c C-r C-f"          #'verb-send-request-on-point
+ "C-c C-r C-m"          #'verb-send-request-on-point-no-window
+ "C-c C-r C-k"          #'verb-kill-response-buffer-and-window
+ "C-c C-r C-a"          #'verb-kill-all-response-buffers
+ "C-c C-r C-u"          #'verb-export-request-on-point-curl
+ "C-c C-r C-b"          #'verb-export-request-on-point-verb
+ "C-c C-r C-w"          #'verb-export-request-on-point-eww
+ "C-c C-r C-l"          #'verb-show-vars        ; 查看已存在的变量值列表
+ "C-c C-r C-v"          #'verb-set-var
+
  )
 #+end_src
 **** C-x
