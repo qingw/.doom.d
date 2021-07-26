@@ -24,7 +24,7 @@
 (package! sudo-edit)
 
 (package! popper
-  :recipe (:host github :repo "waymondo/popper"))
+  :recipe (:host github :repo "waymondo/popper") :disable t)
 
 (package! selectric-mode
   :pin "1840de71f7414b7cd6ce425747c8e26a413233aa")

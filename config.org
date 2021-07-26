@@ -2463,7 +2463,7 @@ Window management packages.
 
 #+begin_src emacs-lisp
 (package! popper
-  :recipe (:host github :repo "waymondo/popper"))
+  :recipe (:host github :repo "waymondo/popper") :disable t)
 #+end_src
 ** Funny
 #+begin_src emacs-lisp
@@ -2565,7 +2565,6 @@ Window management packages.
 :COLUMNS:  %CUSTOM_ID[(Custom Id)]
 :CUSTOM_ID: practices
 :END:
-
 
 ** Evil-mode
 :PROPERTIES:
