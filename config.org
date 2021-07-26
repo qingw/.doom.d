@@ -2576,28 +2576,166 @@ Window management packages.
 
 常用的按键练习 :one: :two: :three: :runner: 。
 
-*** 定位块(/gs[]/)
 
-# 块，前半部分
-*gs -> [[*, ~backward-section-begin~, 定位当前位置前半部分块首
-*gs -> []*, ~backward-section-end~, 定位当前位置前半部分块尾
+#+begin_warn
 
-# 块，后半部分
-*gs -> ][*, ~forward-section-begin~, 定位当前位置后半部分块首
-*gs -> ]]*, ~forward-section-end~, 定位当前位置后半部分块尾
+可以重写的键值，用处不大：
 
-*** 定位语句(~backward|forward-sentence-begin~)
+*g _*, *g ^*, *g a*, *g A*, *g e/E*, *g i/I*, *g J*, *g l/L*, *g m*, *g n/N*
 
-*gs -> (, )*, 很卡哦 ;( , 尽量不用吧
+*g o/O*, *g u/U*, *g v/V*, *g y/Y*
+#+end_warn
 
-*** 定位单词(/gs#*/)
+*** g [x]
 
-*gs -> #*, ~search-word-backward~
+1. 函数头尾跳转
 
-*gs -> **, ~search-word-forward~
+    *g [*, ~beginning-of-defun~
 
-*** 定位非空行(/gs+-/)
+    *g ]*, ~end-of-defun~
 
-*gs -> +*, ~next-line-first-non-blank~
+2. 注释前后一行
 
-*gs -> -*, ~previous-line-first-non-blank~
+    *g c -> [n] j/k*, ~nc-comment-operator~, [n] 可以输入数字来说明将要被注释的行数
+
+3. 查找并打开文件
+
+    *g f*, ~+lookup/file~, 支持链接
+
+    *g F*, ~evil-find-file-at-point-with-line~, 打开文件并跳到对应的行
+
+    如： ~/github/tmp/test/a.js:10 按下 *g f/F* 后会直接在当前窗口内打开该
+
+    文件并且跳转到第 10 行。
+
+4. 跳到标题位置
+
+    *g h*, ~org-up-element~, 当前的标题处
+
+    *g H*, ~org-top~, 当前的一级标题处, 比如在这里按会跳到 [[#practices][Practices]]
+
+    *g j*, ~org-forward-element~, 下一个同级元素(标题，段，行，等)
+
+    *g k*, ~org-backward-element~, 上一个同级元素(标题，段，行，等)
+
+5. imenu
+
+    *g O*, ~imenu~
+
+6. 粘贴替换
+
+    *g p*, ~/alt-paste~ , 选中状态，按下后将粘贴板上的内容替换选中的内容
+
+7. 填充文本
+
+    *g w/W*, ~evil-fill~
+
+    *g q*, ~fill-and-move~, 将持中内容变成一行？
+
+    *g Q*, ~org-fill-paragraph~
+
+    实用案例，如：
+
+    #+begin_example
+    test1 test2 test3
+    test4 test5 test6
+    test7 test8 test9
+    #+end_example
+
+    选中上面的 test1-9 按下 *g q* 后变成：
+
+    #+begin_example
+    test1 test2 test3 test4 test5 test6 test7 test8 test9
+    #+end_example
+
+    这对文本格式化挺有用的。
+
+8. 执行代码
+
+    *g r*, ~+eval:region~, 执行选中区域代码
+
+    *g R*, ~+eval/buffer~, 执行整个 Buffer
+
+9. 切换工作区
+
+    *g t/T*, ~+workspace:switch-next/previous~ 切换工作区
+
+10. 交换，需要先选中
+
+    *g x/X*, ~evil-exchange~
+
+    如： aaa - bbb
+
+    -> 选中 aaa ->  *gx* -> 选中 bbb -> *gx*
+
+    结果： bbb - aaa
+
+*** g s, 搜索定位
+
+通过按下组合键之后，根据显示的字符来将光标定位到输入的字符位置。
+
+1. 所有窗口
+
+    *gs -> SPC*, ~closure~
+
+2. 块，前半部分
+
+    *gs -> [[*, ~backward-section-begin~, 定位当前位置前半部分块首
+
+    *gs -> []*, ~backward-section-end~, 定位当前位置前半部分块尾
+
+3. 块，后半部分
+
+    *gs -> ][*, ~forward-section-begin~, 定位当前位置后半部分块首
+
+    *gs -> ]]*, ~forward-section-end~, 定位当前位置后半部分块尾
+
+4. search
+
+    *gs -> #*, ~search-word-backward~
+
+    *gs -> **, ~search-word-forward~
+
+5. 非空行
+
+    *gs -> -*, ~previous-line-first-non-blank~, 向前
+
+    *gs -> +*, ~next-line-first-non-blank~, 向后
+
+6. avy
+
+    *gs -> /*,, ~avy-goto-char-timer~
+
+    *gs -> l*, ~avy-goto-char-0~, 零字符搜索
+
+    *gs -> s*, ~avy-goto-char-2~, 两个字符搜索
+
+7. 单词开始和结束
+
+    *gs -> b/B*, ~backward-word|WORD-begin~, 向后
+
+    *gs -> [g] e/E*, ~backward-word|WORD-end~, 向后
+
+    *gs -> w/W*, ~forward-word|WORD-begin~, 向前
+
+8. 查找字符
+
+    *gs -> f*, ~find-char~, 向前
+
+    *gs -> F*, ~find-char-backward~, 向后
+
+    *gs -> t*, ~find-char-to~
+
+    *gs -> T*, ~find-char-to-backward~
+
+9. 可视行, 即忽略折叠的行
+
+    *gs -> gj*, ~next-visual-line~
+
+    *gs -> gk*, ~previous-visual-line~
+
+10. 上下行
+
+    *gs -> j*, ~next-line~
+
+    *gs -> k*, ~previous-line~
