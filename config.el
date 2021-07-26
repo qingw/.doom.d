@@ -264,6 +264,8 @@ Finally save buffer.
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
+(global-set-key (kbd "C-t") '+vterm/toggle)
+(global-set-key (kbd "C-S-t") '+vterm/here)
 
 (map!
  ;; "M-1"          #'bm-toggle
@@ -279,13 +281,12 @@ Finally save buffer.
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
 
- :n     "C-t"   #'+vterm/toggle
- :n     "C-T"   #'+vterm/here
+ "C-:"          #'avy-goto-char
+ "C-."          #'avy-goto-word-1
 
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
- "C-:"          #'avy-goto-char
- "C-."          #'avy-goto-word-1
+
  ;; "C-;"          #'avy-goto-char-2
  ;; "C-`"          #'popper-toggle-latest
  ;; "C-~"          #'popper-cycle
@@ -454,6 +455,9 @@ Finally save buffer.
       "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
 
 )
+
+(map! :map vterm-mode-map
+      "C-t" #'+vterm-toggle)
 
 (use-package! autoinsert
   :hook

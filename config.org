@@ -575,6 +575,8 @@ Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/mod
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
+(global-set-key (kbd "C-t") '+vterm/toggle)
+(global-set-key (kbd "C-S-t") '+vterm/here)
 
 #+end_src
 
@@ -600,13 +602,12 @@ Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/mod
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
 
- :n     "C-t"   #'+vterm/toggle
- :n     "C-T"   #'+vterm/here
+ "C-:"          #'avy-goto-char
+ "C-."          #'avy-goto-word-1
 
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
- "C-:"          #'avy-goto-char
- "C-."          #'avy-goto-word-1
+
  ;; "C-;"          #'avy-goto-char-2
  ;; "C-`"          #'popper-toggle-latest
  ;; "C-~"          #'popper-cycle
@@ -794,6 +795,12 @@ Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/mod
 )
 #+end_src
 ** Web-mode
+** VTerm-mode
+
+#+begin_src emacs-lisp
+(map! :map vterm-mode-map
+      "C-t" #'+vterm-toggle)
+#+end_src
 * Package Settings
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
