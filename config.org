@@ -550,6 +550,8 @@ private:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
+Keybindings reference: [[https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/%2Bevil-bindings.el][evil-bindings.el]]
+
 ** Unbindings
 [[https://github.com/hlissner/doom-emacs/issues/1099][To Unbind]]
 
@@ -558,7 +560,8 @@ private:
 
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
-(map! "C-e" nil)
+(map! "C-e" nil
+      :n "C-t" nil)
 ;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r" ",")
 (undefine-key! evil-normal-state-map ",")
 (undefine-key! org-mode-map "C-c C-r")
@@ -596,6 +599,10 @@ private:
 (map!
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
+
+ :n     "C-t"   #'+vterm/toggle
+ :n     "C-T"   #'+vterm/here
+
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
@@ -685,6 +692,8 @@ private:
 #+end_src
 
 *** Evil
+
+
 #+begin_src emacs-lisp
 (map!
  :n     "+"     #'evil-numbers/inc-at-pt
@@ -702,6 +711,11 @@ private:
  :n     "z."    #'emmet-wrap-with-markup
 
  )
+
+;; remap gs-> keybinding
+(map! :after evil-easymotion
+      :map evilem-map
+      "l" #'avy-goto-word-0)
 #+end_src
 *** SPC
 #+begin_src emacs-lisp
@@ -741,12 +755,12 @@ private:
 ** Org-mode
 #+begin_src emacs-lisp
 (map! :map org-mode-map
-      :n        "tt"     #'org-todo
-      :n        "tc"     #'org-toggle-checkbox
-      :n        "tpp"    #'org-priority
-      :n        "tpu"    #'org-priority-up
-      :n        "tpd"    #'org-priority-down
-
+      :n        "tt"            #'org-todo
+      :n        "tT"            #'counsel-org-tag
+      :n        "tc"            #'org-toggle-checkbox
+      :n        "tpp"           #'org-priority
+      :n        "tpu"           #'org-priority-up
+      :n        "tpd"           #'org-priority-down
 
 
       "C-c e e"         #'all-the-icons-insert
@@ -2546,3 +2560,44 @@ Window management packages.
 #+begin_src emacs-lisp
 (disable-packages! bookmark tide eldoc valign grip-mode org-roam)
 #+end_src
+* Practices
+:PROPERTIES:
+:COLUMNS:  %CUSTOM_ID[(Custom Id)]
+:CUSTOM_ID: practices
+:END:
+
+
+** Evil-mode
+:PROPERTIES:
+:COLUMNS:  %CUSTOM_ID[(Custom Id)]
+:CUSTOM_ID: practices-evil
+:END:
+
+
+常用的按键练习 :one: :two: :three: :runner: 。
+
+*** 定位块(/gs[]/)
+
+# 块，前半部分
+*gs -> [[*, ~backward-section-begin~, 定位当前位置前半部分块首
+*gs -> []*, ~backward-section-end~, 定位当前位置前半部分块尾
+
+# 块，后半部分
+*gs -> ][*, ~forward-section-begin~, 定位当前位置后半部分块首
+*gs -> ]]*, ~forward-section-end~, 定位当前位置后半部分块尾
+
+*** 定位语句(~backward|forward-sentence-begin~)
+
+*gs -> (, )*, 很卡哦 ;( , 尽量不用吧
+
+*** 定位单词(/gs#*/)
+
+*gs -> #*, ~search-word-backward~
+
+*gs -> **, ~search-word-forward~
+
+*** 定位非空行(/gs+-/)
+
+*gs -> +*, ~next-line-first-non-blank~
+
+*gs -> -*, ~previous-line-first-non-blank~

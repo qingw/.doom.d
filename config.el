@@ -252,7 +252,8 @@ Finally save buffer.
 
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
-(map! "C-e" nil)
+(map! "C-e" nil
+      :n "C-t" nil)
 ;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r" ",")
 (undefine-key! evil-normal-state-map ",")
 (undefine-key! org-mode-map "C-c C-r")
@@ -277,6 +278,10 @@ Finally save buffer.
 (map!
  :niv   "C-e"   #'evil-end-of-line
  :niv   "C-="   #'er/expand-region
+
+ :n     "C-t"   #'+vterm/toggle
+ :n     "C-T"   #'+vterm/here
+
  "C-a"          #'crux-move-beginning-of-line
  "C-s"          #'+default/search-buffer
  "C-:"          #'avy-goto-char
@@ -373,6 +378,11 @@ Finally save buffer.
 
  )
 
+;; remap gs-> keybinding
+(map! :after evil-easymotion
+      :map evilem-map
+      "l" #'avy-goto-word-0)
+
 (map!
  :leader
  :nv    "SPC"           #'execute-extended-command
@@ -407,12 +417,12 @@ Finally save buffer.
  )
 
 (map! :map org-mode-map
-      :n        "tt"     #'org-todo
-      :n        "tc"     #'org-toggle-checkbox
-      :n        "tpp"    #'org-priority
-      :n        "tpu"    #'org-priority-up
-      :n        "tpd"    #'org-priority-down
-
+      :n        "tt"            #'org-todo
+      :n        "tT"            #'counsel-org-tag
+      :n        "tc"            #'org-toggle-checkbox
+      :n        "tpp"           #'org-priority
+      :n        "tpu"           #'org-priority-up
+      :n        "tpd"           #'org-priority-down
 
 
       "C-c e e"         #'all-the-icons-insert
