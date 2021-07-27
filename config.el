@@ -368,6 +368,12 @@ Finally save buffer.
  ;; z
  :n     "z-"    #'sp-splice-sexp
  :n     "z."    #'emmet-wrap-with-markup
+
+ :n     "gi"    nil
+ (:prefix ("gi" . "mine")
+  :n    "f"     #'+org/attach-file-and-insert-link)
+
+ :n     ","     nil
  )
 
 ;; remap gs-> keybinding
