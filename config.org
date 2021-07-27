@@ -387,7 +387,7 @@ Finally save buffer.
         +present
         +protocol
         +pomodoro
-        +roam
+        +roam2
         +noter)
        (php +lsp)               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
@@ -2567,7 +2567,7 @@ Window management packages.
 ** Disabled
 
 #+begin_src emacs-lisp
-(disable-packages! bookmark tide eldoc valign grip-mode org-roam)
+(disable-packages! bookmark tide eldoc valign grip-mode)
 #+end_src
 * Practices
 :PROPERTIES:

@@ -155,7 +155,7 @@
         +present
         +protocol
         +pomodoro
-        +roam
+        +roam2
         +noter)
        (php +lsp)               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more

@@ -96,4 +96,4 @@
            :repo "honmaple/emacs-maple-iedit"))
 (package! vmd-mode)
 
-(disable-packages! bookmark tide eldoc valign grip-mode org-roam)
+(disable-packages! bookmark tide eldoc valign grip-mode)
