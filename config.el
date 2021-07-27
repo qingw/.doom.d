@@ -215,6 +215,7 @@ Finally save buffer.
       web-mode-enable-current-column-highlight t
 
       ;; org
+      org-roam-v2-ack t                 ; close v2 warning
       org-roam-directory "~/.gclrc/roam/"
       org-directory "~/.gclrc/org/"
       org-log-done 'time                        ; having the time a item is done sounds convenient
@@ -251,17 +252,20 @@ Finally save buffer.
   (load custom-file))
 
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
+(global-set-key (kbd "<f1>") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
+(define-key evil-normal-state-map (kbd ",") nil)
+;; (global-set-key (kbd ",") nil)
 (map! "C-e" nil
       :n "C-t" nil)
 ;; (undefine-key! "SPC :" "SPC ~" "SPC ." "SPC X" "C-c C-r" ",")
-(undefine-key! evil-normal-state-map ",")
+;; (undefine-key! evil-normal-state-map ",")
 (undefine-key! org-mode-map "C-c C-r")
 
-(global-set-key (kbd "<f2>") 'gcl-jump-hydra/body)        ; ns-print-buffer
-(global-set-key (kbd "<f3>") 'gcl-everything/body)
+(global-set-key (kbd "<f1>") 'gcl-everything/body)
 (global-set-key (kbd "<f5>") 'deadgrep)
 (global-set-key (kbd "<M-f5>") 'deadgrep-kill-all-buffers)
+(global-set-key (kbd "<f8>") 'quickrun)
 (global-set-key (kbd "<f12>") 'smerge-vc-next-conflict)
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
 (global-set-key (kbd "C-t") '+vterm/toggle)
@@ -282,6 +286,7 @@ Finally save buffer.
  :niv   "C-="   #'er/expand-region
 
  "C-a"          #'crux-move-beginning-of-line
+ "C-d"          #'kill-current-buffer
  "C-s"          #'+default/search-buffer
  )
 
@@ -374,6 +379,9 @@ Finally save buffer.
   :n    "f"     #'+org/attach-file-and-insert-link)
 
  :n     ","     nil
+ (:prefix ("," . "gccll")
+  :n    "`"     #'gcl-everything/body
+  )
  )
 
 ;; remap gs-> keybinding
@@ -446,6 +454,8 @@ Finally save buffer.
       "C-c c g"         #'counsel-org-clock-goto
       "C-c c c"         #'counsel-org-clock-context
       "C-c c r"         #'counsel-org-clock-rebuild-history
+
+      ;; org-roam, C-c r <x>
 
       ;; verb
       "C-c C-r C-r"     #'verb-send-request-on-point-other-window-stay
@@ -1521,68 +1531,45 @@ is selected, only the bare key is returned."
           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
 
 ;; (use-package! org-roam-lib
-  ;; :after org-roam)
+;; :after org-roam)
 
-(after! org-roam
-  (add-hook 'org-roam-dailies-find-file-hook #'aj-org-roam-setup-dailies-file-h)
-  (add-hook
-   'org-roam-capture-after-find-file-hook
-   (lambda ()
-     (org-id-get-create)
-     (save-buffer)
-     (org-roam-db-update)))
-
-  (doom-store-persist "custom" '(org-roam-directory))
-
-  (setq +org-roam-open-buffer-on-find-file nil
-        org-roam-db-update-method 'immediate
-        org-roam-buffer-width 0.2
-        org-roam-buffer-position 'left
-        org-roam-tag-sources '(prop vanilla all-directories)
-
-        org-roam-prefer-id-links t
-        org-roam-db-location (expand-file-name
-                              "org-roam.db"
-                              (concat doom-etc-dir (file-name-nondirectory org-roam-directory)))
-        org-roam-dailies-directory "journal/"
-        org-roam-capture-templates
-        `(("d" "default" plain #'org-roam-capture--get-point
-           "%?"
-           :file-name ,(concat +org-roam-inbox-prefix "%<%Y%m%d%H%M%S>-${slug}")
-           :head "#+title: ${title}\n"
-           :unnarrowed t
-           ))
-        org-roam-capture-ref-templates
-        `(("r" "ref" plain #'org-roam-capture--get-point
-           "%?"
-           :file-name ,(concat +org-roam-inbox-prefix "${slug}")
-           :head "#+title: ${title}\n#+roam_key: ${ref}"
-           :unnarrowed t
-           :immediate-finish t
-           ))
-        org-roam-dailies-capture-templates
-        `(("d" "default" entry (function org-roam-capture--get-point)
-           "* %?"
-           :file-name ,(concat org-roam-dailies-directory "%<%Y-%m-%d>")
-           :head "#+title: %<%A, %d %B %Y>\n"
-           ))
-        org-roam-capture-immediate-template
-        `("d" "default" plain #'org-roam-capture--get-point
-          "%?"
-          :file-name ,(concat +org-roam-inbox-prefix "%<%Y%m%d%H%M%S>-${slug}")
-          :head "#+title: ${title}\n"
-          :unnarrowed t
-          :immediate-finish t
-          )
-        )
-
-  (advice-add #'org-roam-db--update-meta :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
-  (advice-add #'org-roam-doctor :around #'aj-fix-buffer-file-name-for-indirect-buffers-a)
-  (advice-add #'org-roam-link--replace-link-on-save :after #'+org-roam/replace-file-with-id-link)
-  )
+(use-package! org-roam
+  :custom
+  (setq
+   org-roam-file-extensions '("txt" "org")
+   org-roam-capture-templates
+   (quote
+    (("d" "default" plain
+      (function org-roam-capture--get-point)
+      "%?" :file-name "%<%Y_%m%d>_${slug}"
+      :head "#+TITLE: ${title}\n\n" :unnarrowed t)))
+   )
+  :config
+  (org-roam-setup)
+  :bind (("C-c r l" . org-roam-buffer-toggle)
+         ("C-c r f" . org-roam-node-find)
+         ("C-c r g" . org-roam-graph)
+         ("C-c r i" . org-roam-node-insert)
+         ("C-c r c" . org-roam-capture)
+         ("C-c r j" . org-roam-dailies-capture-today)
+         ))
 
 (use-package! org-preview-html
   :after org)
+
+(use-package! org-download
+  :after org
+  :bind
+  (:map org-mode-map
+   (("s-Y" . org-download-screenshot)
+    ("s-y" . org-download-yank)))
+  )
+
+;; (use-package! mathpix.el
+;;   :custom ((mathpix-app-id "app-id")
+;;            (mathpix-app-key "app-key"))
+;;   :bind
+;;   ("C-x m" . mathpix-screenshot))
 
 (use-package! parrot
   :config

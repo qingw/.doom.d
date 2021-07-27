@@ -68,6 +68,10 @@
 (package! org-sort-tasks
   :recipe (:host github :repo "felipelalli/org-sort-tasks"))
 (package! org-preview-html :disable t)
+(package! org-download)
+(package! org-roam)
+;; (package! mathpix.el
+;;   :recipe ((:host github :repo "jethrokuan/mathpix.el")))
 
 (package! bm)
 (package! imenu-list)
