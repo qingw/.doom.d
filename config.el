@@ -157,6 +157,32 @@ Finally save buffer.
     (insert hstub)
     (evil-insert 0)))
 
+;;;###autoload
+(defun dired-timesort (filename &optional wildcards)
+  (let ((dired-listing-switches "-lhat"))
+    (dired filename wildcards)))
+
+;;;###autoload
+(defmacro quick-find (key file &optional path find-args)
+  `(bind-key
+    ,key
+    (cond
+     ((stringp ,find-args)
+      '(lambda (&optional arg)
+         (interactive)
+         (find-dired (expand-file-name ,file ,path) ,find-args)))
+     ((and
+       ;; (not (tramp-tramp-file-p (expand-file-name ,file ,path)))
+       (or (file-directory-p (expand-file-name ,file ,path))
+           (not (file-exists-p (expand-file-name ,file ,path)))))
+      '(lambda (&optional arg)
+         (interactive)
+         (dired-timesort (expand-file-name ,file ,path))))
+     (t
+      '(lambda (&optional arg)
+         (interactive)
+         (find-file (expand-file-name ,file ,path)))))))
+
 (setq doom-theme 'doom-vibrant)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
@@ -236,7 +262,10 @@ Finally save buffer.
       mouse-wheel-scroll-amount '(1 ((shift) . 1))
 
       vc-log-view-type nil
-    )
+
+      ;; osx
+      ;; browse-url-browser-function 'browse-url-default-macosx-browser
+      )
 
 (setq-default
  fill-column 80
@@ -251,6 +280,7 @@ Finally save buffer.
 (when (file-exists-p custom-file)
   (load custom-file))
 
+(global-set-key (kbd "C-d") nil)        ; ns-print-buffer
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f1>") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
@@ -270,6 +300,7 @@ Finally save buffer.
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
 (global-set-key (kbd "C-t") '+vterm/toggle)
 (global-set-key (kbd "C-S-t") '+vterm/here)
+(global-set-key (kbd "C-d") 'kill-current-buffer)
 
 (map!
  ;; "M-1"          #'bm-toggle
@@ -286,7 +317,6 @@ Finally save buffer.
  :niv   "C-="   #'er/expand-region
 
  "C-a"          #'crux-move-beginning-of-line
- "C-d"          #'kill-current-buffer
  "C-s"          #'+default/search-buffer
  )
 
@@ -470,6 +500,9 @@ Finally save buffer.
       "C-c C-r C-l"     #'verb-show-vars        ; 查看已存在的变量值列表
 
 )
+
+(quick-find "C-h C-x C-s" "~/.ssh/config")
+(quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
 
 (use-package! autoinsert
   :hook

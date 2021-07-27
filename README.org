@@ -223,6 +223,35 @@ Finally save buffer.
     (insert hstub)
     (evil-insert 0)))
 #+end_src
+** quick-find
+#+begin_src emacs-lisp
+
+;;;###autoload
+(defun dired-timesort (filename &optional wildcards)
+  (let ((dired-listing-switches "-lhat"))
+    (dired filename wildcards)))
+
+;;;###autoload
+(defmacro quick-find (key file &optional path find-args)
+  `(bind-key
+    ,key
+    (cond
+     ((stringp ,find-args)
+      '(lambda (&optional arg)
+         (interactive)
+         (find-dired (expand-file-name ,file ,path) ,find-args)))
+     ((and
+       ;; (not (tramp-tramp-file-p (expand-file-name ,file ,path)))
+       (or (file-directory-p (expand-file-name ,file ,path))
+           (not (file-exists-p (expand-file-name ,file ,path)))))
+      '(lambda (&optional arg)
+         (interactive)
+         (dired-timesort (expand-file-name ,file ,path))))
+     (t
+      '(lambda (&optional arg)
+         (interactive)
+         (find-file (expand-file-name ,file ,path)))))))
+#+end_src
 * Init.el
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "init.el" :comments no
@@ -531,7 +560,10 @@ private:
       mouse-wheel-scroll-amount '(1 ((shift) . 1))
 
       vc-log-view-type nil
-    )
+
+      ;; osx
+      ;; browse-url-browser-function 'browse-url-default-macosx-browser
+      )
 
 (setq-default
  fill-column 80
@@ -563,6 +595,7 @@ Keybindings reference:
 
 #+begin_src emacs-lisp
 
+(global-set-key (kbd "C-d") nil)        ; ns-print-buffer
 (global-set-key (kbd "s-p") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f1>") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
@@ -574,7 +607,7 @@ Keybindings reference:
 ;; (undefine-key! evil-normal-state-map ",")
 (undefine-key! org-mode-map "C-c C-r")
 #+end_src
-** F1~12
+** F1~12(kbd)
 
 #+begin_src emacs-lisp
 (global-set-key (kbd "<f1>") 'gcl-everything/body)
@@ -585,6 +618,7 @@ Keybindings reference:
 (global-set-key (kbd "<f11>") '+vc/smerge-hydra/body)
 (global-set-key (kbd "C-t") '+vterm/toggle)
 (global-set-key (kbd "C-S-t") '+vterm/here)
+(global-set-key (kbd "C-d") 'kill-current-buffer)
 
 #+end_src
 
@@ -611,7 +645,6 @@ Keybindings reference:
  :niv   "C-="   #'er/expand-region
 
  "C-a"          #'crux-move-beginning-of-line
- "C-d"          #'kill-current-buffer
  "C-s"          #'+default/search-buffer
  )
 #+end_src
@@ -813,6 +846,11 @@ Keybindings reference:
 )
 #+end_src
 ** Web-mode
+** QuickFind
+#+begin_src emacs-lisp
+(quick-find "C-h C-x C-s" "~/.ssh/config")
+(quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
+#+end_src
 * Package Settings
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
