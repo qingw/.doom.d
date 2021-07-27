@@ -1534,7 +1534,7 @@ is selected, only the bare key is returned."
 ;; :after org-roam)
 
 (use-package! org-roam
-  :custom
+  :config
   (setq
    org-roam-file-extensions '("txt" "org")
    org-roam-capture-templates
@@ -1544,7 +1544,6 @@ is selected, only the bare key is returned."
       "%?" :file-name "%<%Y_%m%d>_${slug}"
       :head "#+TITLE: ${title}\n\n" :unnarrowed t)))
    )
-  :config
   (org-roam-setup)
   :bind (("C-c r l" . org-roam-buffer-toggle)
          ("C-c r f" . org-roam-node-find)
