@@ -1842,6 +1842,14 @@ is selected, only the bare key is returned."
                    :type entry
                    :template ("* %?"
                               "%i %a"))
+                  ("Emacs" :keys "e"
+                   :icon ("emacs" :set "fileicon" :color "purple")
+                   :file +org-capture-todo-file
+                   :prepend t
+                   :headline "Emacs"
+                   :type entry
+                   :template ("* TODO %? :emacs:"
+                              "%i %a"))
                   ("Email" :keys "E"
                    :icon ("envelope" :set "faicon" :color "blue")
                    :file +org-capture-todo-file
