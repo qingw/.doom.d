@@ -252,6 +252,19 @@ Finally save buffer.
          (interactive)
          (find-file (expand-file-name ,file ,path)))))))
 #+end_src
+** embrace
+
+#+begin_src emacs-lisp
+;;;###autoload
+(defun gcl/embrace-prog-mode-hook ()
+  (dolist (lst '((?` "`" . "`")))
+    (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+
+;;;###autoload
+(defun gcl/embrace-org-mode-hook ()
+  (dolist (lst '((?c "@@html:<font color=\"red\">" . "</font>@@")))
+    (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+#+end_src
 * Init.el
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "init.el" :comments no
@@ -2407,8 +2420,11 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
 
-** TODO Embrace
-
+** Embrace
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'gcl/embrace-org-mode-hook)
+(add-hook 'prog-mode-hook 'gcl/embrace-prog-mode-hook)
+#+end_src
 * Development Settings
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no

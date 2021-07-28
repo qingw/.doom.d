@@ -262,7 +262,7 @@ Finally save buffer.
 
 ;;;###autoload
 (defun gcl/embrace-org-mode-hook ()
-  (dolist (lst '((?f "@@html:<font color=\"red\">" . "</font>@@")))
+  (dolist (lst '((?c "@@html:<font color=\"red\">" . "</font>@@")))
     (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
 #+end_src
 * Init.el

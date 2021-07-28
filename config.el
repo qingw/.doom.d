@@ -183,6 +183,16 @@ Finally save buffer.
          (interactive)
          (find-file (expand-file-name ,file ,path)))))))
 
+;;;###autoload
+(defun gcl/embrace-prog-mode-hook ()
+  (dolist (lst '((?` "`" . "`")))
+    (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+
+;;;###autoload
+(defun gcl/embrace-org-mode-hook ()
+  (dolist (lst '((?c "@@html:<font color=\"red\">" . "</font>@@")))
+    (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
+
 (setq doom-theme 'doom-vibrant)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
@@ -1799,6 +1809,9 @@ is selected, only the bare key is returned."
 
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
+
+(add-hook 'org-mode-hook 'gcl/embrace-org-mode-hook)
+(add-hook 'prog-mode-hook 'gcl/embrace-prog-mode-hook)
 
 ;; (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
 
