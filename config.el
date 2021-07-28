@@ -411,6 +411,11 @@ Finally save buffer.
  :n     ","     nil
  (:prefix ("," . "gccll")
   :n    "`"     #'gcl-everything/body
+
+  ;; embrace
+  :n    "ea"    #'embrace-add
+  :n    "ec"    #'embrace-change
+  :n    "ed"    #'embrace-delete
   )
  )
 
@@ -419,8 +424,8 @@ Finally save buffer.
       :map evilem-map
       "c"       #'avy-goto-char
       "C"       #'avy-goto-char-2
-      "w"       #'avy-goto-word-0
-      "W"       #'avy-goto-word-1
+      "w"       #'avy-goto-word-1
+      "W"       #'avy-goto-word-0
       "ll"      #'avy-goto-line
       "lu"      #'avy-goto-line-above
       "ld"      #'avy-goto-line-below

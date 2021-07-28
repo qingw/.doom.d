@@ -751,6 +751,11 @@ Keybindings reference:
  :n     ","     nil
  (:prefix ("," . "gccll")
   :n    "`"     #'gcl-everything/body
+
+  ;; embrace
+  :n    "ea"    #'embrace-add
+  :n    "ec"    #'embrace-change
+  :n    "ed"    #'embrace-delete
   )
  )
 
@@ -759,8 +764,8 @@ Keybindings reference:
       :map evilem-map
       "c"       #'avy-goto-char
       "C"       #'avy-goto-char-2
-      "w"       #'avy-goto-word-0
-      "W"       #'avy-goto-word-1
+      "w"       #'avy-goto-word-1
+      "W"       #'avy-goto-word-0
       "ll"      #'avy-goto-line
       "lu"      #'avy-goto-line-above
       "ld"      #'avy-goto-line-below
@@ -2796,3 +2801,11 @@ Window management packages.
     *gs -> j*, ~next-line~
 
     *gs -> k*, ~previous-line~
+** Embrace(~,e~)
+
+[[/post/my-first-post/#embrace][practices place...]]
+
+*** embrach-add(~,ea~)
+
+*** embrach-change(~,ec~)
+*** embrach-delete(~,ed~)
