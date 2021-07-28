@@ -322,7 +322,7 @@ Finally save buffer.
 
 (map!
  ;; a -> applications, ...
- "C-c a c"      #'org-mac-chrome-insert-frontmost-url
+ "C-c a"        #'org-agenda
 
  ;; b -> bookmark, buffer ...
  "C-c b l"      #'bm-show-all
@@ -484,6 +484,9 @@ Finally save buffer.
       "C-c c g"         #'counsel-org-clock-goto
       "C-c c c"         #'counsel-org-clock-context
       "C-c c r"         #'counsel-org-clock-rebuild-history
+
+      ;; insert
+      "C-c i u"         #'org-mac-chrome-insert-frontmost-url
 
       ;; org-roam, C-c r <x>
 
