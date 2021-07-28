@@ -971,6 +971,11 @@ Keybindings reference:
   (defun emacs-everywhere-raise-frame-1 ()
     (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
 #+end_src
+** Embrace
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'gcl/embrace-org-mode-hook)
+(add-hook 'prog-mode-hook 'gcl/embrace-prog-mode-hook)
+#+end_src
 ** Engine-mode
 #+begin_src emacs-lisp
 
@@ -2414,16 +2419,6 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
-#+end_src
-* Builtin Packages Settings
-:PROPERTIES:
-:header-args:emacs-lisp: :tangle "config.el" :comments no
-:END:
-
-** Embrace
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'gcl/embrace-org-mode-hook)
-(add-hook 'prog-mode-hook 'gcl/embrace-prog-mode-hook)
 #+end_src
 * Development Settings
 :PROPERTIES:
