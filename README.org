@@ -2402,6 +2402,13 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
 #+end_src
+* Builtin Packages Settings
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle "config.el" :comments no
+:END:
+
+** TODO Embrace
+
 * Development Settings
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
