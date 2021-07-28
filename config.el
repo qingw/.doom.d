@@ -502,6 +502,7 @@ Finally save buffer.
 
       ;; insert
       "C-c i u"         #'org-mac-chrome-insert-frontmost-url
+      "C-c i c"         #'copyright
 
       ;; org-roam, C-c r <x>
 
@@ -599,6 +600,9 @@ Finally save buffer.
     (run-with-timer 0.1 nil #'emacs-everywhere-raise-frame-1))
   (defun emacs-everywhere-raise-frame-1 ()
     (call-process "wmctrl" nil nil nil "-a" emacs-everywhere-frame-name)))
+
+(add-hook 'org-mode-hook 'gcl/embrace-org-mode-hook)
+(add-hook 'prog-mode-hook 'gcl/embrace-prog-mode-hook)
 
 (use-package! engine-mode
   :config
@@ -712,10 +716,20 @@ Finally save buffer.
 
   )
 
+(defhydra gcl-repl-hydra (:color blue :columns 3 :hint nil)
+  "REPL "
+  ("e" ielm "Emacs Lisp")
+  ("n" nodejs-repl "Node.js")
+  ("p" +python/open-repl "Python")
+  )
+
+
+
 (defhydra gcl-everything (:color blue :columns 3 :hint nil)
   "🗯 做任何你想不到的事情~~~~ 👁👁👁👁👁👁👁👁👁
 🌻"
   ("j" gcl-jump-hydra/body "Avy")
+  ("r" gcl-repl-hydra/body "REPL")
   ("v" gcl-verb-hydra/body "Verb")
   )
 
@@ -1810,10 +1824,8 @@ is selected, only the bare key is returned."
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
 
-(add-hook 'org-mode-hook 'gcl/embrace-org-mode-hook)
-(add-hook 'prog-mode-hook 'gcl/embrace-prog-mode-hook)
-
-;; (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
 (defun maybe-use-prettier ()
   "Enable prettier-js-mode if an rc file is located."

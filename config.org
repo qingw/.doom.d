@@ -407,6 +407,7 @@ Finally save buffer.
        (latex             ; writing papers in Emacs has never been so fun
         +latexmk
         +cdlatex
+        +lsp
         +fold)
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
@@ -849,6 +850,7 @@ Keybindings reference:
 
       ;; insert
       "C-c i u"         #'org-mac-chrome-insert-frontmost-url
+      "C-c i c"         #'copyright
 
       ;; org-roam, C-c r <x>
 
@@ -1137,10 +1139,20 @@ Keybindings reference:
 
   )
 
+(defhydra gcl-repl-hydra (:color blue :columns 3 :hint nil)
+  "REPL "
+  ("e" ielm "Emacs Lisp")
+  ("n" nodejs-repl "Node.js")
+  ("p" +python/open-repl "Python")
+  )
+
+
+
 (defhydra gcl-everything (:color blue :columns 3 :hint nil)
   "🗯 做任何你想不到的事情~~~~ 👁👁👁👁👁👁👁👁👁
 🌻"
   ("j" gcl-jump-hydra/body "Avy")
+  ("r" gcl-repl-hydra/body "REPL")
   ("v" gcl-verb-hydra/body "Verb")
   )
 
@@ -2429,7 +2441,8 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 Use `.prettierrc` file for prettier.
 
 #+begin_src emacs-lisp
-;; (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
 (defun maybe-use-prettier ()
   "Enable prettier-js-mode if an rc file is located."
