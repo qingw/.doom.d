@@ -1142,8 +1142,10 @@ Keybindings reference:
 (defhydra gcl-repl-hydra (:color blue :columns 3 :hint nil)
   "REPL "
   ("e" ielm "Emacs Lisp")
+  ("l" +lua/open-repl "Lua")
   ("n" nodejs-repl "Node.js")
   ("p" +python/open-repl "Python")
+  ("s" skewer-repl "Skewer")
   )
 
 
