@@ -338,12 +338,16 @@ Finally save buffer.
  "C-c b l"      #'bm-show-all
  "C-c b s"      #'bm-buffer-save
 
- ;; d -> date, time, ...
- "C-c d d"      #'insert-current-date-time
- "C-c d t"      #'insert-current-time
+ ;; i -> date, time, ...
+ "C-c i d"      #'insert-current-date-time
+ "C-c i t"      #'insert-current-time
 
  ;; f -> file, directory, ...
  "C-c f o"      #'crux-open-with
+
+ ;; h -> help
+ "C-c h d"      #'dash-at-point
+ "C-c h D"      #'dash-at-point-with-docset
 
  ;; n -> network utils
  ;; "C-c n x"      #'xxx
@@ -398,6 +402,12 @@ Finally save buffer.
  ;; "s-p r"      #'projector-run-shell-command-project-root
  ;; "s-p R"      #'projector-rerun-buffer-process
  )
+
+(evil-define-minor-mode-key '(normal motion) 'evil-snipe-local-mode
+  "s" #'avy-goto-char
+  "S" #'avy-goto-char-2
+  "w" #'avy-goto-word-1
+  "W" #'avy-goto-word-0)
 
 (map!
  :n     "+"     #'evil-numbers/inc-at-pt
@@ -521,6 +531,7 @@ Finally save buffer.
 )
 
 (quick-find "C-h C-x C-s" "~/.ssh/config")
+(quick-find "C-h C-x C-z" "~/.zsh")
 (quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
 
 (use-package! autoinsert
@@ -718,11 +729,12 @@ Finally save buffer.
 
 (defhydra gcl-repl-hydra (:color blue :columns 3 :hint nil)
   "REPL "
-  ("e" ielm "Emacs Lisp")
-  ("l" +lua/open-repl "Lua")
-  ("n" nodejs-repl "Node.js")
-  ("p" +python/open-repl "Python")
-  ("s" skewer-repl "Skewer")
+  ("e" ielm " ELisp")
+  ("h" httprepl " HTTP")
+  ("l" +lua/open-repl " Lua")
+  ("n" nodejs-repl " Node.js")
+  ("p" +python/open-repl " Python")
+  ("s" skewer-repl " Skewer")
   )
 
 
@@ -916,7 +928,10 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
          (python-mode . lsp)
          (go-mode . lsp)
          (css-mode . lsp)
-         (js2-mode . lsp))
+         (js2-mode . lsp)
+         (bibtex-mode . lsp)
+         (tex-mode . lsp)
+         (latex-mode . lsp))
   :commands lsp
   :config
   (setq lsp-idle-delay 0.2
@@ -1002,6 +1017,11 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
           ("C-p" . maple-iedit-match-previous)
           ("C-t" . map-iedit-skip-and-match-next)
           ("C-T" . map-iedit-skip-and-match-previous)))
+
+(use-package! mu4e
+  :config
+  (setq
+   +mu4e-backend 'offlineimap))
 
 (use-package! net-utils
   :bind
@@ -1828,6 +1848,11 @@ is selected, only the bare key is returned."
 
 (add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[a-z]+rc$" . conf-mode))
+(add-to-list 'auto-mode-alist '("[Mm]akefile" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("\\.mak$" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("\\.make$" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("[._]bash.*" . shell-script-mode))
 
 (defun maybe-use-prettier ()
   "Enable prettier-js-mode if an rc file is located."

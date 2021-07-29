@@ -455,7 +455,7 @@ Finally save buffer.
        ;;zig               ; C, but simpler
 
        :email
-       ;;(mu4e +gmail)
+       (mu4e +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 
@@ -673,12 +673,16 @@ Keybindings reference:
  "C-c b l"      #'bm-show-all
  "C-c b s"      #'bm-buffer-save
 
- ;; d -> date, time, ...
- "C-c d d"      #'insert-current-date-time
- "C-c d t"      #'insert-current-time
+ ;; i -> date, time, ...
+ "C-c i d"      #'insert-current-date-time
+ "C-c i t"      #'insert-current-time
 
  ;; f -> file, directory, ...
  "C-c f o"      #'crux-open-with
+
+ ;; h -> help
+ "C-c h d"      #'dash-at-point
+ "C-c h D"      #'dash-at-point-with-docset
 
  ;; n -> network utils
  ;; "C-c n x"      #'xxx
@@ -743,6 +747,12 @@ Keybindings reference:
 *** Evil
 
 #+begin_src emacs-lisp
+(evil-define-minor-mode-key '(normal motion) 'evil-snipe-local-mode
+  "s" #'avy-goto-char
+  "S" #'avy-goto-char-2
+  "w" #'avy-goto-word-1
+  "W" #'avy-goto-word-0)
+
 (map!
  :n     "+"     #'evil-numbers/inc-at-pt
  :n     "-"     #'evil-numbers/dec-at-pt
@@ -785,6 +795,7 @@ Keybindings reference:
       "ld"      #'avy-goto-line-below
       )
 #+end_src
+
 *** SPC
 #+begin_src emacs-lisp
 (map!
@@ -872,6 +883,7 @@ Keybindings reference:
 ** QuickFind
 #+begin_src emacs-lisp
 (quick-find "C-h C-x C-s" "~/.ssh/config")
+(quick-find "C-h C-x C-z" "~/.zsh")
 (quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
 #+end_src
 * Package Settings
@@ -1141,11 +1153,12 @@ Keybindings reference:
 
 (defhydra gcl-repl-hydra (:color blue :columns 3 :hint nil)
   "REPL "
-  ("e" ielm "Emacs Lisp")
-  ("l" +lua/open-repl "Lua")
-  ("n" nodejs-repl "Node.js")
-  ("p" +python/open-repl "Python")
-  ("s" skewer-repl "Skewer")
+  ("e" ielm " ELisp")
+  ("h" httprepl " HTTP")
+  ("l" +lua/open-repl " Lua")
+  ("n" nodejs-repl " Node.js")
+  ("p" +python/open-repl " Python")
+  ("s" skewer-repl " Skewer")
   )
 
 
@@ -1377,7 +1390,10 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
          (python-mode . lsp)
          (go-mode . lsp)
          (css-mode . lsp)
-         (js2-mode . lsp))
+         (js2-mode . lsp)
+         (bibtex-mode . lsp)
+         (tex-mode . lsp)
+         (latex-mode . lsp))
   :commands lsp
   :config
   (setq lsp-idle-delay 0.2
@@ -1482,6 +1498,16 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
            ("C-p" . maple-iedit-match-previous)
            ("C-t" . map-iedit-skip-and-match-next)
            ("C-T" . map-iedit-skip-and-match-previous)))
+#+end_src
+** Mu4e
+
+[[https://github.com/hlissner/doom-emacs/blob/develop/modules/email/mu4e/README.org][README.org ->]]
+
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :config
+  (setq
+   +mu4e-backend 'offlineimap))
 #+end_src
 ** Net-utils
 #+begin_src emacs-lisp
@@ -2438,13 +2464,23 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 :PROPERTIES:
 :header-args:emacs-lisp: :tangle "config.el" :comments no
 :END:
+
+
+#+begin_src emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[a-z]+rc$" . conf-mode))
+(add-to-list 'auto-mode-alist '("[Mm]akefile" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("\\.mak$" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("\\.make$" . makefile-gmake-mode))
+(add-to-list 'auto-mode-alist '("[._]bash.*" . shell-script-mode))
+#+end_src
+
 ** Web
 
 Use `.prettierrc` file for prettier.
 
 #+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
 (defun maybe-use-prettier ()
   "Enable prettier-js-mode if an rc file is located."
@@ -2582,6 +2618,7 @@ Window management packages.
 (package! engine-mode)
 ;; (package! server)
 (package! verb)
+(package! httprepl)
 #+end_src
 ** Org
 #+begin_src emacs-lisp
@@ -2613,6 +2650,7 @@ Window management packages.
 (package! org-roam)
 ;; (package! mathpix.el
 ;;   :recipe ((:host github :repo "jethrokuan/mathpix.el")))
+(package! lsp-latex)
 #+end_src
 ** PDF
 ** Projectile

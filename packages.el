@@ -43,6 +43,7 @@
 (package! engine-mode)
 ;; (package! server)
 (package! verb)
+(package! httprepl)
 
 (package! counsel-org-clock)
 (package! doct
@@ -72,6 +73,7 @@
 (package! org-roam)
 ;; (package! mathpix.el
 ;;   :recipe ((:host github :repo "jethrokuan/mathpix.el")))
+(package! lsp-latex)
 
 (package! bm)
 (package! imenu-list)
