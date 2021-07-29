@@ -614,6 +614,7 @@ Keybindings reference:
 (global-set-key (kbd "<f1>") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
 (define-key evil-normal-state-map (kbd ",") nil)
+(define-key evil-visual-state-map (kbd ",") nil)
 ;; (global-set-key (kbd ",") nil)
 (map! "C-e" nil
       :n "C-t" nil)
@@ -772,9 +773,9 @@ Keybindings reference:
  (:prefix ("gi" . "mine")
   :n    "f"     #'+org/attach-file-and-insert-link)
 
- :n     ","     nil
+ :nv     ","     nil
  (:prefix ("," . "gccll")
-  :n    "`"     #'gcl-everything/body
+  :nv    "`"     #'gcl-everything/body
 
   ;; embrace
   :n    "ea"    #'embrace-add
