@@ -487,6 +487,11 @@ Finally save buffer.
  ;; :n     "rp"         #'projector-run-shell-command-project-root
  ;; :n     "rP"         #'projector-run-default-shell-command
 
+ ;; s -> search ?
+ (:map (scss-mode-map css-mode-map)
+  :n     "si"            #'counsel-css
+  )
+
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
  )
