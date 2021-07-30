@@ -222,7 +222,7 @@ Finally save buffer.
     (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
 (require 'org) (setq org-confirm-babel-evaluate nil) \
 (org-babel-tangle-file \\\"%s\\\"))\" \
-&& /bin/bash ~/.gclrc/shl/cp-config-org.sh"
+&& /bin/bash ~/.gclrc/bin/rsync-doom-config"
              +literate-config-file))))
 
 ;; 启动全屏
@@ -272,6 +272,8 @@ Finally save buffer.
       mouse-wheel-scroll-amount '(1 ((shift) . 1))
 
       vc-log-view-type nil
+      ;; mu4e
+      +mu4e-backend 'offlineimap
 
       ;; osx
       ;; browse-url-browser-function 'browse-url-default-macosx-browser
@@ -295,6 +297,7 @@ Finally save buffer.
 (global-set-key (kbd "<f1>") nil)        ; ns-print-buffer
 (global-set-key (kbd "<f2>") nil)        ; ns-print-buffer
 (define-key evil-normal-state-map (kbd ",") nil)
+(define-key evil-visual-state-map (kbd ",") nil)
 ;; (global-set-key (kbd ",") nil)
 (map! "C-e" nil
       :n "C-t" nil)
@@ -428,14 +431,17 @@ Finally save buffer.
  (:prefix ("gi" . "mine")
   :n    "f"     #'+org/attach-file-and-insert-link)
 
- :n     ","     nil
+ :nv     ","     nil
  (:prefix ("," . "gccll")
-  :n    "`"     #'gcl-everything/body
+  :nv    "`"     #'gcl-everything/body
 
   ;; embrace
-  :n    "ea"    #'embrace-add
-  :n    "ec"    #'embrace-change
-  :n    "ed"    #'embrace-delete
+  (:prefix ("e" . "embrace")
+   :n    "a"    #'embrace-add
+   :n    "c"    #'embrace-change
+   :n    "d"    #'embrace-delete
+   )
+
   )
  )
 
@@ -531,8 +537,9 @@ Finally save buffer.
 )
 
 (quick-find "C-h C-x C-s" "~/.ssh/config")
-(quick-find "C-h C-x C-z" "~/.zsh")
+(quick-find "C-h C-x C-z" "~/.zshrc")
 (quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
+(quick-find "C-h C-x C-o" "~/.offlineimaprc")
 
 (use-package! autoinsert
   :hook
@@ -1017,11 +1024,6 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
           ("C-p" . maple-iedit-match-previous)
           ("C-t" . map-iedit-skip-and-match-next)
           ("C-T" . map-iedit-skip-and-match-previous)))
-
-(use-package! mu4e
-  :config
-  (setq
-   +mu4e-backend 'offlineimap))
 
 (use-package! net-utils
   :bind

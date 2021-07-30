@@ -414,7 +414,7 @@ Finally save buffer.
        (lua +lsp)               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org               ; organize your plain life in plain text
         +attach
@@ -519,7 +519,7 @@ to bakup some of my private things.
     (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
 (require 'org) (setq org-confirm-babel-evaluate nil) \
 (org-babel-tangle-file \\\"%s\\\"))\" \
-&& /bin/bash ~/.gclrc/shl/cp-config-org.sh"
+&& /bin/bash ~/.gclrc/bin/rsync-doom-config"
              +literate-config-file))))
 #+end_src
 
@@ -574,6 +574,8 @@ private:
       mouse-wheel-scroll-amount '(1 ((shift) . 1))
 
       vc-log-view-type nil
+      ;; mu4e
+      +mu4e-backend 'offlineimap
 
       ;; osx
       ;; browse-url-browser-function 'browse-url-default-macosx-browser
@@ -778,9 +780,12 @@ Keybindings reference:
   :nv    "`"     #'gcl-everything/body
 
   ;; embrace
-  :n    "ea"    #'embrace-add
-  :n    "ec"    #'embrace-change
-  :n    "ed"    #'embrace-delete
+  (:prefix ("e" . "embrace")
+   :n    "a"    #'embrace-add
+   :n    "c"    #'embrace-change
+   :n    "d"    #'embrace-delete
+   )
+
   )
  )
 
@@ -884,8 +889,9 @@ Keybindings reference:
 ** QuickFind
 #+begin_src emacs-lisp
 (quick-find "C-h C-x C-s" "~/.ssh/config")
-(quick-find "C-h C-x C-z" "~/.zsh")
+(quick-find "C-h C-x C-z" "~/.zshrc")
 (quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
+(quick-find "C-h C-x C-o" "~/.offlineimaprc")
 #+end_src
 * Package Settings
 :PROPERTIES:
@@ -1504,12 +1510,6 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
 
 [[https://github.com/hlissner/doom-emacs/blob/develop/modules/email/mu4e/README.org][README.org ->]]
 
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :config
-  (setq
-   +mu4e-backend 'offlineimap))
-#+end_src
 ** Net-utils
 #+begin_src emacs-lisp
 (use-package! net-utils
