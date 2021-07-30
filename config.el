@@ -410,7 +410,15 @@ Finally save buffer.
   "s" #'avy-goto-char
   "S" #'avy-goto-char-2
   "w" #'avy-goto-word-1
-  "W" #'avy-goto-word-0)
+  "W" #'avy-goto-word-0
+  )
+
+(evil-define-key '(normal motion visual) map
+   "s" #'avy-goto-char
+   "S" #'avy-goto-char-2
+   "w" #'avy-goto-word-1
+   "W" #'avy-goto-word-0
+  )
 
 (map!
  :n     "+"     #'evil-numbers/inc-at-pt
@@ -1766,12 +1774,17 @@ is selected, only the bare key is returned."
   (projectile vterm))
 
 (map!
- "s-p b"      #'projector-switch-to-shell-buffer
- "s-p B"      #'projector-run-shell-command-current-directory-background
- "s-p c"      #'projector-run-shell-command-current-directory
- "s-p d"      #'projector-run-default-shell-command
- "s-p r"      #'projector-run-shell-command-project-root
- "s-p R"      #'projector-rerun-buffer-process
+ (:prefix "s-p"
+   "b"        #'projector-switch-to-shell-buffer
+   "-"        #'projector-rerun-buffer-process
+
+  (:prefix ("r" . "Run")
+   "c"        #'projector-run-shell-command-current-directory-background
+   "C"        #'projector-run-shell-command-current-directory
+   "r"        #'projector-run-shell-command-project-root-background
+   "R"        #'projector-run-shell-command-project-root
+   )
+  )
 )
 
 (after! ranger
