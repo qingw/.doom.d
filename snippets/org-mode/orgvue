@@ -2,11 +2,15 @@
 # name: orgvue
 # key: orgvue
 # --
+#+TITLE: $1
+#+DATE: <$2>
+#+TAGS[]: vue3, vue-next, Transition
+#+CATEGORIES[]: vue
+#+LANGUAGE: zh-cn
+#+STARTUP: indent
+
 #+begin_export html
 <link href="https://fonts.goo~gleapis.com/cs~s2?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
-<link href="/js/vue/formatters-styles/style.css" rel="stylesheet">
-<link href="/js/vue/formatters-styles/annotated.css" rel="stylesheet">
-<link href="/js/vue/formatters-styles/html.css" rel="stylesheet">
 <kbd>
 <font color="blue" size="3" style="font-family: 'ZCOOL XiaoWei', serif;">
   诗号：六道同坠，魔劫万千，引渡如来。
@@ -22,3 +26,13 @@ insertCssLink("https://unpkg.com/element-plus/lib/theme-chalk/index.css");
 <script type='text/javascript' src="https://cdn.jsdelivr.net/npm/jsondiffpatch/dist/jsondiffpatch.umd.min.js"></script>
 <script src="/js/vue/tests/common.js"></script>
 #+end_export
+
+[[/img/bdx/yiyeshu-001.jpg]]
+
+#+begin_quote
+本系列为 vue-next 源码分析系列的旁系分支，主要目的在于对 vue3 源码中的一些细节进
+行分析。本文讲述的是$3。
+
+#+end_quote
+
+* TODO
