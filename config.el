@@ -505,13 +505,18 @@ Finally save buffer.
  )
 
 (map! :map org-mode-map
-      :n        "tt"            #'org-todo
-      :n        "tT"            #'counsel-org-tag
-      :n        "tc"            #'org-toggle-checkbox
-      :n        "tpp"           #'org-priority
-      :n        "tpu"           #'org-priority-up
-      :n        "tpd"           #'org-priority-down
-
+      (:prefix "t"
+       :n "t" #'org-todo
+       :n "T" #'counsel-org-tag
+       (:prefix ("c" . "checkbox")
+        :n "c" #'org-toggle-checkbox
+        :n "u" #'org-update-checkbox-count
+       )
+       (:prefix ("p" . "priority")
+        :n "p" #'org-priority
+        :n "u" #'org-priority-up
+        :n "d" #'org-priority-down
+       ))
 
       "C-c e e"         #'all-the-icons-insert
       "C-c e a"         #'all-the-icons-insert-faicon
