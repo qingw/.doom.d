@@ -469,7 +469,7 @@ Finally save buffer.
 
        :app
        calendar
-       ;;emms
+       emms
        everywhere        ; *leave* Emacs!? You must be joking
        irc               ; how neckbeards socialize
        (rss +org)        ; emacs as an RSS reader
@@ -2923,3 +2923,4 @@ Window management packages.
 
 *** embrach-change(~,ec~)
 *** embrach-delete(~,ed~)
+** Emms
