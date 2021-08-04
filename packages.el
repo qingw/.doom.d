@@ -1,6 +1,12 @@
 (package! dotenv-mode)
 (package! leetcode)
 (package! ob-restclient)
+;; FIX: jq-set-var not found
+(package! restclient-jq :recipe
+  (:host github
+   :repo "pashky/restclient.el"
+   :files ("restclient-jq.el")))
+;; (package! ob-jq)
 
 (package! instant-rename-tag
   :recipe (:host github
@@ -101,5 +107,10 @@
   :recipe (:host github
            :repo "honmaple/emacs-maple-iedit"))
 (package! vmd-mode)
+
+;; (package! eaf
+;;   :recipe (:host github
+;;            :repo "manateelazycat/emacs-application-framework"
+;;            :files ("*")))
 
 (disable-packages! bookmark tide eldoc valign grip-mode)

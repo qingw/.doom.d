@@ -477,6 +477,11 @@ Finally save buffer.
  :leader
  :nv    "SPC"           #'execute-extended-command
 
+ (:prefix ("a" . "Applications")
+  :n    "e"     #'emms
+  :n    "E"     #'emms-smart-browse
+  )
+
  ;; b -> Buffer
  :n     "bf"            #'osx-lib-reveal-in-finder
 
@@ -770,6 +775,7 @@ Finally save buffer.
   "REPL "
   ("e" ielm " ELisp")
   ("h" httprepl " HTTP")
+  ("j" jq-interactivly " JSON")
   ("l" +lua/open-repl " Lua")
   ("n" nodejs-repl " Node.js")
   ("p" +python/open-repl " Python")
@@ -1819,6 +1825,8 @@ is selected, only the bare key is returned."
   :mode (("\\.rest\\'" . restclient-mode)
          ("\\.restclient\\'" . restclient-mode)))
 
+(use-package! restclient-jq
+  :after restclient)
 (use-package! ob-restclient
   :after org restclient
   :init
