@@ -108,9 +108,13 @@
            :repo "honmaple/emacs-maple-iedit"))
 (package! vmd-mode)
 
-;; (package! eaf
-;;   :recipe (:host github
-;;            :repo "manateelazycat/emacs-application-framework"
-;;            :files ("*")))
+;; (when (package! eaf :recipe (:host github
+;;                              :repo "manateelazycat/emacs-application-framework"
+;;                              :files ("*.el" "*.py" "app" "core")
+;;                              :build (:not compile)))
+
+;;   (package! ctable :recipe (:host github :repo "kiwanami/emacs-ctable"))
+;;   (package! deferred :recipe (:host github :repo "kiwanami/emacs-deferred"))
+;;   (package! epc :recipe (:host github :repo "kiwanami/emacs-epc")))
 
 (disable-packages! bookmark tide eldoc valign grip-mode)

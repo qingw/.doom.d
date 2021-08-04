@@ -638,6 +638,13 @@ Finally save buffer.
   :bind
   ("s-'" . cycle-quotes))
 
+;; (use-package! eaf
+;;  :commands (eaf-open-browser eaf-open find-file)
+;;  :config
+;;  (use-package! ctable)
+;;  (use-package! deferred)
+;;  (use-package! epc))
+
 (use-package! emacs-everywhere
   :if (daemonp)
   :config
@@ -1444,6 +1451,21 @@ is selected, only the bare key is returned."
                                :icon ("react" :set "alltheicon" :color "blue")
                                :desc ""
                                :i-type "web:react"
+                               )
+                              ("JavaScript" :keys "j"
+                               :icon ("javascript-shield" :set "alltheicon" :color "yellow")
+                               :desc ""
+                               :i-type "web:javascript"
+                               )
+                              ("HTML" :keys "h"
+                               :icon ("html5" :set "alltheicon" :color "orange")
+                               :desc ""
+                               :i-type "web:html"
+                               )
+                              ("CSS" :keys "c"
+                               :icon ("css3" :set "alltheicon" :color "blue")
+                               :desc ""
+                               :i-type "web:css"
                                ))
                    )
                   ("Interesting" :keys "i"
