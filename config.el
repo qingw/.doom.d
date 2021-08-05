@@ -1413,7 +1413,7 @@ is selected, only the bare key is returned."
                    :icon ("sticky-note-o" :set "faicon" :color "green")
                    :file +org-capture-todo-file
                    :prepend t
-                   :headline "Inbox"
+                   :headline "Notes"
                    :type entry
                    :template ("* %?"
                               "%i %a"))
@@ -1446,10 +1446,12 @@ is selected, only the bare key is returned."
                    :children (("Vue" :keys "v"
                                :icon ("vue" :set "fileicon" :color "green")
                                :desc ""
+                               :headline "Vue"
                                :i-type "web:vue")
                               ("React" :keys "r"
                                :icon ("react" :set "alltheicon" :color "blue")
                                :desc ""
+                               :headline "React"
                                :i-type "web:react"
                                )
                               ("JavaScript" :keys "j"
