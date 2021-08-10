@@ -3,7 +3,7 @@
 # key: vuetdf
 # --
 #+TITLE: Vue3 功能拆解$1
-#+DATE: <`(format-time-string "%y-%m-%d %H:%M:%S")`>
+#+DATE: <`(format-time-string "%Y-%m-%d %H:%M:%S")`>
 #+TAGS[]: vue3, vue-next, $2
 #+CATEGORIES[]: vue
 #+LANGUAGE: zh-cn

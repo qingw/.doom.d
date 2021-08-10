@@ -1442,7 +1442,7 @@ is selected, only the bare key is returned."
                    :headline "Web"
                    :type entry
                    :template ("* TODO %{desc}%? :%{i-type}:"
-                              "%i %a")
+                              "%i %a [[%F]]")
                    :children (("Vue" :keys "v"
                                :icon ("vue" :set "fileicon" :color "green")
                                :desc ""
@@ -1922,9 +1922,10 @@ is selected, only the bare key is returned."
 (use-package! yasnippet-snippets        ; AndreaCrotti
   :after yasnippet)
 
-(add-to-list 'auto-mode-alist '("\\.js[x]?\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\(x\\)?\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[a-z]+rc$" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
 (add-to-list 'auto-mode-alist '("[Mm]akefile" . makefile-gmake-mode))
 (add-to-list 'auto-mode-alist '("\\.mak$" . makefile-gmake-mode))
 (add-to-list 'auto-mode-alist '("\\.make$" . makefile-gmake-mode))

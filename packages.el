@@ -107,6 +107,7 @@
   :recipe (:host github
            :repo "honmaple/emacs-maple-iedit"))
 (package! vmd-mode)
+(package! vimrc-mode)
 
 ;; (when (package! eaf :recipe (:host github
 ;;                              :repo "manateelazycat/emacs-application-framework"
