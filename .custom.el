@@ -6,6 +6,8 @@
  '(elfeed-feeds
    '("https://tech.meituan.com/about" "https://feeds.feedburner.com/ruanyifeng" "https://www.ruanyifeng.com/blog/atom.xml"))
  '(package-selected-packages '(google exec-path-from-shell devdocs))
+ '(smtpmail-smtp-server "imap.exmail.qq.com")
+ '(smtpmail-smtp-service 25)
  '(warning-suppress-log-types '((before-save-hook) (after-change-major-mode-hook)))
  '(warning-suppress-types '((initialization) (after-change-major-mode-hook))))
 (custom-set-faces
