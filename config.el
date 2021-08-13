@@ -202,9 +202,13 @@ Finally save buffer.
     (embrace-add-pair (car lst) (cadr lst) (cddr lst))))
 
 (setq doom-theme 'doom-vibrant)
+;; (setq doom-theme 'spacemacs-light)
+;;(setq doom-theme 'doom-nord-light)
+;;(setq doom-theme 'doom-solarized-light)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
-(setq doom-font (font-spec :family "Fira Code" :size 15))
+(setq doom-font (font-spec :family "Fira Code" :size 15)
+      doom-variable-pitch-font (font-spec :family "ETBembo" :size 28))
 ;; (setq doom-font (font-spec :family "Source Code Pro" :size 15))
 
 ;; set title
@@ -223,15 +227,20 @@ Finally save buffer.
 
 (doom-load-envvars-file "~/.doom.d/env" )
 
-(defadvice! +literate-tangle-async-h ()
-  "A very simplified version of `+literate-tangle-h', but async."
-  :override #'+literate-tangle-h
-  (let ((default-directory doom-private-dir))
-    (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
-(require 'org) (setq org-confirm-babel-evaluate nil) \
-(org-babel-tangle-file \\\"%s\\\"))\" \
-&& /bin/bash ~/.gclrc/bin/rsync-doom-config"
-             +literate-config-file))))
+;; (defadvice! +literate-tangle-async-h ()
+;;   "A very simplified version of `+literate-tangle-h', but async."
+;;   :override #'+literate-tangle-h
+;;   (let ((default-directory doom-private-dir))
+;;     (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
+;; (require 'org) (setq org-confirm-babel-evaluate nil) \
+;; (org-babel-tangle-file \\\"%s\\\"))\" \
+;; && /bin/bash ~/.gclrc/bin/rsync-doom-config"
+;;                                               +literate-config-file))))
+
+;; (cond (IS-MAC
+;;        (setq mac-command-modifier 'meta
+;;              mac-option-modifier 'alt
+;;              mac-right-option-modifier 'alt)))
 
 ;; 启动全屏
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -243,6 +252,9 @@ Finally save buffer.
       user-blog-url "https://www.cheng92.com"
       read-process-output-max (* 1024 1024)
       display-line-numbers-type t
+
+      ;; exit no confirm
+      confirm-kill-emacs nil
 
       ;; web, js, css
       css-indent-offset 2
@@ -577,6 +589,14 @@ Finally save buffer.
 (quick-find "C-h C-x C-o" "~/.offlineimaprc")
 (quick-find "C-h C-x C-m" "~/.mbsyncrc")
 
+(map! :leader
+      (:prefix ("-" . "open file")
+       :desc "Edit agenda file"         "t" #'(lambda () (interactive) (find-file "~/.gclrc/org/todo.org"))
+       :desc "Edit doom config.org"     "c" #'(lambda () (interactive) (find-file "~/.doom/config.org"))
+       :desc "Edit mbsyncrc"            "d b" #'(lambda () (interactive) (find-file "~/.gclrc/mu4e/mbsyncrc"))
+       :desc "Edit msmtprc"             "d s" #'(lambda () (interactive) (find-file "~/.msmtprc"))
+       ))
+
 (use-package! autoinsert
   :hook
   (find-file . auto-insert))
@@ -637,12 +657,12 @@ Finally save buffer.
   :bind
   ("s-'" . cycle-quotes))
 
-;; (use-package! eaf
-;;  :commands (eaf-open-browser eaf-open find-file)
-;;  :config
-;;  (use-package! ctable)
-;;  (use-package! deferred)
-;;  (use-package! epc))
+ ;; (use-package! eaf
+ ;;  :commands (eaf-open-browser eaf-open find-file)
+ ;;  :config
+ ;;  (use-package! ctable)
+ ;;  (use-package! deferred)
+ ;;  (use-package! epc))
 
 (use-package! emacs-everywhere
   :if (daemonp)
@@ -1052,43 +1072,65 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   :bind
   (:map markdown-mode-map ("C-x p" . vmd-mode)))
 
-(use-package! maple-iedit
-   :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
-   :config
-   (delete-selection-mode t)
-   (setq maple-iedit-ignore-case t)
-   (defhydra maple/iedit ()
-     ("n" maple-iedit-match-next "next")
-     ("t" maple-iedit-skip-and-match-next "skip and next")
-     ("T" maple-iedit-skip-and-match-previous "skip and previous")
-     ("p" maple-iedit-match-previous "prev"))
-   :bind (:map evil-visual-state-map
-          ("n" . maple/iedit/body)
-          ("C-n" . maple-iedit-match-next)
-          ("C-p" . maple-iedit-match-previous)
-          ("C-t" . map-iedit-skip-and-match-next)
-          ("C-T" . map-iedit-skip-and-match-previous)))
+ (use-package! maple-iedit
+    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+    :config
+    (delete-selection-mode t)
+    (setq maple-iedit-ignore-case t)
+    (defhydra maple/iedit ()
+      ("n" maple-iedit-match-next "next")
+      ("t" maple-iedit-skip-and-match-next "skip and next")
+      ("T" maple-iedit-skip-and-match-previous "skip and previous")
+      ("p" maple-iedit-match-previous "prev"))
+    :bind (:map evil-visual-state-map
+           ("n" . maple/iedit/body)
+           ("C-n" . maple-iedit-match-next)
+           ("C-p" . maple-iedit-match-previous)
+           ("C-t" . map-iedit-skip-and-match-next)
+           ("C-T" . map-iedit-skip-and-match-previous)))
 
 (add-to-list 'load-path "/usr/local/Cellar/mu/1.6.2/share/emacs/site-lisp/mu/mu4e")
 (setq
- sendmail-program "/usr/local/bin/msmtp"
+ ;; sendmail-program "/usr/local/bin/msmtp"
  ;; sendmail-program "/usr/sbin/sendmail"
  send-mail-function #'sendmail-send-it
- message-sendmail-f-is-evil t
- message-sendmail-extra-arguments '("--read-envelope-from")
+ ;; message-sendmail-f-is-evil t
+ ;; message-sendmail-extra-arguments '("--read-envelope-from")
  message-send-mail-function #'message-send-mail-with-sendmail
  mu4e-view-auto-mark-as-read t
- smtpmail-starttls-credentials '(("smtp.1and1.com" 587 nil nil))
- mu4e-get-mail-command "mbsync -c ~/.gclrc/mu4e/mbsyncrc -a"
+ ;; starttls-use-gnutls t
+ ;; smtpmail-starttls-credentials '(("smtp.1and1.com" 587 nil nil))
+ mu4e-get-mail-command "mu index && mbsync -a"
  ;; +mu4e-backend 'offlineimap
  mu4e-maildir "~/Mail"
  mu4e-html2text-command "/usr/local/bin/w3m -T text/html"
  )
 (after! mu4e
   (set-email-account!
+   "gmail" '((user-mail-address    . "gccll.love@gmail.com")
+            (user-full-name       . "gccll.love")
+            (smtpmail-smtp-user   . "gccll.love@gmail.com")
+            (smtpmail-default-smtp-server   . "smtp.gmail.com")
+            (smtpmail-smtp-server           . "smtp.gmail.com")
+            (smtpmail-smtp-service          . 587)
+
+            ;; Optional
+            (mu4e-sent-folder     . "/gmail/sent")
+            (mu4e-drafts-folder   . "/gmail/drafts")
+            (mu4e-trash-folder    . "/gmail/trash")
+            (mu4e-refile-folder   . "/gmail/all")
+            (mu4e-get-mail-command    . "mbsync gmail")
+            (mu4e-compose-signature   . "--\n World is yours, Yours is mine!")
+            )
+   )
+  (set-email-account!
    "qq" '((user-mail-address    . "604522194@qq.com")
           (user-full-name       . "Li ZhiCheng")
           (smtpmail-smtp-user   . "604522194@qq.com")
+          (smtpmail-default-smtp-server   . "smtp.qq.com")
+          (smtpmail-smtp-server           . "smtp.qq.com")
+          (smtpmail-smtp-service          . 587)
+
           ;; Optional
           (mu4e-sent-folder     . "/qq/sent")
           (mu4e-drafts-folder   . "/qq/drafts")
@@ -1102,6 +1144,9 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
    "sunlight" '((user-mail-address    . "simon.li@sunlight-tech.com")
                 (user-full-name       . "Li ZhiCheng")
                 (smtpmail-smtp-user   . "simon.li@sunlight-tech.com")
+                (smtpmail-default-smtp-server   . "smtp.exmail.qq.com")
+                (smtpmail-smtp-server           . "smtp.exmail.qq.com")
+                (smtpmail-smtp-service          . 587)
                 ;; Optional
                 (mu4e-sent-folder     . "/sunlight/sent")
                 (mu4e-drafts-folder   . "/sunlight/drafts")
@@ -1124,8 +1169,26 @@ www.sunlight-tech.com
 
 电话 / 0755-26614499  传真 / 0755-26617699
 ")
-          )
+                )
    t)
+  )
+
+(use-package! mu4e-alert
+  :after mu4e
+  :init
+  (setq mu4e-alert-interesting-mail-query
+    (concat
+     "flag:unread maildir:/sunlight/inbox "
+     "OR "
+     "flag:unread maildir:/qq/inbox"
+     ))
+  (mu4e-alert-enable-mode-line-display)
+  (defun gcl/refresh-mu4e-alert-mode-line ()
+    (interactive)
+    (mu4e~proc-kill)
+    (mu4e-alert-enable-mode-line-display)
+    )
+  (run-with-timer 0 60 'gcl/refresh-mu4e-alert-mode-line)
   )
 
 (use-package! net-utils
@@ -1952,6 +2015,13 @@ is selected, only the bare key is returned."
    )
   (treemacs-follow-mode +1)
   )
+
+(use-package! mixed-pitch
+  :defer
+  :config
+  (setq mixed-pitch-variable-pitch-cursor nil)
+  :hook
+  (text-mode . mixed-pitch-mode))
 
 (use-package! visual-regexp
   :commands (vr/select-replace vr/select-query-replace))

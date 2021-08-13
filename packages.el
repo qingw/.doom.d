@@ -1,3 +1,5 @@
+(package! mu4e-alert)
+
 (package! dotenv-mode)
 (package! leetcode)
 (package! ob-restclient)
@@ -108,6 +110,9 @@
            :repo "honmaple/emacs-maple-iedit"))
 (package! vmd-mode)
 (package! vimrc-mode)
+
+(package! mixed-pitch)
+(package! spacemacs-theme)
 
 ;; (when (package! eaf :recipe (:host github
 ;;                              :repo "manateelazycat/emacs-application-framework"

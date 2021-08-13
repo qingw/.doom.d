@@ -370,7 +370,7 @@ Finally save buffer.
        (magit +forge)             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       pdf               ; pdf enhancements
+       ;; pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
@@ -487,9 +487,13 @@ Finally save buffer.
 
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-vibrant)
+;; (setq doom-theme 'spacemacs-light)
+;;(setq doom-theme 'doom-nord-light)
+;;(setq doom-theme 'doom-solarized-light)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
-(setq doom-font (font-spec :family "Fira Code" :size 15))
+(setq doom-font (font-spec :family "Fira Code" :size 15)
+      doom-variable-pitch-font (font-spec :family "ETBembo" :size 28))
 ;; (setq doom-font (font-spec :family "Source Code Pro" :size 15))
 
 ;; set title
@@ -520,15 +524,20 @@ to bakup some of my private things.
 #+begin_src emacs-lisp
 (doom-load-envvars-file "~/.doom.d/env" )
 
-(defadvice! +literate-tangle-async-h ()
-  "A very simplified version of `+literate-tangle-h', but async."
-  :override #'+literate-tangle-h
-  (let ((default-directory doom-private-dir))
-    (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
-(require 'org) (setq org-confirm-babel-evaluate nil) \
-(org-babel-tangle-file \\\"%s\\\"))\" \
-&& /bin/bash ~/.gclrc/bin/rsync-doom-config"
-             +literate-config-file))))
+;; (defadvice! +literate-tangle-async-h ()
+;;   "A very simplified version of `+literate-tangle-h', but async."
+;;   :override #'+literate-tangle-h
+;;   (let ((default-directory doom-private-dir))
+;;     (gcl/async-shell-command-silently (format "emacs --batch --eval \"(progn \
+;; (require 'org) (setq org-confirm-babel-evaluate nil) \
+;; (org-babel-tangle-file \\\"%s\\\"))\" \
+;; && /bin/bash ~/.gclrc/bin/rsync-doom-config"
+;;                                               +literate-config-file))))
+
+;; (cond (IS-MAC
+;;        (setq mac-command-modifier 'meta
+;;              mac-option-modifier 'alt
+;;              mac-right-option-modifier 'alt)))
 #+end_src
 
 private:
@@ -545,6 +554,9 @@ private:
       user-blog-url "https://www.cheng92.com"
       read-process-output-max (* 1024 1024)
       display-line-numbers-type t
+
+      ;; exit no confirm
+      confirm-kill-emacs nil
 
       ;; web, js, css
       css-indent-offset 2
@@ -928,6 +940,14 @@ Keybindings reference:
 (quick-find "C-h C-x C-d" "~/.gclrc/org/todo.org")
 (quick-find "C-h C-x C-o" "~/.offlineimaprc")
 (quick-find "C-h C-x C-m" "~/.mbsyncrc")
+
+(map! :leader
+      (:prefix ("-" . "open file")
+       :desc "Edit agenda file"         "t" #'(lambda () (interactive) (find-file "~/.gclrc/org/todo.org"))
+       :desc "Edit doom config.org"     "c" #'(lambda () (interactive) (find-file "~/.doom/config.org"))
+       :desc "Edit mbsyncrc"            "d b" #'(lambda () (interactive) (find-file "~/.gclrc/mu4e/mbsyncrc"))
+       :desc "Edit msmtprc"             "d s" #'(lambda () (interactive) (find-file "~/.msmtprc"))
+       ))
 #+end_src
 * Package Settings
 :PROPERTIES:
@@ -1567,6 +1587,7 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
  message-sendmail-extra-arguments '("--read-envelope-from")
  message-send-mail-function #'message-send-mail-with-sendmail
  mu4e-view-auto-mark-as-read t
+ starttls-use-gnutls t
  smtpmail-starttls-credentials '(("smtp.1and1.com" 587 nil nil))
  mu4e-get-mail-command "mbsync -c ~/.gclrc/mu4e/mbsyncrc -a"
  ;; +mu4e-backend 'offlineimap
@@ -2560,6 +2581,19 @@ ignore some directories.
   (treemacs-follow-mode +1)
   )
 #+end_src
+** Themes
+*** mixed-pitch
+
+混合字体
+
+#+begin_src emacs-lisp
+(use-package! mixed-pitch
+  :defer
+  :config
+  (setq mixed-pitch-variable-pitch-cursor nil)
+  :hook
+  (text-mode . mixed-pitch-mode))
+#+end_src
 ** Visual-regexp
 #+begin_src emacs-lisp
 (use-package! visual-regexp
@@ -2834,6 +2868,11 @@ Window management packages.
 (package! vmd-mode)
 (package! vimrc-mode)
 #+end_src
+** Themes
+#+begin_src emacs-lisp
+(package! mixed-pitch)
+(package! spacemacs-theme)
+#+end_src
 ** EAF
 #+begin_src emacs-lisp
 ;; (when (package! eaf :recipe (:host github
@@ -2855,6 +2894,14 @@ Window management packages.
 :COLUMNS:  %CUSTOM_ID[(Custom Id)]
 :CUSTOM_ID: practices
 :END:
+
+~C-c C-v t~:
+
+Signature
+~(org-babel-tangle &optional ARG TARGET-FILE LANG-RE)~
+
+Documentation
+Write code blocks to source-specific files.
 
 ** Evil-mode
 :PROPERTIES:
