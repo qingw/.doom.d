@@ -870,6 +870,10 @@ Keybindings reference:
   :n     "si"            #'counsel-css
   )
 
+ (:prefix ("v" . "View")
+  :n    "e"            #'mu4e-alert-view-unread-mails
+  )
+
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
  )
@@ -1677,6 +1681,9 @@ www.sunlight-tech.com
 | ~q~       | quit                   |
 |---------+------------------------|
 | ~C-c C-c~ | send email             |
+| ~C-c C-a~ | add attachment         |
+| ~C-c C-e~ | preview                |
+| ~C-x m~   | compose mail           |
 
 *** Mu4e-alert
 

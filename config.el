@@ -523,6 +523,10 @@ Finally save buffer.
   :n     "si"            #'counsel-css
   )
 
+ (:prefix ("v" . "View")
+  :n    "e"            #'mu4e-alert-view-unread-mails
+  )
+
  ;; / -> Search
  ;; :n     "/r"    #'deadgrep
  )
