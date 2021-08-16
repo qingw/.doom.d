@@ -513,6 +513,7 @@ Finally save buffer.
  ;; l -> load, ...
  :n     "lr"            #'ranger
  :n     "ld"            #'dired
+ :n     "le"            #'elfeed
 
  ;; r -> Run
  ;; :n     "rp"         #'projector-run-shell-command-project-root
@@ -661,12 +662,58 @@ Finally save buffer.
   :bind
   ("s-'" . cycle-quotes))
 
- ;; (use-package! eaf
- ;;  :commands (eaf-open-browser eaf-open find-file)
- ;;  :config
- ;;  (use-package! ctable)
- ;;  (use-package! deferred)
- ;;  (use-package! epc))
+(use-package! dash-at-point
+  :bind
+  (("C-x d" . dash-at-point)
+   ("C-x D" . dash-at-point-with-docset)))
+
+(use-package! delsel
+  :config
+  (delete-selection-mode t))
+
+(use-package! dotenv-mode
+  :mode ("\\.env\\.?.*\\'" . dotenv-mode))
+
+;; (use-package! eaf
+;;  :commands (eaf-open-browser eaf-open find-file)
+;;  :config
+;;  (use-package! ctable)
+;;  (use-package! deferred)
+;;  (use-package! epc))
+
+(map! :map elfeed-search-mode-map
+      :after elfeed-search
+      [remap kill-this-buffer] "q"
+      [remap kill-buffer] "q"
+      :n doom-leader-key nil
+      ;; :n "q" #'+rss/quit
+      :n "e" #'elfeed-update
+      :n "r" #'elfeed-search-untag-all-unread
+      :n "u" #'elfeed-search-tag-all-unread
+      :n "s" #'elfeed-search-live-filter
+      :n "RET" #'elfeed-search-show-entry
+      :n "p" #'elfeed-show-pdf
+      :n "+" #'elfeed-search-tag-all
+      :n "-" #'elfeed-search-untag-all
+      :n "S" #'elfeed-search-set-filter
+      :n "b" #'elfeed-search-browse-url
+      :n "y" #'elfeed-search-yank)
+
+(map! :map elfeed-show-mode-map
+      :after elfeed-show
+      [remap kill-this-buffer] "q"
+      [remap kill-buffer] "q"
+      :n doom-leader-key nil
+      :nm "q" #'+rss/delete-pane
+      :nm "o" #'ace-link-elfeed
+      :nm "RET" #'org-ref-elfeed-add
+      :nm "n" #'elfeed-show-next
+      :nm "N" #'elfeed-show-prev
+      :nm "p" #'elfeed-show-pdf
+      :nm "+" #'elfeed-show-tag
+      :nm "-" #'elfeed-show-untag
+      :nm "s" #'elfeed-show-new-live-search
+      :nm "y" #'elfeed-show-yank)
 
 (use-package! emacs-everywhere
   :if (daemonp)
@@ -743,18 +790,6 @@ Finally save buffer.
     :keybinding "//")
 
   (engine-mode 1))
-
-(use-package! dash-at-point
-  :bind
-  (("C-x d" . dash-at-point)
-   ("C-x D" . dash-at-point-with-docset)))
-
-(use-package! delsel
-  :config
-  (delete-selection-mode t))
-
-(use-package! dotenv-mode
-  :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 
 ;; (defalias 'ex! 'evil-ex-define-cmd)
 
@@ -1076,22 +1111,22 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   :bind
   (:map markdown-mode-map ("C-x p" . vmd-mode)))
 
- (use-package! maple-iedit
-    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
-    :config
-    (delete-selection-mode t)
-    (setq maple-iedit-ignore-case t)
-    (defhydra maple/iedit ()
-      ("n" maple-iedit-match-next "next")
-      ("t" maple-iedit-skip-and-match-next "skip and next")
-      ("T" maple-iedit-skip-and-match-previous "skip and previous")
-      ("p" maple-iedit-match-previous "prev"))
-    :bind (:map evil-visual-state-map
-           ("n" . maple/iedit/body)
-           ("C-n" . maple-iedit-match-next)
-           ("C-p" . maple-iedit-match-previous)
-           ("C-t" . map-iedit-skip-and-match-next)
-           ("C-T" . map-iedit-skip-and-match-previous)))
+(use-package! maple-iedit
+   :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+   :config
+   (delete-selection-mode t)
+   (setq maple-iedit-ignore-case t)
+   (defhydra maple/iedit ()
+     ("n" maple-iedit-match-next "next")
+     ("t" maple-iedit-skip-and-match-next "skip and next")
+     ("T" maple-iedit-skip-and-match-previous "skip and previous")
+     ("p" maple-iedit-match-previous "prev"))
+   :bind (:map evil-visual-state-map
+          ("n" . maple/iedit/body)
+          ("C-n" . maple-iedit-match-next)
+          ("C-p" . maple-iedit-match-previous)
+          ("C-t" . map-iedit-skip-and-match-next)
+          ("C-T" . map-iedit-skip-and-match-previous)))
 
 (add-to-list 'load-path "/usr/local/Cellar/mu/1.6.2/share/emacs/site-lisp/mu/mu4e")
 (setq

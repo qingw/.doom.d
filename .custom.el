@@ -8,7 +8,7 @@
  '(custom-safe-themes
    '("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))
  '(elfeed-feeds
-   '("https://tech.meituan.com/about" "https://feeds.feedburner.com/ruanyifeng" "https://www.ruanyifeng.com/blog/atom.xml"))
+   '("https://cprss.s3.amazonaws.com/javascriptweekly.com.xml"))
  '(exwm-floating-border-color "#1c1f24")
  '(fci-rule-color "#62686E")
  '(highlight-tail-colors

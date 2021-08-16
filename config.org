@@ -860,6 +860,7 @@ Keybindings reference:
  ;; l -> load, ...
  :n     "lr"            #'ranger
  :n     "ld"            #'dired
+ :n     "le"            #'elfeed
 
  ;; r -> Run
  ;; :n     "rp"         #'projector-run-shell-command-project-root
@@ -1032,6 +1033,42 @@ Keybindings reference:
   :bind
   ("s-'" . cycle-quotes))
 #+end_src
+** Dash-at-point
+#+begin_src emacs-lisp
+(use-package! dash-at-point
+  :bind
+  (("C-x d" . dash-at-point)
+   ("C-x D" . dash-at-point-with-docset)))
+#+end_src
+** Deadgrep
+
+正则搜索要在搜索的结果中，选中 _regexp_ 来筛选。
+
+按键绑定：
+
+| key     | func                      |
+|---------+---------------------------|
+| <f5>    | ~deadgrep~                  |
+| M-<f5>  | ~deadgrep-kill-all-buffers~ |
+|---------+---------------------------|
+| ~RET~     | 查看结果                  |
+| ~o~       | 在另一个窗口打开          |
+| ~n/p~     | 结果中上下移动            |
+| ~M-n/M-p~ | 文件头尾之间移动          |
+| ~g~       | 重新搜索                  |
+| ~TAB~     | 展开/闭合结果             |
+| ~C-c C-k~ | 停止正在执行的搜索        |
+** Delsel
+#+begin_src emacs-lisp
+(use-package! delsel
+  :config
+  (delete-selection-mode t))
+#+end_src
+** Dotenv-mode
+#+begin_src emacs-lisp
+(use-package! dotenv-mode
+  :mode ("\\.env\\.?.*\\'" . dotenv-mode))
+#+end_src
 ** EAF
 #+begin_src emacs-lisp
  ;; (use-package! eaf
@@ -1040,6 +1077,44 @@ Keybindings reference:
  ;;  (use-package! ctable)
  ;;  (use-package! deferred)
  ;;  (use-package! epc))
+#+end_src
+** Elfeed
+*** Keybindings:
+
+#+begin_src emacs-lisp
+(map! :map elfeed-search-mode-map
+      :after elfeed-search
+      [remap kill-this-buffer] "q"
+      [remap kill-buffer] "q"
+      :n doom-leader-key nil
+      ;; :n "q" #'+rss/quit
+      :n "e" #'elfeed-update
+      :n "r" #'elfeed-search-untag-all-unread
+      :n "u" #'elfeed-search-tag-all-unread
+      :n "s" #'elfeed-search-live-filter
+      :n "RET" #'elfeed-search-show-entry
+      :n "p" #'elfeed-show-pdf
+      :n "+" #'elfeed-search-tag-all
+      :n "-" #'elfeed-search-untag-all
+      :n "S" #'elfeed-search-set-filter
+      :n "b" #'elfeed-search-browse-url
+      :n "y" #'elfeed-search-yank)
+
+(map! :map elfeed-show-mode-map
+      :after elfeed-show
+      [remap kill-this-buffer] "q"
+      [remap kill-buffer] "q"
+      :n doom-leader-key nil
+      :nm "q" #'+rss/delete-pane
+      :nm "o" #'ace-link-elfeed
+      :nm "RET" #'org-ref-elfeed-add
+      :nm "n" #'elfeed-show-next
+      :nm "N" #'elfeed-show-prev
+      :nm "p" #'elfeed-show-pdf
+      :nm "+" #'elfeed-show-tag
+      :nm "-" #'elfeed-show-untag
+      :nm "s" #'elfeed-show-new-live-search
+      :nm "y" #'elfeed-show-yank)
 #+end_src
 
 ** Emacs-everywhere
@@ -1124,42 +1199,6 @@ Keybindings reference:
     :keybinding "//")
 
   (engine-mode 1))
-#+end_src
-** Dash-at-point
-#+begin_src emacs-lisp
-(use-package! dash-at-point
-  :bind
-  (("C-x d" . dash-at-point)
-   ("C-x D" . dash-at-point-with-docset)))
-#+end_src
-** Deadgrep
-
-正则搜索要在搜索的结果中，选中 _regexp_ 来筛选。
-
-按键绑定：
-
-| key     | func                      |
-|---------+---------------------------|
-| <f5>    | ~deadgrep~                  |
-| M-<f5>  | ~deadgrep-kill-all-buffers~ |
-|---------+---------------------------|
-| ~RET~     | 查看结果                  |
-| ~o~       | 在另一个窗口打开          |
-| ~n/p~     | 结果中上下移动            |
-| ~M-n/M-p~ | 文件头尾之间移动          |
-| ~g~       | 重新搜索                  |
-| ~TAB~     | 展开/闭合结果             |
-| ~C-c C-k~ | 停止正在执行的搜索        |
-** Delsel
-#+begin_src emacs-lisp
-(use-package! delsel
-  :config
-  (delete-selection-mode t))
-#+end_src
-** Dotenv-mode
-#+begin_src emacs-lisp
-(use-package! dotenv-mode
-  :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 #+end_src
 ** Emoji
 ...
