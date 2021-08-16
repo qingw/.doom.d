@@ -7,8 +7,7 @@
    ["#242730" "#ff665c" "#7bc275" "#FCCE7B" "#51afef" "#C57BDB" "#5cEfFF" "#bbc2cf"])
  '(custom-safe-themes
    '("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))
- '(elfeed-feeds
-   '("https://cprss.s3.amazonaws.com/javascriptweekly.com.xml"))
+ '(elfeed-feeds '("https://www.ruanyifeng.com/blog/atom.xml"))
  '(exwm-floating-border-color "#1c1f24")
  '(fci-rule-color "#62686E")
  '(highlight-tail-colors
