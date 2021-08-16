@@ -113,6 +113,7 @@
 
 (package! mixed-pitch)
 (package! spacemacs-theme)
+(package! visual-fill-column)
 
 ;; (when (package! eaf :recipe (:host github
 ;;                              :repo "manateelazycat/emacs-application-framework"
