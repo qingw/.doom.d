@@ -1759,7 +1759,7 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
  mu4e-view-auto-mark-as-read t
  ;; starttls-use-gnutls t
  ;; smtpmail-starttls-credentials '(("smtp.1and1.com" 587 nil nil))
- mu4e-get-mail-command "mu index && mbsync -a"
+ mu4e-get-mail-command "mbsync -a"
  ;; +mu4e-backend 'offlineimap
  mu4e-maildir "~/Mail"
  mu4e-html2text-command "/usr/local/bin/w3m -T text/html"

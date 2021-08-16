@@ -674,12 +674,12 @@ Finally save buffer.
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 
-;; (use-package! eaf
-;;  :commands (eaf-open-browser eaf-open find-file)
-;;  :config
-;;  (use-package! ctable)
-;;  (use-package! deferred)
-;;  (use-package! epc))
+ ;; (use-package! eaf
+ ;;  :commands (eaf-open-browser eaf-open find-file)
+ ;;  :config
+ ;;  (use-package! ctable)
+ ;;  (use-package! deferred)
+ ;;  (use-package! epc))
 
 (map! :map elfeed-search-mode-map
       :after elfeed-search
@@ -1233,22 +1233,22 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   :bind
   (:map markdown-mode-map ("C-x p" . vmd-mode)))
 
-(use-package! maple-iedit
-   :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
-   :config
-   (delete-selection-mode t)
-   (setq maple-iedit-ignore-case t)
-   (defhydra maple/iedit ()
-     ("n" maple-iedit-match-next "next")
-     ("t" maple-iedit-skip-and-match-next "skip and next")
-     ("T" maple-iedit-skip-and-match-previous "skip and previous")
-     ("p" maple-iedit-match-previous "prev"))
-   :bind (:map evil-visual-state-map
-          ("n" . maple/iedit/body)
-          ("C-n" . maple-iedit-match-next)
-          ("C-p" . maple-iedit-match-previous)
-          ("C-t" . map-iedit-skip-and-match-next)
-          ("C-T" . map-iedit-skip-and-match-previous)))
+ (use-package! maple-iedit
+    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+    :config
+    (delete-selection-mode t)
+    (setq maple-iedit-ignore-case t)
+    (defhydra maple/iedit ()
+      ("n" maple-iedit-match-next "next")
+      ("t" maple-iedit-skip-and-match-next "skip and next")
+      ("T" maple-iedit-skip-and-match-previous "skip and previous")
+      ("p" maple-iedit-match-previous "prev"))
+    :bind (:map evil-visual-state-map
+           ("n" . maple/iedit/body)
+           ("C-n" . maple-iedit-match-next)
+           ("C-p" . maple-iedit-match-previous)
+           ("C-t" . map-iedit-skip-and-match-next)
+           ("C-T" . map-iedit-skip-and-match-previous)))
 
 (add-to-list 'load-path "/usr/local/Cellar/mu/1.6.2/share/emacs/site-lisp/mu/mu4e")
 (setq
@@ -1261,7 +1261,7 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
  mu4e-view-auto-mark-as-read t
  ;; starttls-use-gnutls t
  ;; smtpmail-starttls-credentials '(("smtp.1and1.com" 587 nil nil))
- mu4e-get-mail-command "mu index && mbsync -a"
+ mu4e-get-mail-command "mbsync -a"
  ;; +mu4e-backend 'offlineimap
  mu4e-maildir "~/Mail"
  mu4e-html2text-command "/usr/local/bin/w3m -T text/html"
