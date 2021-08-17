@@ -9,6 +9,8 @@
    :repo "pashky/restclient.el"
    :files ("restclient-jq.el")))
 ;; (package! ob-jq)
+(package! ob-deno)
+(package! deno-fmt)
 
 (package! instant-rename-tag
   :recipe (:host github

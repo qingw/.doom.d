@@ -207,8 +207,8 @@ Finally save buffer.
 ;;(setq doom-theme 'doom-solarized-light)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
-(setq doom-font (font-spec :family "Fira Code" :size 15)
-      doom-variable-pitch-font (font-spec :family "ETBembo" :size 28))
+(setq doom-font (font-spec :family "Fira Code" :size 16)
+      doom-variable-pitch-font (font-spec :family "ETBembo" :size 32))
 ;; (setq doom-font (font-spec :family "Source Code Pro" :size 15))
 
 ;; set title
@@ -674,12 +674,12 @@ Finally save buffer.
 (use-package! dotenv-mode
   :mode ("\\.env\\.?.*\\'" . dotenv-mode))
 
-;; (use-package! eaf
-;;  :commands (eaf-open-browser eaf-open find-file)
-;;  :config
-;;  (use-package! ctable)
-;;  (use-package! deferred)
-;;  (use-package! epc))
+ ;; (use-package! eaf
+ ;;  :commands (eaf-open-browser eaf-open find-file)
+ ;;  :config
+ ;;  (use-package! ctable)
+ ;;  (use-package! deferred)
+ ;;  (use-package! epc))
 
 (map! :map elfeed-search-mode-map
       :after elfeed-search
@@ -1188,33 +1188,33 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 ;; (setq-hook! 'typescript-tsx-mode-hook +format-with-lsp nil)
 
 (cl-defmacro lsp-org-babel-enable (lang)
-"Support LANG in org source code block."
-(setq centaur-lsp 'lsp-mode)
-(cl-check-type lang stringp)
-(let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
-        (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
+  "Support LANG in org source code block."
+  (setq centaur-lsp 'lsp-mode)
+  (cl-check-type lang stringp)
+  (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
+         (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
     `(progn
-    (defun ,intern-pre (info)
-        (let ((file-name (->> info caddr (alist-get :file))))
-        (unless file-name
-            (setq file-name (make-temp-file "babel-lsp-")))
-        (setq buffer-file-name file-name)
-        (lsp-deferred)))
-    (put ',intern-pre 'function-documentation
+       (defun ,intern-pre (info)
+         (let ((file-name (->> info caddr (alist-get :file))))
+           (unless file-name
+             (setq file-name (make-temp-file "babel-lsp-")))
+           (setq buffer-file-name file-name)
+           (lsp-deferred)))
+       (put ',intern-pre 'function-documentation
             (format "Enable lsp-mode in the buffer of org source block (%s)."
                     (upcase ,lang)))
-    (if (fboundp ',edit-pre)
-        (advice-add ',edit-pre :after ',intern-pre)
-        (progn
-        (defun ,edit-pre (info)
-            (,intern-pre info))
-        (put ',edit-pre 'function-documentation
+       (if (fboundp ',edit-pre)
+           (advice-add ',edit-pre :after ',intern-pre)
+         (progn
+           (defun ,edit-pre (info)
+             (,intern-pre info))
+           (put ',edit-pre 'function-documentation
                 (format "Prepare local buffer environment for org source block (%s)."
                         (upcase ,lang))))))))
 (defvar org-babel-lang-list
-'("go" "python" "ipython" "bash" "sh" "js" "typescript" "css"))
+  '("go" "python" "ipython" "bash" "sh" "js" "typescript" "css"))
 (dolist (lang org-babel-lang-list)
-(eval `(lsp-org-babel-enable ,lang)))
+  (eval `(lsp-org-babel-enable ,lang)))
 
 ;; (use-package! grip-mode
 ;;   :hook ((markdown-mode org-mode) . grip-mode)
@@ -1233,22 +1233,22 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   :bind
   (:map markdown-mode-map ("C-x p" . vmd-mode)))
 
-(use-package! maple-iedit
-   :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
-   :config
-   (delete-selection-mode t)
-   (setq maple-iedit-ignore-case t)
-   (defhydra maple/iedit ()
-     ("n" maple-iedit-match-next "next")
-     ("t" maple-iedit-skip-and-match-next "skip and next")
-     ("T" maple-iedit-skip-and-match-previous "skip and previous")
-     ("p" maple-iedit-match-previous "prev"))
-   :bind (:map evil-visual-state-map
-          ("n" . maple/iedit/body)
-          ("C-n" . maple-iedit-match-next)
-          ("C-p" . maple-iedit-match-previous)
-          ("C-t" . map-iedit-skip-and-match-next)
-          ("C-T" . map-iedit-skip-and-match-previous)))
+ (use-package! maple-iedit
+    :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+    :config
+    (delete-selection-mode t)
+    (setq maple-iedit-ignore-case t)
+    (defhydra maple/iedit ()
+      ("n" maple-iedit-match-next "next")
+      ("t" maple-iedit-skip-and-match-next "skip and next")
+      ("T" maple-iedit-skip-and-match-previous "skip and previous")
+      ("p" maple-iedit-match-previous "prev"))
+    :bind (:map evil-visual-state-map
+           ("n" . maple/iedit/body)
+           ("C-n" . maple-iedit-match-next)
+           ("C-p" . maple-iedit-match-previous)
+           ("C-t" . map-iedit-skip-and-match-next)
+           ("C-T" . map-iedit-skip-and-match-previous)))
 
 (add-to-list 'load-path "/usr/local/Cellar/mu/1.6.2/share/emacs/site-lisp/mu/mu4e")
 (setq
@@ -1404,7 +1404,8 @@ www.sunlight-tech.com
   (org-babel-do-load-languages 'org-babel-load-languages
                              (append org-babel-load-languages
                               '((restclient . t)
-                                (verb . t))
+                                (verb . t)
+                                (deno . t))
                               ))
 
   (setq
@@ -1724,7 +1725,7 @@ is selected, only the bare key is returned."
                    :headline "Web"
                    :type entry
                    :template ("* TODO %{desc}%? :%{i-type}:"
-                              "%i %a [[%F]]")
+                              "%i %a")
                    :children (("Vue" :keys "v"
                                :icon ("vue" :set "fileicon" :color "green")
                                :desc ""
@@ -2222,6 +2223,8 @@ is selected, only the bare key is returned."
 (add-to-list 'auto-mode-alist '("\\.make$" . makefile-gmake-mode))
 (add-to-list 'auto-mode-alist '("[._]bash.*" . shell-script-mode))
 
+;; (add-to-list 'org-src-lang-modes '("deno" . typescript))
+
 (defun maybe-use-prettier ()
   "Enable prettier-js-mode if an rc file is located."
   (if (locate-dominating-file default-directory ".prettierrc")
@@ -2257,6 +2260,9 @@ is selected, only the bare key is returned."
 
 (use-package! js-react-redux-yasnippets
   :after yasnippet)
+
+(use-package! ob-deno
+  :after org)
 
 (after! python
   (set-docsets! 'python-mode "Python_3")

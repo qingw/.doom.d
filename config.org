@@ -492,8 +492,8 @@ Finally save buffer.
 ;;(setq doom-theme 'doom-solarized-light)
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
-(setq doom-font (font-spec :family "Fira Code" :size 15)
-      doom-variable-pitch-font (font-spec :family "ETBembo" :size 28))
+(setq doom-font (font-spec :family "Fira Code" :size 16)
+      doom-variable-pitch-font (font-spec :family "ETBembo" :size 32))
 ;; (setq doom-font (font-spec :family "Source Code Pro" :size 15))
 
 ;; set title
@@ -1666,33 +1666,33 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 open Lsp in org source block:
 #+begin_src emacs-lisp
 (cl-defmacro lsp-org-babel-enable (lang)
-"Support LANG in org source code block."
-(setq centaur-lsp 'lsp-mode)
-(cl-check-type lang stringp)
-(let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
-        (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
+  "Support LANG in org source code block."
+  (setq centaur-lsp 'lsp-mode)
+  (cl-check-type lang stringp)
+  (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
+         (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
     `(progn
-    (defun ,intern-pre (info)
-        (let ((file-name (->> info caddr (alist-get :file))))
-        (unless file-name
-            (setq file-name (make-temp-file "babel-lsp-")))
-        (setq buffer-file-name file-name)
-        (lsp-deferred)))
-    (put ',intern-pre 'function-documentation
+       (defun ,intern-pre (info)
+         (let ((file-name (->> info caddr (alist-get :file))))
+           (unless file-name
+             (setq file-name (make-temp-file "babel-lsp-")))
+           (setq buffer-file-name file-name)
+           (lsp-deferred)))
+       (put ',intern-pre 'function-documentation
             (format "Enable lsp-mode in the buffer of org source block (%s)."
                     (upcase ,lang)))
-    (if (fboundp ',edit-pre)
-        (advice-add ',edit-pre :after ',intern-pre)
-        (progn
-        (defun ,edit-pre (info)
-            (,intern-pre info))
-        (put ',edit-pre 'function-documentation
+       (if (fboundp ',edit-pre)
+           (advice-add ',edit-pre :after ',intern-pre)
+         (progn
+           (defun ,edit-pre (info)
+             (,intern-pre info))
+           (put ',edit-pre 'function-documentation
                 (format "Prepare local buffer environment for org source block (%s)."
                         (upcase ,lang))))))))
 (defvar org-babel-lang-list
-'("go" "python" "ipython" "bash" "sh" "js" "typescript" "css"))
+  '("go" "python" "ipython" "bash" "sh" "js" "typescript" "css"))
 (dolist (lang org-babel-lang-list)
-(eval `(lsp-org-babel-enable ,lang)))
+  (eval `(lsp-org-babel-enable ,lang)))
 #+end_src
 ** Markdown
 *** Grip-mode
@@ -1930,7 +1930,8 @@ www.sunlight-tech.com
   (org-babel-do-load-languages 'org-babel-load-languages
                              (append org-babel-load-languages
                               '((restclient . t)
-                                (verb . t))
+                                (verb . t)
+                                (deno . t))
                               ))
 
   (setq
@@ -2296,7 +2297,7 @@ is selected, only the bare key is returned."
                    :headline "Web"
                    :type entry
                    :template ("* TODO %{desc}%? :%{i-type}:"
-                              "%i %a [[%F]]")
+                              "%i %a")
                    :children (("Vue" :keys "v"
                                :icon ("vue" :set "fileicon" :color "green")
                                :desc ""
@@ -2885,6 +2886,8 @@ Doom Emacs default configuration is too slow, let’s speed it up.
 (add-to-list 'auto-mode-alist '("\\.mak$" . makefile-gmake-mode))
 (add-to-list 'auto-mode-alist '("\\.make$" . makefile-gmake-mode))
 (add-to-list 'auto-mode-alist '("[._]bash.*" . shell-script-mode))
+
+;; (add-to-list 'org-src-lang-modes '("deno" . typescript))
 #+end_src
 
 ** Web
@@ -2936,6 +2939,11 @@ Use `.prettierrc` file for prettier.
 (use-package! js-react-redux-yasnippets
   :after yasnippet)
 #+end_src
+*** deno
+#+begin_src emacs-lisp
+(use-package! ob-deno
+  :after org)
+#+end_src
 ** Python
 
 #+begin_src emacs-lisp
@@ -2976,6 +2984,8 @@ Use `.prettierrc` file for prettier.
    :repo "pashky/restclient.el"
    :files ("restclient-jq.el")))
 ;; (package! ob-jq)
+(package! ob-deno)
+(package! deno-fmt)
 #+end_src
 *** WEB
 
@@ -3327,3 +3337,17 @@ Write code blocks to source-specific files.
 *** embrach-change(~,ec~)
 *** embrach-delete(~,ed~)
 ** Emms
+** Development
+*** Deno
+
+#+begin_src deno :results output
+const arr = [1,2,3]
+console.log(arr);
+#+end_src
+
+#+begin_src deno :allow '((net . (httpbin.org example.com)) env) :results output
+  const response = await fetch(`https://httpbin.org/get?user=${Deno.env.get("USER")}`);
+  const json = await response.json();
+
+  console.log(json.args);
+#+end_src
