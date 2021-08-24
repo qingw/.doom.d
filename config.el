@@ -208,7 +208,9 @@ Finally save buffer.
 
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 16))
 (setq doom-font (font-spec :family "Fira Code" :size 16)
-      doom-variable-pitch-font (font-spec :family "ETBembo" :size 36))
+      doom-variable-pitch-font (font-spec :family "Fira Code" :size 16)
+      ;; doom-variable-pitch-font (font-spec :family "ETBembo" :size 36)
+      )
 ;; (setq doom-font (font-spec :family "Source Code Pro" :size 15))
 
 ;; set title
@@ -587,6 +589,11 @@ Finally save buffer.
         )
        )
       )
+
+(map! :map org-msg-edit-mode-map
+      "C-c m s" #'mail-send
+      "C-c m S" #'mail-send-and-exit
+      "C-c m a" #'mail-add-attachment)
 
 (quick-find "C-h C-x C-s" "~/.ssh/config")
 (quick-find "C-h C-x C-z" "~/.zshrc")
@@ -974,6 +981,7 @@ Finally save buffer.
 (defhydra gcl-everything (:color blue :columns 3 :hint nil)
   "🗯 做任何你想不到的事情~~~~ 👁👁👁👁👁👁👁👁👁
 🌻"
+  ("d" dap-hydra "Dap")
   ("j" gcl-jump-hydra/body "Avy")
   ("r" gcl-repl-hydra/body "REPL")
   ("v" gcl-verb-hydra/body "Verb")

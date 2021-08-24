@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: release-mail-list
+# key: rml
+# --
+To: 牛学陈 <xuechen.niu@sunlight-tech.com>
+Cc: SIT <sit@sunlight-tech.com>,  R&D <rd@sunlight-tech.com>,  产品部 <product@sunlight-tech.com>
