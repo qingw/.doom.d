@@ -1776,23 +1776,23 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
  mu4e-html2text-command "/usr/local/bin/w3m -T text/html"
  )
 (after! mu4e
-  (set-email-account!
-   "gmail" '((user-mail-address    . "gccll.love@gmail.com")
-            (user-full-name       . "gccll.love")
-            (smtpmail-smtp-user   . "gccll.love@gmail.com")
-            (smtpmail-default-smtp-server   . "smtp.gmail.com")
-            (smtpmail-smtp-server           . "smtp.gmail.com")
-            (smtpmail-smtp-service          . 587)
+  ;; (set-email-account!
+  ;;  "gmail" '((user-mail-address    . "gccll.love@gmail.com")
+  ;;           (user-full-name       . "gccll.love")
+  ;;           (smtpmail-smtp-user   . "gccll.love@gmail.com")
+  ;;           (smtpmail-default-smtp-server   . "smtp.gmail.com")
+  ;;           (smtpmail-smtp-server           . "smtp.gmail.com")
+  ;;           (smtpmail-smtp-service          . 587)
 
-            ;; Optional
-            (mu4e-sent-folder     . "/gmail/sent")
-            (mu4e-drafts-folder   . "/gmail/drafts")
-            (mu4e-trash-folder    . "/gmail/trash")
-            (mu4e-refile-folder   . "/gmail/all")
-            (mu4e-get-mail-command    . "mbsync gmail")
-            (mu4e-compose-signature   . "--\n World is yours, Yours is mine!")
-            )
-   )
+  ;;           ;; Optional
+  ;;           (mu4e-sent-folder     . "/gmail/sent")
+  ;;           (mu4e-drafts-folder   . "/gmail/drafts")
+  ;;           (mu4e-trash-folder    . "/gmail/trash")
+  ;;           (mu4e-refile-folder   . "/gmail/all")
+  ;;           (mu4e-get-mail-command    . "mbsync gmail")
+  ;;           (mu4e-compose-signature   . "--\n World is yours, Yours is mine!")
+  ;;           )
+  ;;  )
   (set-email-account!
    "qq" '((user-mail-address    . "604522194@qq.com")
           (user-full-name       . "Li ZhiCheng")
