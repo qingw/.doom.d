@@ -1823,22 +1823,7 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
                 (mu4e-trash-folder    . "/sunlight/trash")
                 (mu4e-refile-folder   . "/sunlight/all")
                 (mu4e-get-mail-command    . "mbsync sunlight")
-                (mu4e-compose-signature   . "
------
-[[http://qiniu.ii6g.com/img/20210811090513.png]]
-
-李志诚   研发部
-
-166 7554 1616
-
-深圳市盛阳科技股份有限公司 | 智慧酒店服务平台运营商
-
-www.sunlight-tech.com
-
-地址 / 深圳市南山区科技南路16号深圳湾科技生态园11栋A座31层盛阳科技
-
-电话 / 0755-26614499  传真 / 0755-26617699
-")
+                (mu4e-compose-signature   . "")
                 )
    t)
   )
