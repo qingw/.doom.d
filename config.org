@@ -1,6 +1,6 @@
 #+title: Doom Emacs Configuration
 #+subtitle: The Methods, Management, and Menagerie of Madness
-#+author: Zhicheng Lee
+#+author: Zhicheng Lee, Simon Wang
 #+date: @@html:<!--@@@@html:<a href="https://github.com/gcclll/.doom.d/commit/fe602c5" style="text-decoration: none"><code style="padding: 0; color: var(--text-light); font-size: inherit; opacity: 0.7">fe602c5</code></a>@@@@latex:\href{https://github.com/gcclll/.doom.d/commit/fe602c5}{fe602c5}@@@@html:-->@@@@latex:\\\Large\bfseries@@ {{{modification-time(%Y-%m-%d, t)}}} @@latex:\\\normalsize\mdseries@@{{{modification-time(%H:%M, t)}}} @@latex:\acr{\lowercase{@@{{{timezone}}}@@latex:}}\iffalse@@, {{{git-rev}}}@@latex:\fi@@
 #+macro: timezone (eval (substring (shell-command-to-string "date +%Z") 0 -1))
 #+macro: git-rev (eval (format "@@html:<a href=\"https://github.com/gcclll/.doom.d/commit/%1$s\" style=\"text-decoration: none\"><code style=\"padding: 0; color: var(--text-light); font-size: inherit; opacity: 0.7\">%1$s</code></a>@@@@latex:\\href{https://github.com/gcclll/.doom.d/commit/%1$s}{%1$s}@@" (substring (shell-command-to-string "git rev-parse --short HEAD") 0 -1)))
@@ -281,7 +281,7 @@ Finally save buffer.
 #+name: init.el
 #+begin_src emacs-lisp :tangle "init.el" :noweb no-export :comments none
 ;;; init.el -*- lexical-binding: t; -*-
-
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")
 (doom! :input
        ;;chinese
        ;;japanese
@@ -551,9 +551,10 @@ private:
 (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
 ;; 个人信息配置
-(setq user-full-name "Zhicheng Lee"
-      user-mail-address "gccll.love@gmail.com"
-      user-blog-url "https://www.cheng92.com"
+(setq user-full-name "Qingwu Wang"
+      user-mail-address "wangqwa@chanjet.com"
+      user-blog-url "https://www.m0110.com"
+      lsp-latex-texlab-executable "~/local/bin/texlab"
       read-process-output-max (* 1024 1024)
       display-line-numbers-type t
 
@@ -1759,7 +1760,7 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
 [[https://github.com/hlissner/doom-emacs/blob/develop/modules/email/mu4e/README.org][README.org ->]]
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path "/usr/local/Cellar/mu/1.6.2/share/emacs/site-lisp/mu/mu4e")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/")
 (setq
  ;; sendmail-program "/usr/local/bin/msmtp"
  ;; sendmail-program "/usr/sbin/sendmail"
@@ -1794,9 +1795,9 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
   ;;           )
   ;;  )
   (set-email-account!
-   "qq" '((user-mail-address    . "604522194@qq.com")
-          (user-full-name       . "Li ZhiCheng")
-          (smtpmail-smtp-user   . "604522194@qq.com")
+   "qq" '((user-mail-address    . "15281427@qq.com")
+          (user-full-name       . "Wang Qingwu")
+          (smtpmail-smtp-user   . "15281427@qq.com")
           (smtpmail-default-smtp-server   . "smtp.qq.com")
           (smtpmail-smtp-server           . "smtp.qq.com")
           (smtpmail-smtp-service          . 587)
@@ -1807,23 +1808,23 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
           (mu4e-trash-folder    . "/qq/trash")
           (mu4e-refile-folder   . "/qq/all")
           (mu4e-get-mail-command    . "mbsync qq")
-          (mu4e-compose-signature   . "--\n Li ZhiCheng")
+          (mu4e-compose-signature   . "--\n Happy Hacking \n WangQingwu")
           )
    )
   (set-email-account!
-   "sunlight" '((user-mail-address    . "simon.li@sunlight-tech.com")
-                (user-full-name       . "Li ZhiCheng")
-                (smtpmail-smtp-user   . "simon.li@sunlight-tech.com")
-                (smtpmail-default-smtp-server   . "smtp.exmail.qq.com")
-                (smtpmail-smtp-server           . "smtp.exmail.qq.com")
-                (smtpmail-smtp-service          . 587)
+   "chanjet" '((user-mail-address    . "wangqwa@chanjet.com")
+                (user-full-name       . "Wang Qingwu")
+                (smtpmail-smtp-user   . "wangqwa@chanjet.com")
+                (smtpmail-default-smtp-server   . "smtp.qiye.aliyun.com")
+                (smtpmail-smtp-server           . "smtp.qiye.aliyun.com")
+                (smtpmail-smtp-service          . 465)
                 ;; Optional
-                (mu4e-sent-folder     . "/sunlight/sent")
-                (mu4e-drafts-folder   . "/sunlight/drafts")
-                (mu4e-trash-folder    . "/sunlight/trash")
-                (mu4e-refile-folder   . "/sunlight/all")
-                (mu4e-get-mail-command    . "mbsync sunlight")
-                (mu4e-compose-signature   . "")
+                (mu4e-sent-folder     . "/chanjet.com/Sent")
+                (mu4e-drafts-folder   . "/chanjet.com/Drafts")
+                (mu4e-trash-folder    . "/chanjet.com/Trash")
+                (mu4e-refile-folder   . "/chanjet.com/All")
+                (mu4e-get-mail-command    . "mbsync chanjet")
+                (mu4e-compose-signature   . "-----")
                 )
    t)
   )
@@ -1850,12 +1851,56 @@ issue: /Error (after-save-hook): Error running hook "grip-org-to-md" because:
 *** Mu4e-alert
 
 #+begin_src emacs-lisp
+(after! mu4e
+  (setq! mu4e-maildir (expand-file-name "~/.mail") ; the rest of the mu4e folders are RELATIVE to this one
+         mu4e-get-mail-command "mbsync -a"
+         mu4e-index-update-in-background t
+         mu4e-compose-signature-auto-include t
+         mu4e-use-fancy-chars t
+         mu4e-view-show-addresses t
+         mu4e-view-show-images t
+         mu4e-compose-format-flowed t
+         ;mu4e-compose-in-new-frame t
+         mu4e-change-filenames-when-moving t ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
+         mu4e-maildir-shortcuts
+         '( ("/Inbox" . ?i)
+            ("/Archive" . ?a)
+            ("/Drafts" . ?d)
+            ("/Deleted Items" . ?t)
+            ("/Sent Items" . ?s))
+
+         ;; Message Formatting and sending
+         message-send-mail-function 'smtpmail-send-it
+         message-signature-file "~/.emacs.d/.authinfo.gpg"
+         message-citation-line-format "On %a %d %b %Y at %R, %f wrote:\n"
+         message-citation-line-function 'message-insert-formatted-citation-line
+         message-kill-buffer-on-exit t
+
+         ;; Org mu4e
+         org-mu4e-convert-to-html t
+         ))
+(set-email-account! "wangqwa@chanjet.com"
+                    '((user-mail-address      . "wangqwa@chanjet.com")
+                      (user-full-name         . "Qingwu Wang")
+                      (smtpmail-smtp-server   . "smtp.qiye.aliyun.com")
+                      (smtpmail-smtp-service  . 143)
+                      (smtpmail-stream-type   . starttls)
+                      (smtpmail-debug-info    . t)
+                      (mu4e-drafts-folder     . "/Drafts")
+                      (mu4e-refile-folder     . "/Archive")
+                      (mu4e-sent-folder       . "/Sent Items")
+                      (mu4e-trash-folder      . "/Deleted Items")
+                      (mu4e-update-interval   . 1800)
+                      ;(mu4e-sent-messages-behavior . 'delete)
+                      )
+                    nil)
+
 (use-package! mu4e-alert
   :after mu4e
   :init
   (setq mu4e-alert-interesting-mail-query
     (concat
-     "flag:unread maildir:/sunlight/inbox "
+     "flag:unread maildir:/chanjet.com/Inbox "
      "OR "
      "flag:unread maildir:/qq/inbox"
      ))
